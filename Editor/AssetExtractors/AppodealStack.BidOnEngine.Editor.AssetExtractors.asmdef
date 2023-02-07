@@ -1,0 +1,18 @@
+{
+    "name": "AppodealStack.BidOnEngine.Editor.AssetExtractors",
+    "references": [
+        "GUID:5fc69b624495b48b4a6de5c08d4d18dc",
+        "GUID:04384a98bc83e41ed99aa1b4ba7f8d14"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
