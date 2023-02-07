@@ -1,0 +1,31 @@
+{
+  "name": "com.appodealstack.bidon",
+  "version": "0.1.0",
+  "displayName": "BidOn",
+  "description": "Provides control over advertising auctions to Publishers, while making it fair and transparent.",
+  "unity": "2019.4",
+  "documentationUrl": "https://github.com/bidon-io/bidon-unity-plugin/blob/main/README.md",
+  "changelogUrl": "https://github.com/bidon-io/bidon-unity-plugin/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/bidon-io/bidon-unity-plugin/blob/main/LICENSE.md",
+  "dependencies": {
+    "com.google.external-dependency-manager": "1.2.175"
+  },
+  "keywords": [
+    "BidOn",
+    "Postbid",
+    "Monetization"
+  ],
+  "samples": [
+    {
+      "displayName": "Usage Sample",
+      "description": "BidOn Usage Sample with a Demo Scene and C# Implementation",
+      "path": "Samples~/UsageSample"
+    }
+  ],
+  "author":
+  {
+    "name": "Appodeal Stack",
+    "email": "hi@appodeal.com",
+    "url": "https://appodeal.com"
+  }
+}
