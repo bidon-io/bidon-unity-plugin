@@ -1,7 +1,7 @@
 # Rewarded Ad
 
 > **Warning**
-> For a single instance of BidonRewardedAd, Load() and Show() can only be called once. Create a new instance for every new rewarded ad opportunity.
+> <br/>For a single instance of BidonRewardedAd, Load() and Show() can only be called once. Create a new instance for every new rewarded ad opportunity.
 
 ## Load Rewarded Ad
 
