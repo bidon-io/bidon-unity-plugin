@@ -1,7 +1,7 @@
 # Interstitial Ad
 
 > **Warning**
-> For a single instance of BidonInterstitialAd, Load() and Show() can only be called once. Create a new instance for every new interstitial ad opportunity.
+> <br/>For a single instance of BidonInterstitialAd, Load() and Show() can only be called once. Create a new instance for every new interstitial ad opportunity.
 
 ## Load Interstitial Ad
 
