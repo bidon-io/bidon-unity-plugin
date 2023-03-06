@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dependencies>
     <iosPods>
+        <iosPod name="Bidon" version="0.1.2-Beta" minTargetSdk="10.0" />
+        <iosPod name="BidonAdapterAppLovin" version="0.1.2.1-Beta" minTargetSdk="10.0" />
+        <iosPod name="BidonAdapterBidMachine" version="0.1.2.1-Beta" minTargetSdk="10.0" />
+        <iosPod name="BidonAdapterGoogleMobileAds" version="0.1.2.1-Beta" minTargetSdk="10.0" />
+        <iosPod name="BidonAdapterDTExchange" version="0.1.2.1-Beta" minTargetSdk="10.0" />
+        <iosPod name="BidonAdapterUnityAds" version="0.1.2.1-Beta" minTargetSdk="10.0" />
+        <iosPod name="BidMachine" version="2.0.0.5" minTargetSdk="10.0" />
+        <iosPod name="BidMachineAmazonAdapter" version="2.0.0.0" minTargetSdk="10.0" />
+        <iosPod name="BidMachineCriteoAdapter" version="2.0.0.0" minTargetSdk="10.0" />
+        <iosPod name="BidMachineSmaatoAdapter" version="2.0.0.2" minTargetSdk="10.0" />
+        <iosPod name="BidMachineTapjoyAdapter" version="2.0.0.0" minTargetSdk="10.0" />
+        <iosPod name="BidMachinePangleAdapter" version="2.0.0.0" minTargetSdk="10.0" />
+        <iosPod name="BidMachineNotsyAdapter" version="2.0.0.5" minTargetSdk="10.0" />
+        <iosPod name="BidMachineMetaAudienceAdapter" version="2.0.0.2" minTargetSdk="10.0" />
+        <iosPod name="BidMachineMyTargetAdapter" version="2.0.0.3" minTargetSdk="10.0" />
+        <iosPod name="BidMachineVungleAdapter" version="2.0.0.1" minTargetSdk="10.0" />
+        <iosPod name="BidMachineAdColonyAdapter" version="2.0.0.0" minTargetSdk="10.0" />
+        <sources>
+            <source>https://github.com/appodeal/CocoaPods.git</source>
+        </sources>
     </iosPods>
     <androidPackages>
+        <androidPackage spec="org.bidon:bidon-sdk:0.1.0-Beta" />
+        <androidPackage spec="org.bidon:bidmachine-adapter:0.1.0.1-Beta" />
+        <androidPackage spec="org.bidon:admob-adapter:0.1.0.1-Beta" />
+        <androidPackage spec="org.bidon:applovin-adapter:0.1.0.1-Beta" />
+        <androidPackage spec="org.bidon:dtexchange-adapter:0.1.0.1-Beta" />
+        <androidPackage spec="org.bidon:unityads-adapter:0.1.0.1-Beta" />
         <repositories>
-            <repository></repository>
+            <repository>https://maven.pkg.github.com/bidon-io/bidon-sdk-android</repository>
+            <repository>https://artifactory.appodeal.com/appodeal</repository>
         </repositories>
     </androidPackages>
 </dependencies>
