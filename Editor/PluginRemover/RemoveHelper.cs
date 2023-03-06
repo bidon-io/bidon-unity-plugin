@@ -1,15 +1,15 @@
-using UnityEditor;
-using UnityEditor.PackageManager;
-using UnityEngine;
 using System.IO;
 using System.Xml;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using AppodealStack.BidOnEngine.Editor.Utilities;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.PackageManager;
+using Bidon.Mediation.Editor.Utilities;
 
 // ReSharper Disable CheckNamespace
-namespace AppodealStack.BidOnEngine.Editor.PluginRemover
+namespace Bidon.Mediation.Editor.PluginRemover
 {
     public static class RemoveHelper
     {
@@ -107,8 +107,8 @@ namespace AppodealStack.BidOnEngine.Editor.PluginRemover
 
         public static void RemovePlugin(bool isCleanBeforeUpdate = false)
         {
-            if (!EditorUtility.DisplayDialog("Remove BidOn Plugin",
-                    "Are you sure you want to remove the BidOn plugin from your project?",
+            if (!EditorUtility.DisplayDialog("Remove Bidon Plugin",
+                    "Are you sure you want to remove the Bidon plugin from your project?",
                     "Yes",
                     "Cancel")) return;
 

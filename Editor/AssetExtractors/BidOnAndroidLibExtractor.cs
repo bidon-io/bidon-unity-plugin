@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using AppodealStack.BidOnEngine.Editor.Utilities;
-using AppodealStack.BidOnEngine.Editor.DataContainers;
+using Bidon.Mediation.Editor.Utilities;
+using Bidon.Mediation.Editor.DataContainers;
 
 // ReSharper Disable CheckNamespace
-namespace AppodealStack.BidOnEngine.Editor.AssetExtractors
+namespace Bidon.Mediation.Editor.AssetExtractors
 {
-    internal static class BidOnAndroidLibExtractor
+    internal static class BidonAndroidLibExtractor
     {
         public static bool ExtractAndroidLibrary()
         {
@@ -21,7 +21,7 @@ namespace AppodealStack.BidOnEngine.Editor.AssetExtractors
 
             if (!Directory.Exists(source))
             {
-                Debug.LogError($"[BidOn] Directory not found: '{source}'.");
+                Debug.LogError($"[BidonPlugin] Directory not found: '{source}'.");
                 return false;
             }
 

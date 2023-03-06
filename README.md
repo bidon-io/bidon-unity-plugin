@@ -1,1 +1,1 @@
-# BidOn Unity Plugin (UPM distribution)
+# Bidon Unity Plugin (UPM distribution)
