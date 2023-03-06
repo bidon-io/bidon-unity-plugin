@@ -2,13 +2,13 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using AppodealStack.BidOnEngine.Editor.Utilities;
-using AppodealStack.BidOnEngine.Editor.DataContainers;
+using Bidon.Mediation.Editor.Utilities;
+using Bidon.Mediation.Editor.DataContainers;
 
 // ReSharper Disable CheckNamespace
-namespace AppodealStack.BidOnEngine.Editor.AssetExtractors
+namespace Bidon.Mediation.Editor.AssetExtractors
 {
-    internal static class BidOnDependenciesExtractor
+    internal static class BidonDependenciesExtractor
     {
         public static bool ExtractDependencies()
         {
@@ -20,14 +20,14 @@ namespace AppodealStack.BidOnEngine.Editor.AssetExtractors
             var depsDir = new DirectoryInfo(EditorConstants.PackageDepsDirectory);
             if (!depsDir.Exists)
             {
-                Debug.LogError($"[BidOn] Directory not found: '{depsDir}'.");
+                Debug.LogError($"[BidonPlugin] Directory not found: '{depsDir}'.");
                 return false;
             }
 
             var deps = depsDir.GetFiles(EditorConstants.PackageDepsSearchPattern, SearchOption.AllDirectories);
             if (deps.Length < 1)
             {
-                Debug.LogError($"[BidOn] No Dependencies were found on path '{depsDir}'.");
+                Debug.LogError($"[BidonPlugin] No Dependencies were found on path '{depsDir}'.");
                 return false;
             }
 

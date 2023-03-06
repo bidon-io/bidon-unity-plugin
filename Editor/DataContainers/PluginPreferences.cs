@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using AppodealStack.BidOnEngine.Editor.Utilities;
+using Bidon.Mediation.Editor.Utilities;
 
 // ReSharper Disable CheckNamespace
-namespace AppodealStack.BidOnEngine.Editor.DataContainers
+namespace Bidon.Mediation.Editor.DataContainers
 {
     public class PluginPreferences : ScriptableObject
     {

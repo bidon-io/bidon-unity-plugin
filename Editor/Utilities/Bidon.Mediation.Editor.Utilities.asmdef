@@ -1,5 +1,5 @@
 {
-    "name": "AppodealStack.BidOnEngine.Editor.Utilities",
+    "name": "Bidon.Mediation.Editor.Utilities",
     "references": [],
     "includePlatforms": [
         "Editor"

@@ -1,31 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <items>
     <item>
-        <name>BidOn Plugin Preferences</name>
-        <path>BidOn/Editor</path>
+        <name>Bidon Plugin Preferences File</name>
+        <path>Bidon/Editor</path>
         <filter>(PluginPreferences\.asset)</filter>
         <is_confirmation_required>false</is_confirmation_required>
     </item>
     <item>
-        <name>BidOn Dependencies Directory</name>
-        <path>BidOn/Editor/Dependencies</path>
+        <name>Bidon Dependencies Directory</name>
+        <path>Bidon/Editor/Dependencies</path>
         <is_confirmation_required>false</is_confirmation_required>
         <check_if_empty>false</check_if_empty>
     </item>
     <item>
-        <name>Editor Directory</name>
-        <path>BidOn/Editor</path>
+        <name>Bidon Editor Directory</name>
+        <path>Bidon/Editor</path>
         <is_confirmation_required>false</is_confirmation_required>
         <check_if_empty>true</check_if_empty>
     </item>
     <item>
-        <name>Appodeal Directory</name>
-        <path>BidOn</path>
+        <name>Bidon Directory</name>
+        <path>Bidon</path>
         <is_confirmation_required>false</is_confirmation_required>
         <check_if_empty>true</check_if_empty>
     </item>
     <item>
-        <name>BidOn Andoid Library Directory</name>
+        <name>Bidon Andoid Library Directory</name>
         <path>Plugins/Android/bidon.androidlib</path>
         <is_confirmation_required>false</is_confirmation_required>
         <check_if_empty>false</check_if_empty>
@@ -43,8 +43,8 @@
         <check_if_empty>true</check_if_empty>
     </item>
     <item>
-        <name>BidOn Samples</name>
-        <path>Samples/BidOn</path>
+        <name>Bidon Samples</name>
+        <path>Samples/Bidon</path>
         <is_confirmation_required>false</is_confirmation_required>
         <check_if_empty>false</check_if_empty>
     </item>

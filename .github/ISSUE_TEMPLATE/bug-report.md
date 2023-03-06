@@ -17,7 +17,7 @@ Make sure to check our [issues](https://github.com/bidon-io/bidon-unity-plugin/i
 **[REQUIRED]**
  - Computer OS: [e.g. Windows, macOS]
  - Unity Editor Version: [e.g. 2021.3.1f1]
- - BidOn Unity Plugin Version: [e.g. 1.0.0]
+ - Bidon Unity Plugin Version: [e.g. 1.0.0]
  - Bug Repro Rate: [e.g. 100%, 25%]
 
 **[OPTIONAL]** *(if applicable)*

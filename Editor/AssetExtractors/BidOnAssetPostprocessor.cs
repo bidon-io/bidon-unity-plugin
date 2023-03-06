@@ -1,12 +1,12 @@
 using System.IO;
 using UnityEditor;
-using AppodealStack.BidOnEngine.Editor.Utilities;
-using AppodealStack.BidOnEngine.Editor.DataContainers;
+using Bidon.Mediation.Editor.Utilities;
+using Bidon.Mediation.Editor.DataContainers;
 
 // ReSharper Disable CheckNamespace
-namespace AppodealStack.BidOnEngine.Editor.AssetExtractors
+namespace Bidon.Mediation.Editor.AssetExtractors
 {
-    internal class BidOnAssetPostprocessor : AssetPostprocessor
+    internal class BidonAssetPostprocessor : AssetPostprocessor
     {
 #if UNITY_2021_3_OR_NEWER
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths, bool didDomainReload)
@@ -17,7 +17,7 @@ namespace AppodealStack.BidOnEngine.Editor.AssetExtractors
             string prefsPath = $"{EditorConstants.PluginEditorDirectory}/{EditorConstants.PluginPrefsFileName}";
             if (File.Exists(prefsPath) && AssetDatabase.LoadAssetAtPath<PluginPreferences>(prefsPath) == null) return;
 #endif
-            if (BidOnAndroidLibExtractor.ExtractAndroidLibrary() | BidOnDependenciesExtractor.ExtractDependencies())
+            if (BidonAndroidLibExtractor.ExtractAndroidLibrary() | BidonDependenciesExtractor.ExtractDependencies())
             {
                 AssetDatabase.Refresh();
             }

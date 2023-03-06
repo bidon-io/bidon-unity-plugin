@@ -1,5 +1,5 @@
 // ReSharper Disable CheckNamespace
-namespace AppodealStack.BidOnEngine.Editor.PluginRemover
+namespace Bidon.Mediation.Editor.PluginRemover
 {
     [System.Serializable]
     internal class ItemToRemove
