@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -53,3 +54,4 @@ namespace Bidon.Mediation
         }
     }
 }
+#endif

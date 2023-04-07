@@ -1,3 +1,4 @@
+#if (!UNITY_ANDROID && !UNITY_EDITOR && !UNITY_IOS) || BIDON_DEV_DUMMY
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -37,3 +38,4 @@ namespace Bidon.Mediation
         }
     }
 }
+#endif

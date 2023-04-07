@@ -1,4 +1,4 @@
-#if UNITY_ANDROID
+#if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
 using UnityEngine;
 

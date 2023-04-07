@@ -1,4 +1,4 @@
-#if UNITY_IOS
+#if UNITY_IOS || BIDON_DEV_IOS
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;

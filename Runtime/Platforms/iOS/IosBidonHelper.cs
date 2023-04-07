@@ -1,4 +1,4 @@
-#if UNITY_IOS
+#if UNITY_IOS || BIDON_DEV_IOS
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
