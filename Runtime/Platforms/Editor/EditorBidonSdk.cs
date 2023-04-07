@@ -18,6 +18,11 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
+        public void SetExtraData(string key, object value)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RegisterDefaultAdapters()
         {
             throw new NotImplementedException();

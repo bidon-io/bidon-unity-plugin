@@ -37,6 +37,55 @@ namespace Bidon.Mediation
             BidonSetBaseUrl(baseUrl);
         }
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataInt")]
+        private static extern void BidonSetExtraDataInt(string key, int value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataLong")]
+        private static extern void BidonSetExtraDataLong(string key, long value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataFloat")]
+        private static extern void BidonSetExtraDataFloat(string key, float value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataDouble")]
+        private static extern void BidonSetExtraDataDouble(string key, double value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataBool")]
+        private static extern void BidonSetExtraDataBool(string key, bool value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataChar")]
+        private static extern void BidonSetExtraDataChar(string key, char value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataString")]
+        private static extern void BidonSetExtraDataString(string key, string value);
+
+        public void SetExtraData(string key, object value)
+        {
+            switch (value)
+            {
+                case int valueInt:
+                    BidonSetExtraDataInt(key, valueInt);
+                    break;
+                case long valueLong:
+                    BidonSetExtraDataLong(key, valueLong);
+                    break;
+                case float valueFloat:
+                    BidonSetExtraDataFloat(key, valueFloat);
+                    break;
+                case double valueDouble:
+                    BidonSetExtraDataDouble(key, valueDouble);
+                    break;
+                case bool valueBool:
+                    BidonSetExtraDataBool(key, valueBool);
+                    break;
+                case char valueChar:
+                    BidonSetExtraDataChar(key, valueChar);
+                    break;
+                case string valueString:
+                    BidonSetExtraDataString(key, valueString);
+                    break;
+            }
+        }
+
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegisterDefaultAdapters")]
         private static extern void BidonRegisterDefaultAdapters();
 

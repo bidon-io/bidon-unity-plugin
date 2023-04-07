@@ -39,6 +39,42 @@ void BDNUnityPluginSetBaseUrl(const char* baseUrl) {
     [BDNSdk setBaseURL:baseUrlNSString];
 }
 
+void BDNUnityPluginSetExtraDataInt(const char* key, int value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithInt:value] for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataLong(const char* key, long value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithLong:value] for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataFloat(const char* key, float value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithFloat:value] for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataDouble(const char* key, double value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithDouble:value] for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataBool(const char* key, bool value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithBool:value] for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataChar(const char* key, char value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithChar:value] for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataString(const char* key, const char* value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    NSString* valueNSString = [NSString stringWithUTF8String:value];
+    [BDNSdk setExtraValue:valueNSString for:keyNSString];
+}
+
 void BDNUnityPluginRegisterDefaultAdapters() {
     [BDNSdk registerDefaultAdapters];
 }

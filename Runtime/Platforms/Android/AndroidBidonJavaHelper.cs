@@ -224,6 +224,29 @@ namespace Bidon.Mediation
 
             return revenuePrecision;
         }
+
+        public static object GetJavaObject(object value)
+        {
+            switch (value)
+            {
+                case int _:
+                    return new AndroidJavaObject("java.lang.Integer", value);
+                case long _:
+                    return new AndroidJavaObject("java.lang.Long", value);
+                case float _:
+                    return new AndroidJavaObject("java.lang.Float", value);
+                case double _:
+                    return new AndroidJavaObject("java.lang.Double", value);
+                case bool _:
+                    return new AndroidJavaObject("java.lang.Boolean", value);
+                case char _:
+                    return new AndroidJavaObject("java.lang.Character", value);
+                case string _:
+                    return value;
+                default:
+                    throw new ArgumentException("Incorrect type");
+            }
+        }
     }
 }
 #endif

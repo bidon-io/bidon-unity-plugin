@@ -37,6 +37,15 @@ public class BidonDemoScript : MonoBehaviour
 
         BidonSdk.Instance.SetLogLevel(BidonLogLevel.Verbose);
         BidonSdk.Instance.SetBaseUrl("https://b.appbaqend.com");
+
+        BidonSdk.Instance.SetExtraData("answer", 42);
+        BidonSdk.Instance.SetExtraData("key_long", long.MaxValue);
+        BidonSdk.Instance.SetExtraData("key_float", float.MaxValue);
+        BidonSdk.Instance.SetExtraData("key_double", double.MaxValue);
+        BidonSdk.Instance.SetExtraData("is_cake_a_lie", true);
+        BidonSdk.Instance.SetExtraData("key_char", 'v');
+        BidonSdk.Instance.SetExtraData("key_string", "some value");
+
         BidonSdk.Instance.RegisterDefaultAdapters();
 
 #if UNITY_ANDROID

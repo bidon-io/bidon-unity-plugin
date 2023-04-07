@@ -77,6 +77,11 @@ namespace Bidon.Mediation
             _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setBaseUrl", baseUrl);
         }
 
+        public void SetExtraData(string key, object value)
+        {
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key, AndroidBidonJavaHelper.GetJavaObject(value));
+        }
+
         public void RegisterDefaultAdapters()
         {
             _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("registerDefaultAdapters");
