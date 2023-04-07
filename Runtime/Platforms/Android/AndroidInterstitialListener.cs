@@ -16,36 +16,6 @@ namespace Bidon.Mediation
             _listener = listener;
         }
 
-        public void onAuctionStarted()
-        {
-            SyncContextHelper.Post(obj => _listener?.onAuctionStarted());
-        }
-
-        public void onAuctionSuccess(AndroidJavaObject auctionResults)
-        {
-            SyncContextHelper.Post(obj => _listener?.onAuctionSuccess(auctionResults));
-        }
-
-        public void onAuctionFailed(AndroidJavaObject cause)
-        {
-            SyncContextHelper.Post(obj => _listener?.onAuctionFailed(cause));
-        }
-
-        public void onRoundStarted(string roundId, double priceFloor)
-        {
-            SyncContextHelper.Post(obj => _listener?.onRoundStarted(roundId, priceFloor));
-        }
-
-        public void onRoundSucceed(string roundId, AndroidJavaObject roundResults)
-        {
-            SyncContextHelper.Post(obj => _listener?.onRoundSucceed(roundId, roundResults));
-        }
-
-        public void onRoundFailed(string roundId, AndroidJavaObject cause)
-        {
-            SyncContextHelper.Post(obj => _listener?.onRoundFailed(roundId, cause));
-        }
-
         public void onAdLoaded(AndroidJavaObject ad)
         {
             SyncContextHelper.Post(obj => _listener?.onAdLoaded(ad));

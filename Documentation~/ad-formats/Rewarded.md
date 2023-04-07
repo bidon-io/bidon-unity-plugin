@@ -5,10 +5,10 @@
 
 ## Load Rewarded Ad
 
-To load rewarded ad, first create a `BidonRewardedAd` instance. Specify placement (only if needed), otherwise placement = "default" will be used.
+To load rewarded ad, first create a `BidonRewardedAd` instance.
 
 ```c#
-var bidonRewarded = new BidonRewardedAd("PLACEMENT_NAME");
+var bidonRewarded = new BidonRewardedAd();
 ```
 
 Subscribe to desired events for receiving callbacks during ad object lifecycle.
@@ -27,14 +27,6 @@ Below you can find all available events for rewarded ads.
 <p>
 
 ```c#
-event EventHandler<BidonAuctionStartedEventArgs> OnAuctionStarted;
-event EventHandler<BidonAuctionSucceedEventArgs> OnAuctionSucceed;
-event EventHandler<BidonAuctionFailedEventArgs> OnAuctionFailed;
-
-event EventHandler<BidonRoundStartedEventArgs> OnRoundStarted;
-event EventHandler<BidonRoundSucceedEventArgs> OnRoundSucceed;
-event EventHandler<BidonRoundFailedEventArgs> OnRoundFailed;
-
 event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
 event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
 event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -42,9 +34,7 @@ event EventHandler<BidonAdShowFailedEventArgs> OnAdShowFailed;
 event EventHandler<BidonAdClickedEventArgs> OnAdClicked;
 event EventHandler<BidonAdClosedEventArgs> OnAdClosed;
 event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
-
 event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
-
 event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 ```
 

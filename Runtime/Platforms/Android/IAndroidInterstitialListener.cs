@@ -6,8 +6,6 @@ namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal interface IAndroidInterstitialListener :
-        IAndroidAuctionListener,
-        IAndroidRoundListener,
         IAndroidAdListener,
         IAndroidFullscreenAdListener,
         IAndroidAdRevenueListener

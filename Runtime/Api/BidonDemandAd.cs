@@ -12,8 +12,6 @@ namespace Bidon.Mediation
     {
         public BidonAdType AdType;
 
-        public string Placement;
-
         public string ToJsonString(bool isPretty = false) => UnityEngine.JsonUtility.ToJson(this, isPretty);
     }
 }

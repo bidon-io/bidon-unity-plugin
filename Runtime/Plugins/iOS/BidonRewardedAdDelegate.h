@@ -8,11 +8,6 @@
 #import <BidOn/BidOn-Swift.h>
 #import <BidonUnityPluginStructs.h>
 
-typedef void (*DidStartAuction)();
-typedef void (*DidCompleteAuction)(BDNUnityPluginAd* winner);
-typedef void (*DidStartAuctionRound)(const char* roundId, double priceFloor);
-typedef void (*DidCompleteAuctionRound)(BDNUnityPluginAuctionRound* round);
-typedef void (*DidReceiveBid)(BDNUnityPluginAd* ad);
 typedef void (*DidFailToLoad)(int error);
 typedef void (*DidLoad)(BDNUnityPluginAd* ad);
 typedef void (*DidFailToPresent)(BDNUnityPluginImpression* impression, int error);
@@ -24,11 +19,6 @@ typedef void (*DidReceiveReward)(BDNUnityPluginReward* reward, BDNUnityPluginImp
 
 @interface BDNUnityPluginRewardedAdDelegate : NSObject <BDNRewardedAdDelegate>
 
-@property (assign) DidStartAuction           rewardedDidStartAuctionCallback;
-@property (assign) DidCompleteAuction        rewardedDidCompleteAuctionCallback;
-@property (assign) DidStartAuctionRound      rewardedDidStartAuctionRoundCallback;
-@property (assign) DidCompleteAuctionRound   rewardedDidCompleteAuctionRoundCallback;
-@property (assign) DidReceiveBid             rewardedDidReceiveBidCallback;
 @property (assign) DidFailToLoad             rewardedDidFailToLoadCallback;
 @property (assign) DidLoad                   rewardedDidLoadCallback;
 @property (assign) DidFailToPresent          rewardedDidFailToPresentCallback;

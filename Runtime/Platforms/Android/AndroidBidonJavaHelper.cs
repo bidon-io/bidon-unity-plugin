@@ -1,7 +1,5 @@
 #if UNITY_ANDROID
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -51,19 +49,6 @@ namespace Bidon.Mediation
             {
                 Debug.LogError($"BidonSdk operation is not possible due to incorrect integration: {e.Message}");
             }
-        }
-
-        public static IEnumerable<BidonAuctionResult> GetListOfBidonAuctionResults(AndroidJavaObject list)
-        {
-            if (list == null) return Enumerable.Empty<BidonAuctionResult>();
-
-            int countOfElements = list.Call<int>("size");
-            var resultList = new List<BidonAuctionResult>();
-            for(int i = 0; i < countOfElements; i++)
-            {
-                resultList.Add(GetBidonAuctionResult(list.Call<AndroidJavaObject>("get", i)));
-            }
-            return resultList;
         }
 
         public static BidonAdValue GetBidonAdValue(AndroidJavaObject adValue)
@@ -193,37 +178,13 @@ namespace Bidon.Mediation
             return BidonError.Unspecified;
         }
 
-        private static BidonAuctionResult GetBidonAuctionResult(AndroidJavaObject result)
-        {
-            if (result == null) return null;
-
-            return new BidonAuctionResult
-            {
-                AdSource = GetBidonAdSource(result.Call<AndroidJavaObject>("getAdSource")),
-                Ecpm = result.Call<double>("getEcpm")
-            };
-        }
-
-        private static BidonAdSource GetBidonAdSource(AndroidJavaObject adSource)
-        {
-            if (adSource == null) return null;
-
-            return new BidonAdSource
-            {
-                Ad = GetBidonAd(adSource.Call<AndroidJavaObject>("getAd")),
-                DemandId = adSource.Call<AndroidJavaObject>("getDemandId").Call<string>("getDemandId"),
-                IsReadyToShow = adSource.Call<bool>("isAdReadyToShow")
-            };
-        }
-
         private static BidonDemandAd GetBidonDemandAd(AndroidJavaObject demandAd)
         {
             if (demandAd == null) return null;
 
             return new BidonDemandAd
             {
-                AdType = GetBidonAdType(demandAd.Call<AndroidJavaObject>("getAdType")),
-                Placement = demandAd.Call<string>("getPlacement")
+                AdType = GetBidonAdType(demandAd.Call<AndroidJavaObject>("getAdType"))
             };
         }
 
