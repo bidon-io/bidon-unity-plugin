@@ -14,12 +14,6 @@ typedef struct {
 } BDNUnityPluginAd;
 
 typedef struct {
-    const char* RoundId;
-    const char* Demands;
-    double      Timeout;
-} BDNUnityPluginAuctionRound;
-
-typedef struct {
     const char*         ImpressionId;
     const char*         AuctionId;
     int                 AuctionConfigurationId;

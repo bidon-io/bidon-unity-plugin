@@ -1,6 +1,5 @@
 #if UNITY_IOS
 using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
@@ -17,32 +16,14 @@ namespace Bidon.Mediation
         private IntPtr _rewardedAdPtr;
         private IntPtr _rewardedDelegatePtr;
 
-        private delegate void AuctionStartedCallback();
-        private delegate void AuctionFinishedCallback(IntPtr iosBidonAdPtr);
-
-        private delegate void RoundStartedCallback(string roundId, double priceFloor);
-        private delegate void RoundFinishedCallback(IntPtr iosBidonAuctionRoundPtr);
-
-        private delegate void BidReceivedCallback(IntPtr iosBidonAdPtr);
-
         private delegate void AdLoadFailedCallback(int cause);
         private delegate void AdLoadedCallback(IntPtr iosBidonAdPtr);
         private delegate void AdShowFailedCallback(IntPtr iosBidonImpressionPtr, int cause);
         private delegate void AdShownCallback(IntPtr iosBidonImpressionPtr);
         private delegate void AdClosedCallback(IntPtr iosBidonImpressionPtr);
         private delegate void AdClickedCallback(IntPtr iosBidonImpressionPtr);
-
         private delegate void AdRevenueReceivedCallback(IntPtr iosBidonAdPtr, IntPtr iosBidonAdRevenuePtr);
-
         private delegate void UserRewardedCallback(IntPtr iosBidonRewardPtr, IntPtr iosBidonImpressionPtr);
-
-        public event EventHandler<BidonAuctionStartedEventArgs> OnAuctionStarted;
-        public event EventHandler<BidonAuctionSucceedEventArgs> OnAuctionSucceed;
-        public event EventHandler<BidonAuctionFailedEventArgs> OnAuctionFailed;
-
-        public event EventHandler<BidonRoundStartedEventArgs> OnRoundStarted;
-        public event EventHandler<BidonRoundSucceedEventArgs> OnRoundSucceed;
-        public event EventHandler<BidonRoundFailedEventArgs> OnRoundFailed;
 
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
@@ -51,47 +32,35 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdClickedEventArgs> OnAdClicked;
         public event EventHandler<BidonAdClosedEventArgs> OnAdClosed;
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
-
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
-
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded; 
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewardedDelegate")]
-        private static extern IntPtr BidonCreateRewardedDelegate(AuctionStartedCallback onAuctionStarted,
-                                                                AuctionFinishedCallback onAuctionFinished,
-                                                                RoundStartedCallback onRoundStarted,
-                                                                RoundFinishedCallback onRoundFinished,
-                                                                BidReceivedCallback onBidReceived,
-                                                                AdLoadFailedCallback onAdLoadFailed,
-                                                                AdLoadedCallback onAdLoaded,
-                                                                AdShowFailedCallback onAdShowFailed,
-                                                                AdShownCallback onAdShown,
-                                                                AdClosedCallback onAdClosed,
-                                                                AdClickedCallback onAdClicked,
-                                                                AdRevenueReceivedCallback onAdRevenueReceived,
-                                                                UserRewardedCallback onUserRewarded);
+        private static extern IntPtr BidonCreateRewardedDelegate(AdLoadFailedCallback onAdLoadFailed,
+                                                                 AdLoadedCallback onAdLoaded,
+                                                                 AdShowFailedCallback onAdShowFailed,
+                                                                 AdShownCallback onAdShown,
+                                                                 AdClosedCallback onAdClosed,
+                                                                 AdClickedCallback onAdClicked,
+                                                                 AdRevenueReceivedCallback onAdRevenueReceived,
+                                                                 UserRewardedCallback onUserRewarded);
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewarded")]
-        private static extern IntPtr BidonCreateRewarded(string placement, IntPtr delegatePtr);
+        private static extern IntPtr BidonCreateRewarded(IntPtr delegatePtr);
 
-        internal IosBidonRewardedAd(string placement)
+        internal IosBidonRewardedAd()
         {
             _instance = this;
 
-            _rewardedDelegatePtr = BidonCreateRewardedDelegate(AuctionStarted, 
-                                                                    AuctionFinished, 
-                                                                    RoundStarted, 
-                                                                    RoundFinished, 
-                                                                    BidReceived, 
-                                                                    AdLoadFailed, 
-                                                                    AdLoaded, 
-                                                                    AdShowFailed, 
-                                                                    AdShown, 
-                                                                    AdClosed, 
-                                                                    AdClicked, 
-                                                                    AdRevenueReceived,
-                                                                    UserRewarded);
-            _rewardedAdPtr = BidonCreateRewarded(placement, _rewardedDelegatePtr);
+            _rewardedDelegatePtr = BidonCreateRewardedDelegate(AdLoadFailed,
+                                                               AdLoaded,
+                                                               AdShowFailed,
+                                                               AdShown,
+                                                               AdClosed,
+                                                               AdClicked,
+                                                               AdRevenueReceived,
+                                                               UserRewarded);
+            _rewardedAdPtr = BidonCreateRewarded(_rewardedDelegatePtr);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginLoadRewarded")]
@@ -130,75 +99,6 @@ namespace Bidon.Mediation
             BidonDestroyRewardedDelegate(_rewardedDelegatePtr);
             _rewardedAdPtr = IntPtr.Zero;
             _rewardedDelegatePtr = IntPtr.Zero;
-        }
-
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginGetRewardedPlacementId")]
-        private static extern string BidonGetRewardedPlacementId(IntPtr ptr);
-
-        public string GetPlacementId()
-        {
-            return BidonGetRewardedPlacementId(_rewardedAdPtr);
-        }
-
-        [MonoPInvokeCallback(typeof(AuctionStartedCallback))]
-        private static void AuctionStarted()
-        {
-            Debug.Log("[BDNDEBUG] [Rewarded] AuctionStarted");
-            SyncContextHelper.Post(state => _instance.OnAuctionStarted?.Invoke(_instance, new BidonAuctionStartedEventArgs()));
-        }
-
-        [MonoPInvokeCallback(typeof(AuctionFinishedCallback))]
-        private static void AuctionFinished(IntPtr iosBidonAdPtr)
-        {
-            BidonAd ad = null;
-            if (iosBidonAdPtr != IntPtr.Zero)
-            {
-                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
-                ad = iosBidonAd.ToBidonAd();
-                SyncContextHelper.Post(state => _instance.OnAuctionSucceed?.Invoke(_instance, new BidonAuctionSucceedEventArgs(Enumerable.Empty<BidonAuctionResult>())));
-            }
-            else
-            {
-                SyncContextHelper.Post(state => _instance.OnAuctionFailed?.Invoke(_instance, new BidonAuctionFailedEventArgs(BidonError.Unspecified)));
-            }
-            Debug.Log($"[BDNDEBUG] [Rewarded] AuctionFinished: ad: {ad?.ToJsonString(false) ?? "null"}");
-        }
-
-        [MonoPInvokeCallback(typeof(RoundStartedCallback))]
-        private static void RoundStarted(string roundId, double priceFloor)
-        {
-            Debug.Log($"[BDNDEBUG] [Rewarded] RoundStarted, id: {roundId}, priceFloor: {priceFloor}");
-            SyncContextHelper.Post(state => _instance.OnRoundStarted?.Invoke(_instance, new BidonRoundStartedEventArgs(roundId, priceFloor)));
-        }
-
-        [MonoPInvokeCallback(typeof(RoundFinishedCallback))]
-        private static void RoundFinished(IntPtr iosBidonAuctionRoundPtr)
-        {
-            if (iosBidonAuctionRoundPtr != IntPtr.Zero)
-            {
-                var round = Marshal.PtrToStructure<IosBidonAuctionRound>(iosBidonAuctionRoundPtr);
-                Debug.Log($"[BDNDEBUG] [Rewarded] RoundFinished: id: {round.RoundId}, demands: {round.Demands}, timeout: {round.Timeout}");
-            }
-            else
-            {
-                Debug.Log($"[BDNDEBUG] [Rewarded] RoundFinished: round data is null");
-            }
-
-            // TODO - It's not yet possible to detect success or fail based on provided data
-            // SyncContextHelper.Post(state => _instance.OnRoundSucceed?.Invoke(_instance, new BidonRoundSucceedEventArgs(round.RoundId, Enumerable.Empty<BidonAuctionResult>())));
-            // SyncContextHelper.Post(state => _instance.OnRoundFailed?.Invoke(_instance, new BidonRoundFailedEventArgs(round.RoundId, BidonError.Unspecified)));
-        }
-
-        [MonoPInvokeCallback(typeof(BidReceivedCallback))]
-        private static void BidReceived(IntPtr iosBidonAdPtr)
-        {
-            BidonAd ad = null;
-            if (iosBidonAdPtr != IntPtr.Zero)
-            {
-                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
-                ad = iosBidonAd.ToBidonAd();
-            }
-            Debug.Log($"[BDNDEBUG] [Rewarded] BidReceived: ad: {ad?.ToJsonString(false) ?? "null"}");
         }
 
         [MonoPInvokeCallback(typeof(AdLoadFailedCallback))]

@@ -7,12 +7,7 @@
 
 #import "BidonInterstitialAdDelegate.h"
 
-void* BDNUnityPluginCreateInterstitialDelegate(DidStartAuction didStartAuctionCallback,
-                                               DidCompleteAuction didCompleteAuctionCallback,
-                                               DidStartAuctionRound didStartAuctionRoundCallback,
-                                               DidCompleteAuctionRound didCompleteAuctionRoundCallback,
-                                               DidReceiveBid didReceiveBidCallback,
-                                               DidFailToLoad didFailToLoadCallback,
+void* BDNUnityPluginCreateInterstitialDelegate(DidFailToLoad didFailToLoadCallback,
                                                DidLoad didLoadCallback,
                                                DidFailToPresent didFailToPresentCallback,
                                                WillPresent willPresentCallback,
@@ -20,11 +15,6 @@ void* BDNUnityPluginCreateInterstitialDelegate(DidStartAuction didStartAuctionCa
                                                DidClick didClickCallback,
                                                DidPayRevenue didPayRevenueCallback) {
     BDNUnityPluginInterstitialAdDelegate* delegate = [BDNUnityPluginInterstitialAdDelegate new];
-    delegate.interstitialDidStartAuctionCallback = didStartAuctionCallback;
-    delegate.interstitialDidCompleteAuctionCallback = didCompleteAuctionCallback;
-    delegate.interstitialDidStartAuctionRoundCallback = didStartAuctionRoundCallback;
-    delegate.interstitialDidCompleteAuctionRoundCallback = didCompleteAuctionRoundCallback;
-    delegate.interstitialDidReceiveBidCallback = didReceiveBidCallback;
     delegate.interstitialDidFailToLoadCallback = didFailToLoadCallback;
     delegate.interstitialDidLoadCallback = didLoadCallback;
     delegate.interstitialDidFailToPresentCallback = didFailToPresentCallback;
@@ -40,11 +30,6 @@ void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
 
     BDNUnityPluginInterstitialAdDelegate* delegate = (__bridge_transfer BDNUnityPluginInterstitialAdDelegate *)delegatePtr;
 
-    delegate.interstitialDidStartAuctionCallback = nil;
-    delegate.interstitialDidCompleteAuctionCallback = nil;
-    delegate.interstitialDidStartAuctionRoundCallback = nil;
-    delegate.interstitialDidCompleteAuctionRoundCallback = nil;
-    delegate.interstitialDidReceiveBidCallback = nil;
     delegate.interstitialDidFailToLoadCallback = nil;
     delegate.interstitialDidLoadCallback = nil;
     delegate.interstitialDidFailToPresentCallback = nil;
@@ -55,54 +40,6 @@ void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
 }
 
 @implementation BDNUnityPluginInterstitialAdDelegate
-
-- (void)adObjectDidStartAuction:(id<BDNAdObject>)adObject {
-    if (!self.interstitialDidStartAuctionCallback) return;
-
-    self.interstitialDidStartAuctionCallback();
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didCompleteAuction:(id<BDNAd>)winner {
-    if (!self.interstitialDidCompleteAuctionCallback) return;
-
-    BDNUnityPluginAd unityAd;
-    if (winner) {
-        unityAd.Id = [winner.id UTF8String];
-        unityAd.Ecpm = winner.eCPM;
-        unityAd.AdUnitId = winner.adUnitId ? [winner.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [winner.networkName UTF8String];
-        unityAd.Dsp = winner.dsp ? [winner.dsp UTF8String] : nil;
-    }
-
-    self.interstitialDidCompleteAuctionCallback(winner ? &unityAd : nil);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didStartAuctionRound:(NSString *)auctionRound pricefloor:(double)pricefloor {
-    if (!self.interstitialDidStartAuctionRoundCallback) return;
-
-    self.interstitialDidStartAuctionRoundCallback([auctionRound UTF8String], pricefloor);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didCompleteAuctionRound:(NSString *)auctionRound {
-    if (!self.interstitialDidCompleteAuctionRoundCallback) return;
-
-    self.interstitialDidCompleteAuctionRoundCallback(nil);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didReceiveBid:(id<BDNAd>)ad {
-    if (!self.interstitialDidReceiveBidCallback) return;
-
-    BDNUnityPluginAd unityAd;
-    if (ad) {
-        unityAd.Id = [ad.id UTF8String];
-        unityAd.Ecpm = ad.eCPM;
-        unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [ad.networkName UTF8String];
-        unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    }
-
-    self.interstitialDidReceiveBidCallback(ad ? &unityAd : nil);
-}
 
 - (void)adObject:(id<BDNAdObject>)adObject didFailToLoadAd:(NSError *)error {
     if (!self.interstitialDidFailToLoadCallback) return;

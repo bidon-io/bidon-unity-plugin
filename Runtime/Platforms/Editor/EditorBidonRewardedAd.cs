@@ -5,12 +5,6 @@ namespace Bidon.Mediation
 {
     internal class EditorBidonRewardedAd : IBidonRewardedAd
     {
-        public event EventHandler<BidonAuctionStartedEventArgs> OnAuctionStarted;
-        public event EventHandler<BidonAuctionSucceedEventArgs> OnAuctionSucceed;
-        public event EventHandler<BidonAuctionFailedEventArgs> OnAuctionFailed;
-        public event EventHandler<BidonRoundStartedEventArgs> OnRoundStarted;
-        public event EventHandler<BidonRoundSucceedEventArgs> OnRoundSucceed;
-        public event EventHandler<BidonRoundFailedEventArgs> OnRoundFailed;
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -21,7 +15,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
-        internal EditorBidonRewardedAd(string placement) { }
+        internal EditorBidonRewardedAd() { }
 
         public void Load(double priceFloor)
         {
@@ -39,11 +33,6 @@ namespace Bidon.Mediation
         }
 
         public void Destroy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetPlacementId()
         {
             throw new NotImplementedException();
         }
