@@ -5,9 +5,9 @@
 //  Created by Dmitrii Feshchenko on 03/03/2023.
 //
 
+#import <Bidon/Bidon-Swift.h>
 #import <UnityAppController.h>
 #import <BidonRewardedAdDelegate.h>
-#import <BidOn/BidOn-Swift.h>
 
 void* BDNUnityPluginCreateRewarded(void* delegatePtr) {
     BDNRewardedAd* ad = [[BDNRewardedAd alloc] initWithPlacement:@"default"];

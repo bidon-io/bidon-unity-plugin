@@ -16,7 +16,7 @@ namespace Bidon.Mediation
 
         public string CurrencyCode;
 
-        public BidonDemandAd DemandAd;
+        public BidonAdType AdType;
 
         public string Dsp;
 

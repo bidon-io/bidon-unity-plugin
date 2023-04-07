@@ -2,7 +2,6 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
 using AOT;
 
 // ReSharper disable once CheckNamespace
@@ -18,12 +17,12 @@ namespace Bidon.Mediation
 
         private delegate void AdLoadFailedCallback(int cause);
         private delegate void AdLoadedCallback(IntPtr iosBidonAdPtr);
-        private delegate void AdShowFailedCallback(IntPtr iosBidonImpressionPtr, int cause);
-        private delegate void AdShownCallback(IntPtr iosBidonImpressionPtr);
-        private delegate void AdClosedCallback(IntPtr iosBidonImpressionPtr);
-        private delegate void AdClickedCallback(IntPtr iosBidonImpressionPtr);
+        private delegate void AdShowFailedCallback(int cause);
+        private delegate void AdShownCallback(IntPtr iosBidonAdPtr);
+        private delegate void AdClosedCallback(IntPtr iosBidonAdPtr);
+        private delegate void AdClickedCallback(IntPtr iosBidonAdPtr);
         private delegate void AdRevenueReceivedCallback(IntPtr iosBidonAdPtr, IntPtr iosBidonAdRevenuePtr);
-        private delegate void UserRewardedCallback(IntPtr iosBidonRewardPtr, IntPtr iosBidonImpressionPtr);
+        private delegate void UserRewardedCallback(IntPtr iosBidonAdPtr, IntPtr iosBidonRewardPtr);
 
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
@@ -104,8 +103,8 @@ namespace Bidon.Mediation
         [MonoPInvokeCallback(typeof(AdLoadFailedCallback))]
         private static void AdLoadFailed(int cause)
         {
-            Debug.Log($"[BDNDEBUG] [Rewarded] AdLoadFailed: cause: {cause}");
-            SyncContextHelper.Post(state => _instance.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(BidonError.Unspecified)));
+            var error = IosBidonHelper.GetBidonErrorFromInt(cause);
+            SyncContextHelper.Post(state => _instance.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(error)));
         }
 
         [MonoPInvokeCallback(typeof(AdLoadedCallback))]
@@ -117,73 +116,54 @@ namespace Bidon.Mediation
                 var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
                 ad = iosBidonAd.ToBidonAd();
             }
-            Debug.Log($"[BDNDEBUG] [Rewarded] AdLoaded: ad: {ad?.ToJsonString(false) ?? "null"}");
 
             SyncContextHelper.Post(state => _instance.OnAdLoaded?.Invoke(_instance, new BidonAdLoadedEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdShowFailedCallback))]
-        private static void AdShowFailed(IntPtr iosBidonImpressionPtr, int cause)
+        private static void AdShowFailed(int cause)
         {
-            if (iosBidonImpressionPtr != IntPtr.Zero)
-            {
-                var impression = Marshal.PtrToStructure<IosBidonImpression>(iosBidonImpressionPtr);
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdShowFailed: imp: {impression.ImpressionId}, cause: {cause}");
-            }
-            else
-            {
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdShowFailed: impression data is null, cause: {cause}");
-            }
-
-            SyncContextHelper.Post(state => _instance.OnAdShowFailed?.Invoke(_instance, new BidonAdShowFailedEventArgs(BidonError.Unspecified)));
+            var error = IosBidonHelper.GetBidonErrorFromInt(cause);
+            SyncContextHelper.Post(state => _instance.OnAdShowFailed?.Invoke(_instance, new BidonAdShowFailedEventArgs(error)));
         }
 
         [MonoPInvokeCallback(typeof(AdShownCallback))]
-        private static void AdShown(IntPtr iosBidonImpressionPtr)
+        private static void AdShown(IntPtr iosBidonAdPtr)
         {
-            if (iosBidonImpressionPtr != IntPtr.Zero)
+            BidonAd ad = null;
+            if (iosBidonAdPtr != IntPtr.Zero)
             {
-                var impression = Marshal.PtrToStructure<IosBidonImpression>(iosBidonImpressionPtr);
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdShown: imp: {impression.ImpressionId}");
-            }
-            else
-            {
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdShown: impression data is null");
+                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
+                ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdShown?.Invoke(_instance, new BidonAdShownEventArgs(null)));
+            SyncContextHelper.Post(state => _instance.OnAdShown?.Invoke(_instance, new BidonAdShownEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdClosedCallback))]
-        private static void AdClosed(IntPtr iosBidonImpressionPtr)
+        private static void AdClosed(IntPtr iosBidonAdPtr)
         {
-            if (iosBidonImpressionPtr != IntPtr.Zero)
+            BidonAd ad = null;
+            if (iosBidonAdPtr != IntPtr.Zero)
             {
-                var impression = Marshal.PtrToStructure<IosBidonImpression>(iosBidonImpressionPtr);
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdClosed: imp: {impression.ImpressionId}");
-            }
-            else
-            {
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdClosed: impression data is null");
+                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
+                ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdClosed?.Invoke(_instance, new BidonAdClosedEventArgs(null)));
+            SyncContextHelper.Post(state => _instance.OnAdClosed?.Invoke(_instance, new BidonAdClosedEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdClickedCallback))]
-        private static void AdClicked(IntPtr iosBidonImpressionPtr)
+        private static void AdClicked(IntPtr iosBidonAdPtr)
         {
-            if (iosBidonImpressionPtr != IntPtr.Zero)
+            BidonAd ad = null;
+            if (iosBidonAdPtr != IntPtr.Zero)
             {
-                var impression = Marshal.PtrToStructure<IosBidonImpression>(iosBidonImpressionPtr);
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdClicked: imp: {impression.ImpressionId}");
-            }
-            else
-            {
-                Debug.Log($"[BDNDEBUG] [Rewarded] AdClicked: impression data is null");
+                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
+                ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdClicked?.Invoke(_instance, new BidonAdClickedEventArgs(null)));
+            SyncContextHelper.Post(state => _instance.OnAdClicked?.Invoke(_instance, new BidonAdClickedEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdRevenueReceivedCallback))]
@@ -203,14 +183,19 @@ namespace Bidon.Mediation
                 adValue = iosBidonAdRevenue.ToBidonAdValue();
             }
 
-            Debug.Log($"[BDNDEBUG] [Rewarded] AdRevenueReceived: ad: {ad?.ToJsonString(false) ?? "null"}, adValue: {adValue?.ToJsonString(false) ?? "null"}");
-
             SyncContextHelper.Post(state => _instance.OnAdRevenueReceived?.Invoke(_instance, new BidonAdRevenueReceivedEventArgs(ad, adValue)));
         }
 
         [MonoPInvokeCallback(typeof(UserRewardedCallback))]
-        private static void UserRewarded(IntPtr iosBidonRewardPtr, IntPtr iosBidonImpressionPtr)
+        private static void UserRewarded(IntPtr iosBidonAdPtr, IntPtr iosBidonRewardPtr)
         {
+            BidonAd ad = null;
+            if (iosBidonAdPtr != IntPtr.Zero)
+            {
+                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
+                ad = iosBidonAd.ToBidonAd();
+            }
+
             BidonReward reward = null;
             if (iosBidonRewardPtr != IntPtr.Zero)
             {
@@ -218,9 +203,7 @@ namespace Bidon.Mediation
                 reward = iosBidonReward.ToBidonReward();
             }
 
-            Debug.Log($"[BDNDEBUG] [Rewarded] UserRewarded: reward: {reward?.ToJsonString(false) ?? "null"}");
-
-            SyncContextHelper.Post(state => _instance.OnUserRewarded?.Invoke(_instance, new BidonUserRewardedEventArgs(null, reward)));
+            SyncContextHelper.Post(state => _instance.OnUserRewarded?.Invoke(_instance, new BidonUserRewardedEventArgs(ad, reward)));
         }
     }
 }

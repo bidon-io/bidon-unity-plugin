@@ -6,6 +6,7 @@
 //
 
 #import "BidonInterstitialAdDelegate.h"
+#import "BidonHelperMethods.h"
 
 void* BDNUnityPluginCreateInterstitialDelegate(DidFailToLoad didFailToLoadCallback,
                                                DidLoad didLoadCallback,
@@ -41,71 +42,57 @@ void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
 
 @implementation BDNUnityPluginInterstitialAdDelegate
 
-- (void)adObject:(id<BDNAdObject>)adObject didFailToLoadAd:(NSError *)error {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error {
     if (!self.interstitialDidFailToLoadCallback) return;
 
-    self.interstitialDidFailToLoadCallback(0);
+    self.interstitialDidFailToLoadCallback((int)error.code);
 }
 
-- (void)adObject:(id<BDNAdObject>)adObject didLoadAd:(id<BDNAd>)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd;
-    if (ad) {
-        unityAd.Id = [ad.id UTF8String];
-        unityAd.Ecpm = ad.eCPM;
-        unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [ad.networkName UTF8String];
-        unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    }
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
 
-    self.interstitialDidLoadCallback(ad ? &unityAd : nil);
+    self.interstitialDidLoadCallback(&unityAd);
 }
 
-- (void)fullscreenAd:(id<BDNFullscreenAd>)fullscreenAd didFailToPresentAd:(NSError *)error {
+- (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didFailToPresentAd:(NSError * _Nonnull)error {
     if (!self.interstitialDidFailToPresentCallback) return;
 
-    self.interstitialDidFailToPresentCallback(nil, 0);
+    self.interstitialDidFailToPresentCallback((int)error.code);
 }
 
-- (void)fullscreenAd:(id<BDNFullscreenAd>)fullscreenAd willPresentAd:(id<BDNAd>)ad {
+- (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialWillPresentCallback) return;
 
-    self.interstitialWillPresentCallback(nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+
+    self.interstitialWillPresentCallback(&unityAd);
 }
 
-- (void)fullscreenAd:(id<BDNFullscreenAd>)fullscreenAd didDismissAd:(id<BDNAd>)ad {
+- (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didDismissAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidHideCallback) return;
 
-    self.interstitialDidHideCallback(nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+
+    self.interstitialDidHideCallback(&unityAd);
 }
 
-- (void)adObject:(id<BDNAdObject>)adObject didRecordClick:(id<BDNAd>)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidClickCallback) return;
 
-    self.interstitialDidClickCallback(nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+
+    self.interstitialDidClickCallback(&unityAd);
 }
 
-- (void)adObject:(id<BDNAdObject>)adObject didPay:(id<BDNAdRevenue>)revenue ad:(id<BDNAd>)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd;
-    if (ad) {
-        unityAd.Id = [ad.id UTF8String];
-        unityAd.Ecpm = ad.eCPM;
-        unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [ad.networkName UTF8String];
-        unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    }
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAdRevenue unityAdRevenue = GetBDNUnityPluginAdRevenue(revenue);
 
-    BDNUnityPluginAdRevenue unityAdRevenue;
-    if (revenue) {
-        unityAdRevenue.Revenue = revenue.revenue;
-        unityAdRevenue.RevenuePrecision = (int)revenue.precision;
-        unityAdRevenue.Currency = [revenue.currency UTF8String];
-    }
-
-    self.interstitialDidPayRevenueCallback(ad ? &unityAd : nil, revenue ? &unityAdRevenue : nil);
+    self.interstitialDidPayRevenueCallback(&unityAd, &unityAdRevenue);
 }
 
 @end

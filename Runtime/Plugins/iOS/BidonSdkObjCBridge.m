@@ -5,7 +5,7 @@
 //  Created by Dmitrii Feshchenko on 02/03/2023.
 //
 
-#import <BidOn/BidOn-Swift.h>
+#import <Bidon/Bidon-Swift.h>
 
 typedef void (*InitializationFinishedCallback)();
 

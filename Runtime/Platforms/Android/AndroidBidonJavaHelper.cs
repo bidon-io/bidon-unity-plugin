@@ -72,7 +72,7 @@ namespace Bidon.Mediation
                 AdUnitId = ad.Call<string>("getAdUnitId"),
                 AuctionId = ad.Call<string>("getAuctionId"),
                 CurrencyCode = ad.Call<string>("getCurrencyCode"),
-                DemandAd = GetBidonDemandAd(ad.Call<AndroidJavaObject>("getDemandAd")),
+                AdType = GetBidonAdType(ad.Call<AndroidJavaObject>("getDemandAd").Call<AndroidJavaObject>("getAdType")),
                 Dsp = ad.Call<string>("getDsp"),
                 Ecpm = ad.Call<double>("getEcpm"),
                 NetworkName = ad.Call<string>("getNetworkName"),
@@ -176,16 +176,6 @@ namespace Bidon.Mediation
             }
 
             return BidonError.Unspecified;
-        }
-
-        private static BidonDemandAd GetBidonDemandAd(AndroidJavaObject demandAd)
-        {
-            if (demandAd == null) return null;
-
-            return new BidonDemandAd
-            {
-                AdType = GetBidonAdType(demandAd.Call<AndroidJavaObject>("getAdType"))
-            };
         }
 
         private static BidonAdType GetBidonAdType(AndroidJavaObject adType)
