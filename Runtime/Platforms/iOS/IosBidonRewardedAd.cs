@@ -32,7 +32,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdClosedEventArgs> OnAdClosed;
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
-        public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded; 
+        public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewardedDelegate")]
         private static extern IntPtr BidonCreateRewardedDelegate(AdLoadFailedCallback onAdLoadFailed,
