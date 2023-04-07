@@ -70,3 +70,10 @@ const char* BDNUnityPluginGetBaseUrl() {
 bool BDNUnityPluginIsInitialized() {
     return [BDNSdk isInitialized];
 }
+
+void BDNUnityPluginSetMetadata(const char* frameworkVersion, const char* pluginVersion) {
+    NSString* frameworkVersionNSString = [NSString stringWithUTF8String:frameworkVersion];
+    NSString* pluginVersionNSString = [NSString stringWithUTF8String:pluginVersion];
+    [BDNSdk setFramework:BDNFrameworkUnity version:frameworkVersionNSString];
+    [BDNSdk setPluginVersion:pluginVersionNSString];
+}

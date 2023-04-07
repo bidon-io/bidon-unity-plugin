@@ -27,6 +27,10 @@ namespace Bidon.Mediation
                 return;
             }
 
+            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFramework", "unity");
+            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFrameworkVersion", Application.unityVersion);
+            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setPluginVersion", BidonSdk.PluginVersion);
+
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setInitializationCallback", new AndroidInitializationListener(this));
         }
 
