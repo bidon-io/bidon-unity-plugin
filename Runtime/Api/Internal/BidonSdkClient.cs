@@ -33,6 +33,16 @@ namespace Bidon.Mediation
             _bidonSdkImpl.SetBaseUrl(baseUrl);
         }
 
+        public void SetExtraData(string key, object value)
+        {
+            if (String.IsNullOrEmpty(key) || (value is string valueString && String.IsNullOrEmpty(valueString))) return;
+
+            if (value is int || value is long || value is float || value is double || value is bool || value is char || value is string)
+            {
+                _bidonSdkImpl.SetExtraData(key, value);
+            }
+        }
+
         public void RegisterDefaultAdapters()
         {
             _bidonSdkImpl.RegisterDefaultAdapters();
