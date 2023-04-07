@@ -5,9 +5,9 @@
 //  Created by Dmitrii Feshchenko on 03/03/2023.
 //
 
+#import <Bidon/Bidon-Swift.h>
 #import <UnityAppController.h>
 #import <BidonInterstitialAdDelegate.h>
-#import <BidOn/BidOn-Swift.h>
 
 void* BDNUnityPluginCreateInterstitial(void* delegatePtr) {
     BDNInterstitial* ad = [[BDNInterstitial alloc] initWithPlacement:@"default"];
