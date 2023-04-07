@@ -1,6 +1,7 @@
 #if UNITY_IOS
 using System;
 using System.Runtime.InteropServices;
+using UnityEngine;
 using AOT;
 
 // ReSharper disable once CheckNamespace
@@ -17,6 +18,7 @@ namespace Bidon.Mediation
         internal IosBidonSdk()
         {
             _instance = this;
+            SetMetadata(Application.unityVersion, BidonSdk.PluginVersion);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetLogLevel")]
@@ -89,6 +91,14 @@ namespace Bidon.Mediation
         public bool IsInitialized()
         {
             return BidonIsInitialized();
+        }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetMetadata")]
+        private static extern void BidonSetMetadata(string frameworkVersion, string pluginVersion);
+
+        private void SetMetadata(string frameworkVersion, string pluginVersion)
+        {
+            BidonSetMetadata(frameworkVersion, pluginVersion);
         }
 
         [MonoPInvokeCallback(typeof(InitializationFinishedCallback))]
