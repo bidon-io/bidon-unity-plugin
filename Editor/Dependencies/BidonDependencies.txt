@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dependencies>
     <iosPods>
-        <iosPod name="Bidon" version="0.1.7-Beta" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterAppLovin" version="0.1.7.1-Beta" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterBidMachine" version="0.1.7.1-Beta" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterGoogleMobileAds" version="0.1.7.1-Beta" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterDTExchange" version="0.1.7.1-Beta" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterUnityAds" version="0.1.7.1-Beta" minTargetSdk="12.0" />
+        <iosPod name="Bidon" version="0.1.8-Beta" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterAppLovin" version="0.1.8.1-Beta" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterBidMachine" version="0.1.8.1-Beta" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterGoogleMobileAds" version="0.1.8.1-Beta" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterDTExchange" version="0.1.8.1-Beta" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterUnityAds" version="0.1.8.1-Beta" minTargetSdk="12.0" />
         <iosPod name="BidMachine" version="2.0.1.0" minTargetSdk="12.0" />
         <iosPod name="BidMachineAdColonyAdapter" version="2.0.1.0" minTargetSdk="12.0" />
         <iosPod name="BidMachineAmazonAdapter" version="2.0.1.0" minTargetSdk="12.0" />
