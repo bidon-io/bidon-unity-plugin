@@ -1,4 +1,5 @@
 #if UNITY_IOS || BIDON_DEV_IOS
+using System;
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
@@ -7,24 +8,12 @@ namespace Bidon.Mediation
     {
         public static BidonError GetBidonErrorFromInt(int cause)
         {
-            BidonError error;
-            switch (cause)
+            if (Enum.IsDefined(typeof(BidonError), cause + 1))
             {
-                case 3:
-                    error = BidonError.NoFill;
-                    break;
-                case 5:
-                    error = BidonError.SdkNotInitialized;
-                    break;
-                case 7:
-                    error = BidonError.NoContextFound;
-                    break;
-                default:
-                    error = BidonError.Unspecified;
-                    break;
+                return (BidonError)(cause + 1);
             }
 
-            return error;
+            return BidonError.Unspecified;
         }
     }
 }

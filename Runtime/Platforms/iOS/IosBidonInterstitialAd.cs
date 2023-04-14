@@ -15,12 +15,13 @@ namespace Bidon.Mediation
         private IntPtr _interstitialAdPtr;
         private IntPtr _interstitialDelegatePtr;
 
-        private delegate void AdLoadFailedCallback(int cause);
         private delegate void AdLoadedCallback(IntPtr iosBidonAdPtr);
-        private delegate void AdShowFailedCallback(int cause);
+        private delegate void AdLoadFailedCallback(int cause);
         private delegate void AdShownCallback(IntPtr iosBidonAdPtr);
-        private delegate void AdClosedCallback(IntPtr iosBidonAdPtr);
+        private delegate void AdShowFailedCallback(int cause);
         private delegate void AdClickedCallback(IntPtr iosBidonAdPtr);
+        private delegate void AdClosedCallback(IntPtr iosBidonAdPtr);
+        private delegate void AdExpiredCallback(IntPtr iosBidonAdPtr);
         private delegate void AdRevenueReceivedCallback(IntPtr iosBidonAdPtr, IntPtr iosBidonAdRevenuePtr);
 
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
@@ -33,12 +34,13 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateInterstitialDelegate")]
-        private static extern IntPtr BidonCreateInterstitialDelegate(AdLoadFailedCallback onAdLoadFailed,
-                                                                     AdLoadedCallback onAdLoaded,
-                                                                     AdShowFailedCallback onAdShowFailed,
+        private static extern IntPtr BidonCreateInterstitialDelegate(AdLoadedCallback onAdLoaded,
+                                                                     AdLoadFailedCallback onAdLoadFailed,
                                                                      AdShownCallback onAdShown,
-                                                                     AdClosedCallback onAdClosed,
+                                                                     AdShowFailedCallback onAdShowFailed,
                                                                      AdClickedCallback onAdClicked,
+                                                                     AdClosedCallback onAdClosed,
+                                                                     AdExpiredCallback onAdExpired,
                                                                      AdRevenueReceivedCallback onAdRevenueReceived);
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateInterstitial")]
@@ -48,12 +50,13 @@ namespace Bidon.Mediation
         {
             _instance = this;
 
-            _interstitialDelegatePtr = BidonCreateInterstitialDelegate(AdLoadFailed,
-                                                                       AdLoaded,
-                                                                       AdShowFailed,
+            _interstitialDelegatePtr = BidonCreateInterstitialDelegate(AdLoaded,
+                                                                       AdLoadFailed,
                                                                        AdShown,
-                                                                       AdClosed,
+                                                                       AdShowFailed,
                                                                        AdClicked,
+                                                                       AdClosed,
+                                                                       AdExpired,
                                                                        AdRevenueReceived);
             _interstitialAdPtr = BidonCreateInterstitial(_interstitialDelegatePtr);
         }
@@ -96,13 +99,6 @@ namespace Bidon.Mediation
             _interstitialDelegatePtr = IntPtr.Zero;
         }
 
-        [MonoPInvokeCallback(typeof(AdLoadFailedCallback))]
-        private static void AdLoadFailed(int cause)
-        {
-            var error = IosBidonHelper.GetBidonErrorFromInt(cause);
-            SyncContextHelper.Post(state => _instance.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(error)));
-        }
-
         [MonoPInvokeCallback(typeof(AdLoadedCallback))]
         private static void AdLoaded(IntPtr iosBidonAdPtr)
         {
@@ -116,11 +112,11 @@ namespace Bidon.Mediation
             SyncContextHelper.Post(state => _instance.OnAdLoaded?.Invoke(_instance, new BidonAdLoadedEventArgs(ad)));
         }
 
-        [MonoPInvokeCallback(typeof(AdShowFailedCallback))]
-        private static void AdShowFailed(int cause)
+        [MonoPInvokeCallback(typeof(AdLoadFailedCallback))]
+        private static void AdLoadFailed(int cause)
         {
             var error = IosBidonHelper.GetBidonErrorFromInt(cause);
-            SyncContextHelper.Post(state => _instance.OnAdShowFailed?.Invoke(_instance, new BidonAdShowFailedEventArgs(error)));
+            SyncContextHelper.Post(state => _instance.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(error)));
         }
 
         [MonoPInvokeCallback(typeof(AdShownCallback))]
@@ -136,17 +132,11 @@ namespace Bidon.Mediation
             SyncContextHelper.Post(state => _instance.OnAdShown?.Invoke(_instance, new BidonAdShownEventArgs(ad)));
         }
 
-        [MonoPInvokeCallback(typeof(AdClosedCallback))]
-        private static void AdClosed(IntPtr iosBidonAdPtr)
+        [MonoPInvokeCallback(typeof(AdShowFailedCallback))]
+        private static void AdShowFailed(int cause)
         {
-            BidonAd ad = null;
-            if (iosBidonAdPtr != IntPtr.Zero)
-            {
-                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
-                ad = iosBidonAd.ToBidonAd();
-            }
-
-            SyncContextHelper.Post(state => _instance.OnAdClosed?.Invoke(_instance, new BidonAdClosedEventArgs(ad)));
+            var error = IosBidonHelper.GetBidonErrorFromInt(cause);
+            SyncContextHelper.Post(state => _instance.OnAdShowFailed?.Invoke(_instance, new BidonAdShowFailedEventArgs(error)));
         }
 
         [MonoPInvokeCallback(typeof(AdClickedCallback))]
@@ -160,6 +150,32 @@ namespace Bidon.Mediation
             }
 
             SyncContextHelper.Post(state => _instance.OnAdClicked?.Invoke(_instance, new BidonAdClickedEventArgs(ad)));
+        }
+
+        [MonoPInvokeCallback(typeof(AdClosedCallback))]
+        private static void AdClosed(IntPtr iosBidonAdPtr)
+        {
+            BidonAd ad = null;
+            if (iosBidonAdPtr != IntPtr.Zero)
+            {
+                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
+                ad = iosBidonAd.ToBidonAd();
+            }
+
+            SyncContextHelper.Post(state => _instance.OnAdClosed?.Invoke(_instance, new BidonAdClosedEventArgs(ad)));
+        }
+
+        [MonoPInvokeCallback(typeof(AdExpiredCallback))]
+        private static void AdExpired(IntPtr iosBidonAdPtr)
+        {
+            BidonAd ad = null;
+            if (iosBidonAdPtr != IntPtr.Zero)
+            {
+                var iosBidonAd = Marshal.PtrToStructure<IosBidonAd>(iosBidonAdPtr);
+                ad = iosBidonAd.ToBidonAd();
+            }
+
+            SyncContextHelper.Post(state => _instance.OnAdExpired?.Invoke(_instance, new BidonAdExpiredEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdRevenueReceivedCallback))]
