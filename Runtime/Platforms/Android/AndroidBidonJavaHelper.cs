@@ -184,23 +184,13 @@ namespace Bidon.Mediation
 
             string javaAdType = adType.Call<string>("name");
 
-            BidonAdType bidonAdType;
-            switch (javaAdType)
+            return javaAdType switch
             {
-                case "Banner":
-                    bidonAdType = BidonAdType.Banner;
-                    break;
-                case "Interstitial":
-                    bidonAdType = BidonAdType.Interstitial;
-                    break;
-                case "Rewarded":
-                    bidonAdType = BidonAdType.Rewarded;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(javaAdType), javaAdType, "value must be assignable to BidonAdType");
-            }
-
-            return bidonAdType;
+                "Banner" => BidonAdType.Banner,
+                "Interstitial" => BidonAdType.Interstitial,
+                "Rewarded" => BidonAdType.Rewarded,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaAdType), javaAdType, "value must be assignable to BidonAdType")
+            };
         }
 
         private static BidonRevenuePrecision GetBidonRevenuePrecision(AndroidJavaObject precision)
@@ -209,43 +199,27 @@ namespace Bidon.Mediation
 
             string javaPrecision = precision.Call<string>("name");
 
-            BidonRevenuePrecision revenuePrecision;
-            switch (javaPrecision)
+            return javaPrecision switch
             {
-                case "Precise":
-                    revenuePrecision = BidonRevenuePrecision.Precise;
-                    break;
-                case "Estimated":
-                    revenuePrecision = BidonRevenuePrecision.Estimated;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(javaPrecision), javaPrecision, "value must be assignable to BidonRevenuePrecision");
-            }
-
-            return revenuePrecision;
+                "Precise" => BidonRevenuePrecision.Precise,
+                "Estimated" => BidonRevenuePrecision.Estimated,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaPrecision), javaPrecision, "value must be assignable to BidonRevenuePrecision")
+            };
         }
 
         public static object GetJavaObject(object value)
         {
-            switch (value)
+            return value switch
             {
-                case int _:
-                    return new AndroidJavaObject("java.lang.Integer", value);
-                case long _:
-                    return new AndroidJavaObject("java.lang.Long", value);
-                case float _:
-                    return new AndroidJavaObject("java.lang.Float", value);
-                case double _:
-                    return new AndroidJavaObject("java.lang.Double", value);
-                case bool _:
-                    return new AndroidJavaObject("java.lang.Boolean", value);
-                case char _:
-                    return new AndroidJavaObject("java.lang.Character", value);
-                case string _:
-                    return value;
-                default:
-                    throw new ArgumentException("Incorrect type");
-            }
+                int _ => new AndroidJavaObject("java.lang.Integer", value),
+                long _ => new AndroidJavaObject("java.lang.Long", value),
+                float _ => new AndroidJavaObject("java.lang.Float", value),
+                double _ => new AndroidJavaObject("java.lang.Double", value),
+                bool _ => new AndroidJavaObject("java.lang.Boolean", value),
+                char _ => new AndroidJavaObject("java.lang.Character", value),
+                string _ => value,
+                _ => throw new ArgumentException("Incorrect type")
+            };
         }
     }
 }
