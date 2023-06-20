@@ -13,7 +13,7 @@ This page describes how to import and configure Bidon Unity Plugin.
 3. Copy the link from below and install Bidon Unity Plugin via UPM (`Window -> Package Manager -> "+" -> Add package from git URL`).
 
 ```
-https://github.com/bidon-io/bidon-unity-plugin.git
+https://github.com/bidon-io/bidon-unity-plugin.git#v0.2.1
 ```
 
 ## Initialize the SDK
