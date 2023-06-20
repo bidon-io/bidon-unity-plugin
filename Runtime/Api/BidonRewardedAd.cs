@@ -8,14 +8,6 @@ namespace Bidon.Mediation
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     public sealed class BidonRewardedAd : IBidonRewardedAd
     {
-        public event EventHandler<BidonAuctionStartedEventArgs> OnAuctionStarted;
-        public event EventHandler<BidonAuctionSucceedEventArgs> OnAuctionSucceed;
-        public event EventHandler<BidonAuctionFailedEventArgs> OnAuctionFailed;
-
-        public event EventHandler<BidonRoundStartedEventArgs> OnRoundStarted;
-        public event EventHandler<BidonRoundSucceedEventArgs> OnRoundSucceed;
-        public event EventHandler<BidonRoundFailedEventArgs> OnRoundFailed;
-
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -23,35 +15,27 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdClickedEventArgs> OnAdClicked;
         public event EventHandler<BidonAdClosedEventArgs> OnAdClosed;
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
-
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
-
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
         private readonly IBidonRewardedAd _bidonRewardedAdImpl;
 
-        public BidonRewardedAd(string placement = "default")
+        public BidonRewardedAd()
         {
 #if UNITY_EDITOR
-            _bidonRewardedAdImpl = new EditorBidonRewardedAd(placement);
+            _bidonRewardedAdImpl = new EditorBidonRewardedAd();
 #elif UNITY_ANDROID
-            _bidonRewardedAdImpl = new AndroidBidonRewardedAd(placement);
+            _bidonRewardedAdImpl = new AndroidBidonRewardedAd();
 #elif UNITY_IOS
-            _bidonRewardedAdImpl = new IosBidonRewardedAd(placement);
+            _bidonRewardedAdImpl = new IosBidonRewardedAd();
 #else
-            _bidonRewardedAdImpl = new DummyBidonRewardedAd(placement);
+            _bidonRewardedAdImpl = new DummyBidonRewardedAd();
 #endif
             InitializeCallbacks();
         }
 
         private void InitializeCallbacks()
         {
-            _bidonRewardedAdImpl.OnAuctionStarted += (sender, args) => OnAuctionStarted?.Invoke(this, args);
-            _bidonRewardedAdImpl.OnAuctionSucceed += (sender, args) => OnAuctionSucceed?.Invoke(this, args);
-            _bidonRewardedAdImpl.OnAuctionFailed += (sender, args) => OnAuctionFailed?.Invoke(this, args);
-            _bidonRewardedAdImpl.OnRoundStarted += (sender, args) => OnRoundStarted?.Invoke(this, args);
-            _bidonRewardedAdImpl.OnRoundSucceed += (sender, args) => OnRoundSucceed?.Invoke(this, args);
-            _bidonRewardedAdImpl.OnRoundFailed += (sender, args) => OnRoundFailed?.Invoke(this, args);
             _bidonRewardedAdImpl.OnAdLoaded += (sender, args) => OnAdLoaded?.Invoke(this, args);
             _bidonRewardedAdImpl.OnAdLoadFailed += (sender, args) => OnAdLoadFailed?.Invoke(this, args);
             _bidonRewardedAdImpl.OnAdShown += (sender, args) => OnAdShown?.Invoke(this, args);
@@ -70,7 +54,5 @@ namespace Bidon.Mediation
         public void Show() => _bidonRewardedAdImpl.Show();
 
         public void Destroy() => _bidonRewardedAdImpl.Destroy();
-
-        public string GetPlacementId() => _bidonRewardedAdImpl.GetPlacementId();
     }
 }

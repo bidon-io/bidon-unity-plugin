@@ -19,7 +19,7 @@ You're able to define which adapters will be used by Bidon SDK in the applicatio
 You're able to receive impression-level ad revenue data for sending to any MMP or analytics platform.
 
 ```c#
-var bidonInter = new BidonInterstitialAd("PLACEMENT_NAME");
+var bidonInter = new BidonInterstitialAd();
 bidonInter.OnAdRevenueReceived += (sender, args) =>
 {
     double revenue = args.AdValue.AdRevenue;

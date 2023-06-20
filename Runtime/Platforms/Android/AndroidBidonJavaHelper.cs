@@ -1,7 +1,5 @@
-#if UNITY_ANDROID
+#if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -53,19 +51,6 @@ namespace Bidon.Mediation
             }
         }
 
-        public static IEnumerable<BidonAuctionResult> GetListOfBidonAuctionResults(AndroidJavaObject list)
-        {
-            if (list == null) return Enumerable.Empty<BidonAuctionResult>();
-
-            int countOfElements = list.Call<int>("size");
-            var resultList = new List<BidonAuctionResult>();
-            for(int i = 0; i < countOfElements; i++)
-            {
-                resultList.Add(GetBidonAuctionResult(list.Call<AndroidJavaObject>("get", i)));
-            }
-            return resultList;
-        }
-
         public static BidonAdValue GetBidonAdValue(AndroidJavaObject adValue)
         {
             if (adValue == null) return null;
@@ -87,7 +72,7 @@ namespace Bidon.Mediation
                 AdUnitId = ad.Call<string>("getAdUnitId"),
                 AuctionId = ad.Call<string>("getAuctionId"),
                 CurrencyCode = ad.Call<string>("getCurrencyCode"),
-                DemandAd = GetBidonDemandAd(ad.Call<AndroidJavaObject>("getDemandAd")),
+                AdType = GetBidonAdType(ad.Call<AndroidJavaObject>("getDemandAd").Call<AndroidJavaObject>("getAdType")),
                 Dsp = ad.Call<string>("getDsp"),
                 Ecpm = ad.Call<double>("getEcpm"),
                 NetworkName = ad.Call<string>("getNetworkName"),
@@ -193,63 +178,19 @@ namespace Bidon.Mediation
             return BidonError.Unspecified;
         }
 
-        private static BidonAuctionResult GetBidonAuctionResult(AndroidJavaObject result)
-        {
-            if (result == null) return null;
-
-            return new BidonAuctionResult
-            {
-                AdSource = GetBidonAdSource(result.Call<AndroidJavaObject>("getAdSource")),
-                Ecpm = result.Call<double>("getEcpm")
-            };
-        }
-
-        private static BidonAdSource GetBidonAdSource(AndroidJavaObject adSource)
-        {
-            if (adSource == null) return null;
-
-            return new BidonAdSource
-            {
-                Ad = GetBidonAd(adSource.Call<AndroidJavaObject>("getAd")),
-                DemandId = adSource.Call<AndroidJavaObject>("getDemandId").Call<string>("getDemandId"),
-                IsReadyToShow = adSource.Call<bool>("isAdReadyToShow")
-            };
-        }
-
-        private static BidonDemandAd GetBidonDemandAd(AndroidJavaObject demandAd)
-        {
-            if (demandAd == null) return null;
-
-            return new BidonDemandAd
-            {
-                AdType = GetBidonAdType(demandAd.Call<AndroidJavaObject>("getAdType")),
-                Placement = demandAd.Call<string>("getPlacement")
-            };
-        }
-
         private static BidonAdType GetBidonAdType(AndroidJavaObject adType)
         {
             if (adType == null) throw new ArgumentNullException(nameof(adType), "param can not be null");
 
             string javaAdType = adType.Call<string>("name");
 
-            BidonAdType bidonAdType;
-            switch (javaAdType)
+            return javaAdType switch
             {
-                case "Banner":
-                    bidonAdType = BidonAdType.Banner;
-                    break;
-                case "Interstitial":
-                    bidonAdType = BidonAdType.Interstitial;
-                    break;
-                case "Rewarded":
-                    bidonAdType = BidonAdType.Rewarded;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(javaAdType), javaAdType, "value must be assignable to BidonAdType");
-            }
-
-            return bidonAdType;
+                "Banner" => BidonAdType.Banner,
+                "Interstitial" => BidonAdType.Interstitial,
+                "Rewarded" => BidonAdType.Rewarded,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaAdType), javaAdType, "value must be assignable to BidonAdType")
+            };
         }
 
         private static BidonRevenuePrecision GetBidonRevenuePrecision(AndroidJavaObject precision)
@@ -258,20 +199,27 @@ namespace Bidon.Mediation
 
             string javaPrecision = precision.Call<string>("name");
 
-            BidonRevenuePrecision revenuePrecision;
-            switch (javaPrecision)
+            return javaPrecision switch
             {
-                case "Precise":
-                    revenuePrecision = BidonRevenuePrecision.Precise;
-                    break;
-                case "Estimated":
-                    revenuePrecision = BidonRevenuePrecision.Estimated;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(javaPrecision), javaPrecision, "value must be assignable to BidonRevenuePrecision");
-            }
+                "Precise" => BidonRevenuePrecision.Precise,
+                "Estimated" => BidonRevenuePrecision.Estimated,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaPrecision), javaPrecision, "value must be assignable to BidonRevenuePrecision")
+            };
+        }
 
-            return revenuePrecision;
+        public static object GetJavaObject(object value)
+        {
+            return value switch
+            {
+                int _ => new AndroidJavaObject("java.lang.Integer", value),
+                long _ => new AndroidJavaObject("java.lang.Long", value),
+                float _ => new AndroidJavaObject("java.lang.Float", value),
+                double _ => new AndroidJavaObject("java.lang.Double", value),
+                bool _ => new AndroidJavaObject("java.lang.Boolean", value),
+                char _ => new AndroidJavaObject("java.lang.Character", value),
+                string _ => value,
+                _ => throw new ArgumentException("Incorrect type")
+            };
         }
     }
 }

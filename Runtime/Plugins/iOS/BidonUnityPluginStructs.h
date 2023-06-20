@@ -6,34 +6,20 @@
 //
 
 typedef struct {
-    const char* Id;
-    double      Ecpm;
     const char* AdUnitId;
-    const char* NetworkName;
+    const char* AuctionId;
+    const char* CurrencyCode;
+    int         AdType;
     const char* Dsp;
-} BDNUnityPluginAd;
-
-typedef struct {
+    double      Ecpm;
+    const char* NetworkName;
     const char* RoundId;
-    const char* Demands;
-    double      Timeout;
-} BDNUnityPluginAuctionRound;
-
-typedef struct {
-    const char*         ImpressionId;
-    const char*         AuctionId;
-    int                 AuctionConfigurationId;
-    BDNUnityPluginAd*   ad;
-    double              showTrackTime;
-    double              clickTrackTime;
-    double              rewardTrackTime;
-} BDNUnityPluginImpression;
+} BDNUnityPluginAd;
 
 typedef struct {
     double      Revenue;
     int         RevenuePrecision;
     const char* Currency;
-    
 } BDNUnityPluginAdRevenue;
 
 typedef struct {

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -13,6 +14,11 @@ namespace Bidon.Mediation
         }
 
         public void SetBaseUrl(string baseUrl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetExtraData(string key, object value)
         {
             throw new NotImplementedException();
         }
@@ -53,3 +59,4 @@ namespace Bidon.Mediation
         }
     }
 }
+#endif

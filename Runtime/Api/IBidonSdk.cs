@@ -8,6 +8,7 @@ namespace Bidon.Mediation
         event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
         void SetLogLevel(BidonLogLevel logLevel);
         void SetBaseUrl(string baseUrl);
+        void SetExtraData(string key, object value);
         void RegisterDefaultAdapters();
         void RegisterAdapter(string className);
         void Initialize(string appKey);

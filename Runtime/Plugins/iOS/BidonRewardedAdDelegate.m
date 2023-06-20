@@ -6,34 +6,28 @@
 //
 
 #import "BidonRewardedAdDelegate.h"
+#import "BidonHelperMethods.h"
 
-void* BDNUnityPluginCreateRewardedDelegate(DidStartAuction didStartAuctionCallback,
-                                           DidCompleteAuction didCompleteAuctionCallback,
-                                           DidStartAuctionRound didStartAuctionRoundCallback,
-                                           DidCompleteAuctionRound didCompleteAuctionRoundCallback,
-                                           DidReceiveBid didReceiveBidCallback,
+void* BDNUnityPluginCreateRewardedDelegate(DidLoad didLoadCallback,
                                            DidFailToLoad didFailToLoadCallback,
-                                           DidLoad didLoadCallback,
-                                           DidFailToPresent didFailToPresentCallback,
                                            WillPresent willPresentCallback,
-                                           DidHide didHideCallback,
+                                           DidFailToPresent didFailToPresentCallback,
                                            DidClick didClickCallback,
+                                           DidHide didHideCallback,
+                                           DidExpire didExpireCallback,
                                            DidPayRevenue didPayRevenueCallback,
                                            DidReceiveReward didReceiveRewardCallback) {
     BDNUnityPluginRewardedAdDelegate* delegate = [BDNUnityPluginRewardedAdDelegate new];
-    delegate.rewardedDidStartAuctionCallback = didStartAuctionCallback;
-    delegate.rewardedDidCompleteAuctionCallback = didCompleteAuctionCallback;
-    delegate.rewardedDidStartAuctionRoundCallback = didStartAuctionRoundCallback;
-    delegate.rewardedDidCompleteAuctionRoundCallback = didCompleteAuctionRoundCallback;
-    delegate.rewardedDidReceiveBidCallback = didReceiveBidCallback;
-    delegate.rewardedDidFailToLoadCallback = didFailToLoadCallback;
     delegate.rewardedDidLoadCallback = didLoadCallback;
-    delegate.rewardedDidFailToPresentCallback = didFailToPresentCallback;
+    delegate.rewardedDidFailToLoadCallback = didFailToLoadCallback;
     delegate.rewardedWillPresentCallback = willPresentCallback;
-    delegate.rewardedDidHideCallback = didHideCallback;
+    delegate.rewardedDidFailToPresentCallback = didFailToPresentCallback;
     delegate.rewardedDidClickCallback = didClickCallback;
+    delegate.rewardedDidHideCallback = didHideCallback;
+    delegate.rewardedDidExpireCallback = didExpireCallback;
     delegate.rewardedDidPayRevenueCallback = didPayRevenueCallback;
     delegate.rewardedDidReceiveRewardCallback = didReceiveRewardCallback;
+
     return (__bridge_retained void*)delegate;
 }
 
@@ -42,147 +36,80 @@ void BDNUnityPluginDestroyRewardedDelegate(void* delegatePtr) {
 
     BDNUnityPluginRewardedAdDelegate* delegate = (__bridge_transfer BDNUnityPluginRewardedAdDelegate *)delegatePtr;
 
-    delegate.rewardedDidStartAuctionCallback = nil;
-    delegate.rewardedDidCompleteAuctionCallback = nil;
-    delegate.rewardedDidStartAuctionRoundCallback = nil;
-    delegate.rewardedDidCompleteAuctionRoundCallback = nil;
-    delegate.rewardedDidReceiveBidCallback = nil;
-    delegate.rewardedDidFailToLoadCallback = nil;
     delegate.rewardedDidLoadCallback = nil;
-    delegate.rewardedDidFailToPresentCallback = nil;
+    delegate.rewardedDidFailToLoadCallback = nil;
     delegate.rewardedWillPresentCallback = nil;
-    delegate.rewardedDidHideCallback = nil;
+    delegate.rewardedDidFailToPresentCallback = nil;
     delegate.rewardedDidClickCallback = nil;
+    delegate.rewardedDidHideCallback = nil;
+    delegate.rewardedDidExpireCallback = nil;
     delegate.rewardedDidPayRevenueCallback = nil;
     delegate.rewardedDidReceiveRewardCallback = nil;
 }
 
 @implementation BDNUnityPluginRewardedAdDelegate
 
-- (void)adObjectDidStartAuction:(id<BDNAdObject>)adObject {
-    if (!self.rewardedDidStartAuctionCallback) return;
-
-    self.rewardedDidStartAuctionCallback();
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didCompleteAuction:(id<BDNAd>)winner {
-    if (!self.rewardedDidCompleteAuctionCallback) return;
-
-    BDNUnityPluginAd unityAd;
-    if (winner) {
-        unityAd.Id = [winner.id UTF8String];
-        unityAd.Ecpm = winner.eCPM;
-        unityAd.AdUnitId = winner.adUnitId ? [winner.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [winner.networkName UTF8String];
-        unityAd.Dsp = winner.dsp ? [winner.dsp UTF8String] : nil;
-    }
-
-    self.rewardedDidCompleteAuctionCallback(winner ? &unityAd : nil);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didStartAuctionRound:(NSString *)auctionRound pricefloor:(double)pricefloor {
-    if (!self.rewardedDidStartAuctionRoundCallback) return;
-
-    self.rewardedDidStartAuctionRoundCallback([auctionRound UTF8String], pricefloor);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didCompleteAuctionRound:(NSString *)auctionRound {
-    if (!self.rewardedDidCompleteAuctionRoundCallback) return;
-
-    self.rewardedDidCompleteAuctionRoundCallback(nil);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didReceiveBid:(id<BDNAd>)ad {
-    if (!self.rewardedDidReceiveBidCallback) return;
-
-    BDNUnityPluginAd unityAd;
-    if (ad) {
-        unityAd.Id = [ad.id UTF8String];
-        unityAd.Ecpm = ad.eCPM;
-        unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [ad.networkName UTF8String];
-        unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    }
-
-    self.rewardedDidReceiveBidCallback(ad ? &unityAd : nil);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didFailToLoadAd:(NSError *)error {
-    if (!self.rewardedDidFailToLoadCallback) return;
-
-    self.rewardedDidFailToLoadCallback(0);
-}
-
-- (void)adObject:(id<BDNAdObject>)adObject didLoadAd:(id<BDNAd>)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd;
-    if (ad) {
-        unityAd.Id = [ad.id UTF8String];
-        unityAd.Ecpm = ad.eCPM;
-        unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [ad.networkName UTF8String];
-        unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    }
-
-    self.rewardedDidLoadCallback(ad ? &unityAd : nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    self.rewardedDidLoadCallback(&unityAd);
 }
 
-- (void)fullscreenAd:(id<BDNFullscreenAd>)fullscreenAd didFailToPresentAd:(NSError *)error {
-    if (!self.rewardedDidFailToPresentCallback) return;
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error {
+    if (!self.rewardedDidFailToLoadCallback) return;
 
-    self.rewardedDidFailToPresentCallback(nil, 0);
+    self.rewardedDidFailToLoadCallback((int)error.code);
 }
 
-- (void)fullscreenAd:(id<BDNFullscreenAd>)fullscreenAd willPresentAd:(id<BDNAd>)ad {
+- (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedWillPresentCallback) return;
 
-    self.rewardedWillPresentCallback(nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    self.rewardedWillPresentCallback(&unityAd);
 }
 
-- (void)fullscreenAd:(id<BDNFullscreenAd>)fullscreenAd didDismissAd:(id<BDNAd>)ad {
-    if (!self.rewardedDidHideCallback) return;
+- (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didFailToPresentAd:(NSError * _Nonnull)error {
+    if (!self.rewardedDidFailToPresentCallback) return;
 
-    self.rewardedDidHideCallback(nil);
+    self.rewardedDidFailToPresentCallback((int)error.code);
 }
 
-- (void)adObject:(id<BDNAdObject>)adObject didRecordClick:(id<BDNAd>)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidClickCallback) return;
 
-    self.rewardedDidClickCallback(nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    self.rewardedDidClickCallback(&unityAd);
 }
 
-- (void)adObject:(id<BDNAdObject>)adObject didPay:(id<BDNAdRevenue>)revenue ad:(id<BDNAd>)ad {
+- (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didDismissAd:(id<BDNAd> _Nonnull)ad {
+    if (!self.rewardedDidHideCallback) return;
+
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    self.rewardedDidHideCallback(&unityAd);
+}
+
+- (void)adObject:(id<BDNAdObject>)adObject didExpireAd:(id<BDNAd>)ad {
+    if (!self.rewardedDidExpireCallback) return;
+
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    self.rewardedDidExpireCallback(&unityAd);
+}
+
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd;
-    if (ad) {
-        unityAd.Id = [ad.id UTF8String];
-        unityAd.Ecpm = ad.eCPM;
-        unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
-        unityAd.NetworkName = [ad.networkName UTF8String];
-        unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    }
-
-    BDNUnityPluginAdRevenue unityAdRevenue;
-    if (revenue) {
-        unityAdRevenue.Revenue = revenue.revenue;
-        unityAdRevenue.RevenuePrecision = (int)revenue.precision;
-        unityAdRevenue.Currency = [revenue.currency UTF8String];
-    }
-
-    self.rewardedDidPayRevenueCallback(ad ? &unityAd : nil, revenue ? &unityAdRevenue : nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAdRevenue unityAdRevenue = GetBDNUnityPluginAdRevenue(revenue);
+    self.rewardedDidPayRevenueCallback(&unityAd, &unityAdRevenue);
 }
 
-- (void)rewardedAd:(id<BDNRewardedAd>)rewardedAd didRewardUser:(id<BDNReward>)reward {
+- (void)rewardedAd:(id<BDNRewardedAd> _Nonnull)rewardedAd didRewardUser:(id<BDNReward> _Nonnull)reward ad:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidReceiveRewardCallback) return;
 
-    BDNUnityPluginReward unityReward;
-    if (reward) {
-        unityReward.label = [reward.label UTF8String];
-        unityReward.amount = reward.amount;
-    }
-
-    self.rewardedDidReceiveRewardCallback(reward ? &unityReward : nil, nil);
+    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginReward unityReward = GetBDNUnityPluginReward(reward);
+    self.rewardedDidReceiveRewardCallback(&unityAd, &unityReward);
 }
+
 @end

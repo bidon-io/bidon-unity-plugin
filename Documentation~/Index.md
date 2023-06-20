@@ -1,19 +1,19 @@
 # Integration
 
-This page describes how to import and configure Bidon Unity Plugin. 
+This page describes how to import and configure Bidon Unity Plugin.
 
-- [Getting Started](#getting-started) 
+- [Getting Started](#getting-started)
 - [Initialize the SDK](#initialize-the-sdk)
 - [Configure Ad Types](#configure-ad-types)
 
-## Getting Started 
+## Getting Started
 
 1. Download External Dependency Manager v1.2.175 or newer from [this website](https://developers.google.com/unity/archive#external_dependency_manager_for_unity).
 2. Import EDM into your Unity project by adding downloaded archive via Unity Package Manager (`Window -> Package Manager -> "+" -> Add package from tarball`).
 3. Copy the link from below and install Bidon Unity Plugin via UPM (`Window -> Package Manager -> "+" -> Add package from git URL`).
 
 ```
-https://github.com/bidon-io/bidon-unity-plugin.git
+https://github.com/bidon-io/bidon-unity-plugin.git#v0.2.1
 ```
 
 ## Initialize the SDK

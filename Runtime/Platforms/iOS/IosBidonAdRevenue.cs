@@ -1,4 +1,4 @@
-#if UNITY_IOS
+#if UNITY_IOS || BIDON_DEV_IOS
 using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace

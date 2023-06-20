@@ -1,4 +1,4 @@
-#if UNITY_ANDROID
+#if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
@@ -12,11 +12,11 @@ namespace Bidon.Mediation
         private readonly AndroidJavaObject _interstitialAdJavaObject;
         private readonly AndroidJavaObject _activityJavaObject;
 
-        internal AndroidBidonInterstitialAd(string placement)
+        internal AndroidBidonInterstitialAd()
         {
             try
             {
-                _interstitialAdJavaObject = new AndroidJavaObject("org.bidon.sdk.ads.interstitial.InterstitialAd", placement);
+                _interstitialAdJavaObject = new AndroidJavaObject("org.bidon.sdk.ads.interstitial.InterstitialAd");
                 _activityJavaObject = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
             }
             catch (Exception e)
@@ -28,14 +28,6 @@ namespace Bidon.Mediation
             _interstitialAdJavaObject.Call("setInterstitialListener", new AndroidInterstitialListener(this));
         }
 
-        public event EventHandler<BidonAuctionStartedEventArgs> OnAuctionStarted;
-        public event EventHandler<BidonAuctionSucceedEventArgs> OnAuctionSucceed;
-        public event EventHandler<BidonAuctionFailedEventArgs> OnAuctionFailed;
-
-        public event EventHandler<BidonRoundStartedEventArgs> OnRoundStarted;
-        public event EventHandler<BidonRoundSucceedEventArgs> OnRoundSucceed;
-        public event EventHandler<BidonRoundFailedEventArgs> OnRoundFailed;
-
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -43,7 +35,6 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdClickedEventArgs> OnAdClicked;
         public event EventHandler<BidonAdClosedEventArgs> OnAdClosed;
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
-
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
         public void Load(double priceFloor)
@@ -66,42 +57,7 @@ namespace Bidon.Mediation
             _interstitialAdJavaObject?.Call("destroyAd");
         }
 
-        public string GetPlacementId()
-        {
-            return _interstitialAdJavaObject?.Call<string>("getPlacementId");
-        }
-
         #region Callbacks
-
-        public void onAuctionStarted()
-        {
-            OnAuctionStarted?.Invoke(this, new BidonAuctionStartedEventArgs());
-        }
-
-        public void onAuctionSuccess(AndroidJavaObject auctionResults)
-        {
-            OnAuctionSucceed?.Invoke(this, new BidonAuctionSucceedEventArgs(AndroidBidonJavaHelper.GetListOfBidonAuctionResults(auctionResults)));
-        }
-
-        public void onAuctionFailed(AndroidJavaObject cause)
-        {
-            OnAuctionFailed?.Invoke(this, new BidonAuctionFailedEventArgs(AndroidBidonJavaHelper.GetBidonError(cause)));
-        }
-
-        public void onRoundStarted(string roundId, double priceFloor)
-        {
-            OnRoundStarted?.Invoke(this, new BidonRoundStartedEventArgs(roundId, priceFloor));
-        }
-
-        public void onRoundSucceed(string roundId, AndroidJavaObject roundResults)
-        {
-            OnRoundSucceed?.Invoke(this, new BidonRoundSucceedEventArgs(roundId, AndroidBidonJavaHelper.GetListOfBidonAuctionResults(roundResults)));
-        }
-
-        public void onRoundFailed(string roundId, AndroidJavaObject cause)
-        {
-            OnRoundFailed?.Invoke(this, new BidonRoundFailedEventArgs(roundId, AndroidBidonJavaHelper.GetBidonError(cause)));
-        }
 
         public void onAdLoaded(AndroidJavaObject ad)
         {

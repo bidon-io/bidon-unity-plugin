@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
@@ -39,6 +37,15 @@ public class BidonDemoScript : MonoBehaviour
 
         BidonSdk.Instance.SetLogLevel(BidonLogLevel.Verbose);
         BidonSdk.Instance.SetBaseUrl("https://b.appbaqend.com");
+
+        BidonSdk.Instance.SetExtraData("answer", 42);
+        BidonSdk.Instance.SetExtraData("key_long", long.MaxValue);
+        BidonSdk.Instance.SetExtraData("key_float", float.MaxValue);
+        BidonSdk.Instance.SetExtraData("key_double", double.MaxValue);
+        BidonSdk.Instance.SetExtraData("is_cake_a_lie", true);
+        BidonSdk.Instance.SetExtraData("key_char", 'v');
+        BidonSdk.Instance.SetExtraData("key_string", "some value");
+
         BidonSdk.Instance.RegisterDefaultAdapters();
 
 #if UNITY_ANDROID
@@ -68,8 +75,7 @@ public class BidonDemoScript : MonoBehaviour
             return;
         }
 
-        _interstitialAd = new BidonInterstitialAd("level_finished");
-        Debug.Log($"[BidonPlugin] [Interstitial] placementId: {_interstitialAd.GetPlacementId()}");
+        _interstitialAd = new BidonInterstitialAd();
 
         SubscribeForInterstitialEvents();
     }
@@ -123,8 +129,7 @@ public class BidonDemoScript : MonoBehaviour
             return;
         }
 
-        _rewardedAd = new BidonRewardedAd("bonus_requested");
-        Debug.Log($"[BidonPlugin] [Rewarded] placementId: {_rewardedAd.GetPlacementId()}");
+        _rewardedAd = new BidonRewardedAd();
 
         SubscribeForRewardedEvents();
     }
@@ -174,12 +179,6 @@ public class BidonDemoScript : MonoBehaviour
 
     private void SubscribeForInterstitialEvents()
     {
-        _interstitialAd.OnAuctionStarted += OnInterstitialAuctionStarted;
-        _interstitialAd.OnAuctionSucceed += OnInterstitialAuctionSucceed;
-        _interstitialAd.OnAuctionFailed += OnInterstitialAuctionFailed;
-        _interstitialAd.OnRoundStarted += OnInterstitialRoundStarted;
-        _interstitialAd.OnRoundSucceed += OnInterstitialRoundSucceed;
-        _interstitialAd.OnRoundFailed += OnInterstitialRoundFailed;
         _interstitialAd.OnAdLoaded += OnInterstitialAdLoaded;
         _interstitialAd.OnAdLoadFailed += OnInterstitialAdLoadFailed;
         _interstitialAd.OnAdShown += OnInterstitialAdShown;
@@ -192,12 +191,6 @@ public class BidonDemoScript : MonoBehaviour
 
     private void UnsubscribeFromInterstitialEvents()
     {
-        _interstitialAd.OnAuctionStarted -= OnInterstitialAuctionStarted;
-        _interstitialAd.OnAuctionSucceed -= OnInterstitialAuctionSucceed;
-        _interstitialAd.OnAuctionFailed -= OnInterstitialAuctionFailed;
-        _interstitialAd.OnRoundStarted -= OnInterstitialRoundStarted;
-        _interstitialAd.OnRoundSucceed -= OnInterstitialRoundSucceed;
-        _interstitialAd.OnRoundFailed -= OnInterstitialRoundFailed;
         _interstitialAd.OnAdLoaded -= OnInterstitialAdLoaded;
         _interstitialAd.OnAdLoadFailed -= OnInterstitialAdLoadFailed;
         _interstitialAd.OnAdShown -= OnInterstitialAdShown;
@@ -210,12 +203,6 @@ public class BidonDemoScript : MonoBehaviour
 
     private void SubscribeForRewardedEvents()
     {
-        _rewardedAd.OnAuctionStarted += OnRewardedAuctionStarted;
-        _rewardedAd.OnAuctionSucceed += OnRewardedAuctionSucceed;
-        _rewardedAd.OnAuctionFailed += OnRewardedAuctionFailed;
-        _rewardedAd.OnRoundStarted += OnRewardedRoundStarted;
-        _rewardedAd.OnRoundSucceed += OnRewardedRoundSucceed;
-        _rewardedAd.OnRoundFailed += OnRewardedRoundFailed;
         _rewardedAd.OnAdLoaded += OnRewardedAdLoaded;
         _rewardedAd.OnAdLoadFailed += OnRewardedAdLoadFailed;
         _rewardedAd.OnAdShown += OnRewardedAdShown;
@@ -229,12 +216,6 @@ public class BidonDemoScript : MonoBehaviour
 
     private void UnsubscribeFromRewardedEvents()
     {
-        _rewardedAd.OnAuctionStarted -= OnRewardedAuctionStarted;
-        _rewardedAd.OnAuctionSucceed -= OnRewardedAuctionSucceed;
-        _rewardedAd.OnAuctionFailed -= OnRewardedAuctionFailed;
-        _rewardedAd.OnRoundStarted -= OnRewardedRoundStarted;
-        _rewardedAd.OnRoundSucceed -= OnRewardedRoundSucceed;
-        _rewardedAd.OnRoundFailed -= OnRewardedRoundFailed;
         _rewardedAd.OnAdLoaded -= OnRewardedAdLoaded;
         _rewardedAd.OnAdLoadFailed -= OnRewardedAdLoadFailed;
         _rewardedAd.OnAdShown -= OnRewardedAdShown;
@@ -244,47 +225,6 @@ public class BidonDemoScript : MonoBehaviour
         _rewardedAd.OnAdExpired -= OnRewardedAdExpired;
         _rewardedAd.OnAdRevenueReceived -= OnRewardedAdRevenueReceived;
         _rewardedAd.OnUserRewarded -= OnRewardedUserRewarded;
-    }
-
-    private void OnInterstitialAuctionStarted(object sender, BidonAuctionStartedEventArgs args)
-    {
-        Debug.Log("[BidonPlugin] [Event] [Interstitial] OnAuctionStarted raised");
-    }
-
-    private void OnInterstitialAuctionSucceed(object sender, BidonAuctionSucceedEventArgs args)
-    {
-        Debug.Log("[BidonPlugin] [Event] [Interstitial] OnAuctionSucceed raised");
-
-        foreach (var result in args.AuctionResults?.ToList())
-        {
-            Debug.Log($"[BidonPlugin] [Interstitial] [OnAuctionSucceed] result: {result.ToJsonString(true)}");
-        }
-    }
-
-    private void OnInterstitialAuctionFailed(object sender, BidonAuctionFailedEventArgs args)
-    {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAuctionFailed raised. Reason: {args.Cause.ToString()}");
-    }
-
-    private void OnInterstitialRoundStarted(object sender, BidonRoundStartedEventArgs args)
-    {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnRoundStarted raised. Id: {args.RoundId}, price floor: {args.PriceFloor}");
-    }
-
-    private void OnInterstitialRoundSucceed(object sender, BidonRoundSucceedEventArgs args)
-    {
-        Debug.Log("[BidonPlugin] [Event] [Interstitial] OnRoundSucceed raised");
-        Debug.Log($"[BidonPlugin] [Interstitial] [OnRoundSucceed] id: {args.RoundId}");
-
-        foreach (var result in args.RoundResults.ToList())
-        {
-            Debug.Log($"[BidonPlugin] [Interstitial] [OnRoundSucceed] result: {result.ToJsonString(true)}");
-        }
-    }
-
-    private void OnInterstitialRoundFailed(object sender, BidonRoundFailedEventArgs args)
-    {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnRoundFailed raised. Reason: {args.Cause.ToString()}");
     }
 
     private void OnInterstitialAdLoaded(object sender, BidonAdLoadedEventArgs args)
@@ -325,47 +265,6 @@ public class BidonDemoScript : MonoBehaviour
     private void OnInterstitialAdRevenueReceived(object sender, BidonAdRevenueReceivedEventArgs args)
     {
         Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdRevenueReceived raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}, AdValue: {args.AdValue?.ToJsonString(true) ?? "null"}");
-    }
-
-    private void OnRewardedAuctionStarted(object sender, BidonAuctionStartedEventArgs args)
-    {
-        Debug.Log("[BidonPlugin] [Event] [Rewarded] OnAuctionStarted raised");
-    }
-
-    private void OnRewardedAuctionSucceed(object sender, BidonAuctionSucceedEventArgs args)
-    {
-        Debug.Log("[BidonPlugin] [Event] [Rewarded] OnAuctionSucceed raised");
-
-        foreach (var result in args.AuctionResults?.ToList())
-        {
-            Debug.Log($"[BidonPlugin] [Rewarded] [OnAuctionSucceed] result: {result.ToJsonString(true)}");
-        }
-    }
-
-    private void OnRewardedAuctionFailed(object sender, BidonAuctionFailedEventArgs args)
-    {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAuctionFailed raised. Reason: {args.Cause.ToString()}");
-    }
-
-    private void OnRewardedRoundStarted(object sender, BidonRoundStartedEventArgs args)
-    {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnRoundStarted raised. Id: {args.RoundId}, price floor: {args.PriceFloor}");
-    }
-
-    private void OnRewardedRoundSucceed(object sender, BidonRoundSucceedEventArgs args)
-    {
-        Debug.Log("[BidonPlugin] [Event] [Rewarded] OnRoundSucceed raised");
-        Debug.Log($"[BidonPlugin] [Rewarded] [OnRoundSucceed] id: {args.RoundId}");
-
-        foreach (var result in args.RoundResults.ToList())
-        {
-            Debug.Log($"[BidonPlugin] [Rewarded] [OnRoundSucceed] result: {result.ToJsonString(true)}");
-        }
-    }
-
-    private void OnRewardedRoundFailed(object sender, BidonRoundFailedEventArgs args)
-    {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnRoundFailed raised. Reason: {args.Cause.ToString()}");
     }
 
     private void OnRewardedAdLoaded(object sender, BidonAdLoadedEventArgs args)

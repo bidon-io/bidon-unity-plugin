@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -5,12 +6,6 @@ namespace Bidon.Mediation
 {
     internal class EditorBidonInterstitialAd : IBidonInterstitialAd
     {
-        public event EventHandler<BidonAuctionStartedEventArgs> OnAuctionStarted;
-        public event EventHandler<BidonAuctionSucceedEventArgs> OnAuctionSucceed;
-        public event EventHandler<BidonAuctionFailedEventArgs> OnAuctionFailed;
-        public event EventHandler<BidonRoundStartedEventArgs> OnRoundStarted;
-        public event EventHandler<BidonRoundSucceedEventArgs> OnRoundSucceed;
-        public event EventHandler<BidonRoundFailedEventArgs> OnRoundFailed;
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -20,7 +15,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
-        internal EditorBidonInterstitialAd(string placement) { }
+        internal EditorBidonInterstitialAd() { }
 
         public void Load(double priceFloor)
         {
@@ -41,10 +36,6 @@ namespace Bidon.Mediation
         {
             throw new NotImplementedException();
         }
-
-        public string GetPlacementId()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
+#endif
