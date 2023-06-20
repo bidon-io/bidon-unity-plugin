@@ -105,17 +105,14 @@ namespace Bidon.Mediation
         public BidonLogLevel GetLogLevel()
         {
             string nativeLogLevel = _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("getLoggerLevel").Call<string>("name");
-            switch (nativeLogLevel)
+
+            return nativeLogLevel switch
             {
-                case "Off":
-                    return BidonLogLevel.Off;
-                case "Error":
-                    return BidonLogLevel.Error;
-                case "Verbose":
-                    return BidonLogLevel.Verbose;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(nativeLogLevel), nativeLogLevel, null);
-            }
+                "Off" => BidonLogLevel.Off,
+                "Error" => BidonLogLevel.Error,
+                "Verbose" => BidonLogLevel.Verbose,
+                _ => throw new ArgumentOutOfRangeException(nameof(nativeLogLevel), nativeLogLevel, null)
+            };
         }
 
         public string GetBaseUrl()
