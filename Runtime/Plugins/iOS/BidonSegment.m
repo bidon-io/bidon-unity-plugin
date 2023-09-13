@@ -8,7 +8,10 @@
 #import <Bidon/Bidon-Swift.h>
 
 const char* BDNUnityPluginSegmentGetId() {
-    return strdup([[[BDNSdk segment] id] UTF8String]);
+    if ([[BDNSdk segment] id]) {
+        return strdup([[[BDNSdk segment] id] UTF8String]);
+    }
+    return strdup([@"" UTF8String]);
 }
 
 int BDNUnityPluginSegmentGetAge() {

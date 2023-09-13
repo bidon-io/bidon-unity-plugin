@@ -10,28 +10,7 @@
 typedef void (*InitializationFinishedCallback)();
 
 void BDNUnityPluginSetLogLevel(int logLevel) {
-    switch (logLevel) {
-        case 0:
-            [BDNSdk setLogLevel:BDNLoggerLevelVerbose];
-            break;
-        case 1:
-            [BDNSdk setLogLevel:BDNLoggerLevelDebug];
-            break;
-        case 2:
-            [BDNSdk setLogLevel:BDNLoggerLevelInfo];
-            break;
-        case 3:
-            [BDNSdk setLogLevel:BDNLoggerLevelWarning];
-            break;
-        case 4:
-            [BDNSdk setLogLevel:BDNLoggerLevelError];
-            break;
-        case 5:
-            [BDNSdk setLogLevel:BDNLoggerLevelOff];
-            break;
-        default:
-            break;
-    }
+    [BDNSdk setLogLevel:(BDNLoggerLevel)logLevel];
 }
 
 void BDNUnityPluginSetTestMode(bool isEnabled) {
