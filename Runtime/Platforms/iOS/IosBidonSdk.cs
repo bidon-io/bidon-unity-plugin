@@ -32,6 +32,22 @@ namespace Bidon.Mediation
             BidonSetLogLevel((int)logLevel);
         }
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetTestMode")]
+        private static extern void BidonSetTestMode(bool isEnabled);
+
+        public void SetTestMode(bool isEnabled)
+        {
+            BidonSetTestMode(isEnabled);
+        }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginIsTestModeEnabled")]
+        private static extern bool BidonIsTestModeEnabled();
+
+        public bool IsTestModeEnabled()
+        {
+            return BidonIsTestModeEnabled();
+        }
+
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetBaseUrl")]
         private static extern void BidonSetBaseUrl(string baseUrl);
 

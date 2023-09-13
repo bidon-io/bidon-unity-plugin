@@ -34,6 +34,14 @@ void BDNUnityPluginSetLogLevel(int logLevel) {
     }
 }
 
+void BDNUnityPluginSetTestMode(bool isEnabled) {
+    [BDNSdk setIsTestMode:isEnabled];
+}
+
+bool BDNUnityPluginIsTestModeEnabled() {
+    return [BDNSdk isTestMode];
+}
+
 void BDNUnityPluginSetBaseUrl(const char* baseUrl) {
     NSString* baseUrlNSString = [NSString stringWithUTF8String:baseUrl];
     [BDNSdk setBaseURL:baseUrlNSString];

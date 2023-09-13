@@ -20,6 +20,16 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
+        public void SetTestMode(bool isEnabled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsTestModeEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetBaseUrl(string baseUrl)
         {
             throw new NotImplementedException();

@@ -31,6 +31,16 @@ namespace Bidon.Mediation
             _bidonSdkImpl.SetLogLevel(logLevel);
         }
 
+        public void SetTestMode(bool isEnabled)
+        {
+            _bidonSdkImpl.SetTestMode(isEnabled);
+        }
+
+        public bool IsTestModeEnabled()
+        {
+            return _bidonSdkImpl.IsTestModeEnabled();
+        }
+
         public void SetBaseUrl(string baseUrl)
         {
             _bidonSdkImpl.SetBaseUrl(baseUrl);

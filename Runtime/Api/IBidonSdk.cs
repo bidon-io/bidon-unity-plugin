@@ -8,6 +8,8 @@ namespace Bidon.Mediation
         event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
         IBidonSegment Segment { get; }
         void SetLogLevel(BidonLogLevel logLevel);
+        void SetTestMode(bool isEnabled);
+        bool IsTestModeEnabled();
         void SetBaseUrl(string baseUrl);
         void SetExtraData(string key, object value);
         void RegisterDefaultAdapters();

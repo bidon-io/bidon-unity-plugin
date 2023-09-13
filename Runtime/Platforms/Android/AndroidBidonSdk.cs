@@ -43,6 +43,17 @@ namespace Bidon.Mediation
             _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", AndroidBidonJavaHelper.GetLogLevelJavaObject(logLevel));
         }
 
+        public void SetTestMode(bool isEnabled)
+        {
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setTestMode", isEnabled);
+        }
+
+        public bool IsTestModeEnabled()
+        {
+            Debug.Log("Method IsTestModeEnabled() is not yet supported on Android Platform");
+            return false;
+        }
+
         public void SetBaseUrl(string baseUrl)
         {
             _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setBaseUrl", baseUrl);

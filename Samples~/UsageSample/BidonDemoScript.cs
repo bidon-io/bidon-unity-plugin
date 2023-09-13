@@ -41,6 +41,9 @@ public class BidonDemoScript : MonoBehaviour
         BidonSdk.Instance.SetLogLevel(BidonLogLevel.Verbose);
         BidonSdk.Instance.SetBaseUrl("https://b.appbaqend.com");
 
+        BidonSdk.Instance.SetTestMode(false);
+        Debug.Log($"[BidonPlugin] Is test mode enabled: {BidonSdk.Instance.IsTestModeEnabled()}");
+
         BidonSdk.Instance.SetExtraData("answer", 42);
         BidonSdk.Instance.SetExtraData("key_long", long.MaxValue);
         BidonSdk.Instance.SetExtraData("key_float", float.MaxValue);
