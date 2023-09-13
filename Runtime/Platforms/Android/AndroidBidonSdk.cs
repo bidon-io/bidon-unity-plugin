@@ -13,6 +13,7 @@ namespace Bidon.Mediation
         private readonly AndroidJavaObject _activityJavaObject;
 
         public IBidonSegment Segment { get; }
+        public IBidonRegulation Regulation { get; }
 
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
@@ -30,6 +31,7 @@ namespace Bidon.Mediation
             }
 
             Segment = new AndroidBidonSegment(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getSegment"));
+            Regulation = new AndroidBidonRegulation(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getRegulation"));
 
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFramework", "unity");
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFrameworkVersion", Application.unityVersion);

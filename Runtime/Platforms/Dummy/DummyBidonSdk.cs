@@ -7,12 +7,14 @@ namespace Bidon.Mediation
     internal class DummyBidonSdk : IBidonSdk
     {
         public IBidonSegment Segment { get; }
+        public IBidonRegulation Regulation { get; }
 
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
         internal DummyBidonSdk()
         {
             Segment = new DummyBidonSegment();
+            Regulation = new DummyBidonRegulation();
         }
 
         public void SetLogLevel(BidonLogLevel logLevel)

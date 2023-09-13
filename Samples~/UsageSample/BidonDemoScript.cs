@@ -44,6 +44,15 @@ public class BidonDemoScript : MonoBehaviour
         BidonSdk.Instance.SetTestMode(false);
         Debug.Log($"[BidonPlugin] Is test mode enabled: {BidonSdk.Instance.IsTestModeEnabled()}");
 
+        BidonSdk.Instance.Regulation.GdprConsentString = "gdpr_consent_string";
+        BidonSdk.Instance.Regulation.UsPrivacyString = "us_privacy_string";
+        BidonSdk.Instance.Regulation.GdprConsentStatus = BidonGdprConsentStatus.Given;
+        BidonSdk.Instance.Regulation.CoppaApplicabilityStatus = BidonCoppaApplicabilityStatus.Yes;
+        Debug.Log($"[BidonPlugin] [Regulation] GdprConsentString: {BidonSdk.Instance.Regulation.GdprConsentString}");
+        Debug.Log($"[BidonPlugin] [Regulation] UsPrivacyString: {BidonSdk.Instance.Regulation.UsPrivacyString}");
+        Debug.Log($"[BidonPlugin] [Regulation] GdprConsentStatus: {BidonSdk.Instance.Regulation.GdprConsentStatus}");
+        Debug.Log($"[BidonPlugin] [Regulation] CoppaApplicabilityStatus: {BidonSdk.Instance.Regulation.CoppaApplicabilityStatus}");
+
         BidonSdk.Instance.SetExtraData("answer", 42);
         BidonSdk.Instance.SetExtraData("key_long", long.MaxValue);
         BidonSdk.Instance.SetExtraData("key_float", float.MaxValue);

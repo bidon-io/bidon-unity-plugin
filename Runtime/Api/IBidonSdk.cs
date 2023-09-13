@@ -7,6 +7,7 @@ namespace Bidon.Mediation
     {
         event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
         IBidonSegment Segment { get; }
+        IBidonRegulation Regulation { get; }
         void SetLogLevel(BidonLogLevel logLevel);
         void SetTestMode(bool isEnabled);
         bool IsTestModeEnabled();

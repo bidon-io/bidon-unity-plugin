@@ -26,6 +26,8 @@ namespace Bidon.Mediation
 
         private static readonly AndroidJavaClass LogLevelJClass;
         private static readonly AndroidJavaClass GenderJClass;
+        private static readonly AndroidJavaClass GdprConsentStatusJClass;
+        private static readonly AndroidJavaClass CoppaApplicabilityStatusJClass;
 
         static AndroidBidonJavaHelper()
         {
@@ -50,6 +52,8 @@ namespace Bidon.Mediation
 
                 LogLevelJClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
                 GenderJClass = new AndroidJavaClass("org.bidon.sdk.segment.models.Gender");
+                GdprConsentStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Gdpr");
+                CoppaApplicabilityStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Coppa");
             }
             catch (Exception e)
             {
@@ -235,6 +239,28 @@ namespace Bidon.Mediation
                 BidonUserGender.Female => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Female"),
                 BidonUserGender.Other => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Other"),
                 _ => throw new ArgumentOutOfRangeException(nameof(gender), gender, null)
+            };
+        }
+
+        public static AndroidJavaObject GetGdprConsentStatusJavaObject(BidonGdprConsentStatus consentStatus)
+        {
+            return consentStatus switch
+            {
+                BidonGdprConsentStatus.Unknown => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
+                BidonGdprConsentStatus.Denied => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Denied"),
+                BidonGdprConsentStatus.Given => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Given"),
+                _ => throw new ArgumentOutOfRangeException(nameof(consentStatus), consentStatus, null)
+            };
+        }
+
+        public static AndroidJavaObject GetCoppaApplicabilityStatusJavaObject(BidonCoppaApplicabilityStatus applicabilityStatus)
+        {
+            return applicabilityStatus switch
+            {
+                BidonCoppaApplicabilityStatus.Unknown => CoppaApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
+                BidonCoppaApplicabilityStatus.No => CoppaApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "No"),
+                BidonCoppaApplicabilityStatus.Yes => CoppaApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Yes"),
+                _ => throw new ArgumentOutOfRangeException(nameof(applicabilityStatus), applicabilityStatus, null)
             };
         }
 
