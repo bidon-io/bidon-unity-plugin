@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
@@ -30,6 +32,7 @@ public class BidonDemoScript : MonoBehaviour
             Debug.Log($"[BidonPlugin] Plugin version: {BidonSdk.PluginVersion}");
             Debug.Log($"[BidonPlugin] SDK version: {BidonSdk.Instance.GetSdkVersion()}");
             Debug.Log($"[BidonPlugin] Current log level: {BidonSdk.Instance.GetLogLevel().ToString()}");
+            Debug.Log($"[BidonPlugin] [Segment] Id: {BidonSdk.Instance.Segment.Id}");
 #if UNITY_IOS
             Debug.Log($"[BidonPlugin] Base URL: {BidonSdk.Instance.GetBaseUrl()}");
 #endif
@@ -44,9 +47,30 @@ public class BidonDemoScript : MonoBehaviour
         BidonSdk.Instance.SetExtraData("key_double", double.MaxValue);
         BidonSdk.Instance.SetExtraData("is_cake_a_lie", true);
         BidonSdk.Instance.SetExtraData("key_char", 'v');
-        BidonSdk.Instance.SetExtraData("key_string", "some value");
+        BidonSdk.Instance.SetExtraData("key_string", "string_value");
 
-        BidonSdk.Instance.RegisterDefaultAdapters();
+        BidonSdk.Instance.Segment.Age = 42;
+        BidonSdk.Instance.Segment.Gender = BidonUserGender.Male;
+        BidonSdk.Instance.Segment.Level = 13;
+        BidonSdk.Instance.Segment.TotalInAppsAmount = double.MaxValue;
+        BidonSdk.Instance.Segment.IsPaying = true;
+        Debug.Log($"[BidonPlugin] [Segment] Age: {BidonSdk.Instance.Segment.Age}");
+        Debug.Log($"[BidonPlugin] [Segment] Gender: {BidonSdk.Instance.Segment.Gender}");
+        Debug.Log($"[BidonPlugin] [Segment] Level: {BidonSdk.Instance.Segment.Level}");
+        Debug.Log($"[BidonPlugin] [Segment] InAppsAmount: {BidonSdk.Instance.Segment.TotalInAppsAmount}");
+        Debug.Log($"[BidonPlugin] [Segment] IsPaying: {BidonSdk.Instance.Segment.IsPaying}");
+
+        BidonSdk.Instance.Segment.SetCustomAttribute("bool_attr", true);
+        BidonSdk.Instance.Segment.SetCustomAttribute("int_attr", int.MaxValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("long_attr", long.MaxValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("double_attr", double.MaxValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("string_attr", "string_value");
+        BidonSdk.Instance.Segment.SetCustomAttribute("unsupported_attr", 'c');
+        string attributes = String.Join(", ",
+            BidonSdk.Instance.Segment.CustomAttributes
+                .Select(attr => $"{attr.Key}:{attr.Value}")
+                .ToArray());
+        Debug.Log($"[BidonPlugin] [Segment] Custom Attributes: {attributes}");
 
 #if UNITY_ANDROID
         BidonSdk.Instance.RegisterAdapter("org.bidon.admob.AdmobAdapter");
@@ -54,12 +78,14 @@ public class BidonDemoScript : MonoBehaviour
         BidonSdk.Instance.RegisterAdapter("BidonAdapterAppLovin.AppLovinDemandSourceAdapter");
 #endif
 
+        BidonSdk.Instance.RegisterDefaultAdapters();
+
 #if UNITY_EDITOR
         BidonSdk.Instance.Initialize("");
 #elif UNITY_ANDROID
         BidonSdk.Instance.Initialize("b1689e101a2555084e08c2ba7375783bde166625bbeae00f");
 #elif UNITY_IOS
-        BidonSdk.Instance.Initialize("3c53cae2cd969ecd82910e1f5610a3df24ea8b4b3ca52247");
+        BidonSdk.Instance.Initialize("dee74c5129f53fc629a44a690a02296694e3eef99f2d3a5f");
 #else
         BidonSdk.Instance.Initialize("");
 #endif

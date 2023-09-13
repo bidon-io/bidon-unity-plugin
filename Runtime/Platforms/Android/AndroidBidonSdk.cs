@@ -12,6 +12,8 @@ namespace Bidon.Mediation
         private readonly AndroidJavaObject _bidonSdkJavaClass;
         private readonly AndroidJavaObject _activityJavaObject;
 
+        public IBidonSegment Segment { get; }
+
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
         internal AndroidBidonSdk()
@@ -27,6 +29,8 @@ namespace Bidon.Mediation
                 return;
             }
 
+            Segment = new AndroidBidonSegment(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getSegment"));
+
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFramework", "unity");
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFrameworkVersion", Application.unityVersion);
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setPluginVersion", BidonSdk.PluginVersion);
@@ -36,40 +40,7 @@ namespace Bidon.Mediation
 
         public void SetLogLevel(BidonLogLevel logLevel)
         {
-            AndroidJavaClass logLevelJavaClass;
-            try
-            {
-                logLevelJavaClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"BidonSdk operation is not possible due to incorrect integration: {e.Message}");
-                return;
-            }
-
-            switch (logLevel)
-            {
-                case BidonLogLevel.Off:
-                {
-                    _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", logLevelJavaClass.CallStatic<AndroidJavaObject>("valueOf", "Off"));
-                    break;
-                }
-                case BidonLogLevel.Error:
-                {
-                    _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", logLevelJavaClass.CallStatic<AndroidJavaObject>("valueOf", "Error"));
-                    break;
-                }
-                case BidonLogLevel.Verbose:
-                case BidonLogLevel.Debug:
-                case BidonLogLevel.Info:
-                case BidonLogLevel.Warning:
-                {
-                    _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", logLevelJavaClass.CallStatic<AndroidJavaObject>("valueOf", "Verbose"));
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null);
-            }
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", AndroidBidonJavaHelper.GetLogLevelJavaObject(logLevel));
         }
 
         public void SetBaseUrl(string baseUrl)

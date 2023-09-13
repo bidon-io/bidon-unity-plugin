@@ -6,6 +6,7 @@ namespace Bidon.Mediation
     public interface IBidonSdk
     {
         event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
+        IBidonSegment Segment { get; }
         void SetLogLevel(BidonLogLevel logLevel);
         void SetBaseUrl(string baseUrl);
         void SetExtraData(string key, object value);

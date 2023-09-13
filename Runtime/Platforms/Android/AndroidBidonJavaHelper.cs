@@ -24,6 +24,9 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass NoAppropriateAdUnitIdJClass;
         private static readonly AndroidJavaClass ExpiredJClass;
 
+        private static readonly AndroidJavaClass LogLevelJClass;
+        private static readonly AndroidJavaClass GenderJClass;
+
         static AndroidBidonJavaHelper()
         {
             try
@@ -44,6 +47,9 @@ namespace Bidon.Mediation
                 FullscreenAdNotReadyJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$FullscreenAdNotReady");
                 NoAppropriateAdUnitIdJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoAppropriateAdUnitId");
                 ExpiredJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$Expired");
+
+                LogLevelJClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
+                GenderJClass = new AndroidJavaClass("org.bidon.sdk.segment.models.Gender");
             }
             catch (Exception e)
             {
@@ -204,6 +210,31 @@ namespace Bidon.Mediation
                 "Precise" => BidonRevenuePrecision.Precise,
                 "Estimated" => BidonRevenuePrecision.Estimated,
                 _ => throw new ArgumentOutOfRangeException(nameof(javaPrecision), javaPrecision, "value must be assignable to BidonRevenuePrecision")
+            };
+        }
+
+        public static AndroidJavaObject GetLogLevelJavaObject(BidonLogLevel logLevel)
+        {
+            return logLevel switch
+            {
+                BidonLogLevel.Off => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Off"),
+                BidonLogLevel.Error => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Error"),
+                BidonLogLevel.Verbose => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                BidonLogLevel.Debug => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                BidonLogLevel.Info => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                BidonLogLevel.Warning => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null)
+            };
+        }
+
+        public static AndroidJavaObject GetGenderJavaObject(BidonUserGender gender)
+        {
+            return gender switch
+            {
+                BidonUserGender.Male => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Male"),
+                BidonUserGender.Female => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Female"),
+                BidonUserGender.Other => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Other"),
+                _ => throw new ArgumentOutOfRangeException(nameof(gender), gender, null)
             };
         }
 

@@ -9,6 +9,8 @@ namespace Bidon.Mediation
 
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
+        public IBidonSegment Segment { get; }
+
         internal BidonSdkClient()
         {
 #if UNITY_EDITOR
@@ -21,6 +23,7 @@ namespace Bidon.Mediation
             _bidonSdkImpl = new DummyBidonSdk();
 #endif
             _bidonSdkImpl.OnInitializationFinished += (sender, args) => OnInitializationFinished?.Invoke(this, args);
+            Segment = _bidonSdkImpl.Segment;
         }
 
         public void SetLogLevel(BidonLogLevel logLevel)
