@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public interface IBidonSegment
     {
         string Id { get; }
