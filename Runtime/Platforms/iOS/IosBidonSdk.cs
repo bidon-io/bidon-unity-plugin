@@ -11,6 +11,8 @@ namespace Bidon.Mediation
     {
         private static IosBidonSdk _instance;
 
+        public IBidonSegment Segment { get; }
+
         private delegate void InitializationFinishedCallback();
 
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
@@ -18,6 +20,7 @@ namespace Bidon.Mediation
         internal IosBidonSdk()
         {
             _instance = this;
+            Segment = new IosBidonSegment();
             SetMetadata(Application.unityVersion, BidonSdk.PluginVersion);
         }
 
