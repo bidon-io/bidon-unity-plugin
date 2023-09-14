@@ -63,3 +63,30 @@ To release resources we recommend destroying instances when you don't need them 
 bidonInter.Destroy();
 bidonInter = null;
 ```
+
+## Sending Extra Data
+
+Note that the value has to be one of the following types: `bool`, `char`, `int`, `long`, `float`, `double`, `string`.
+Passing `null` as a value will remove existing `KeyValuePair` from dictionary.
+
+```c#
+bidonInter.SetExtraData("some_key", true);
+```
+
+You can also read all current extras as shown below:
+
+```c#
+var extras = bidonInter.GetExtraData();
+```
+
+## Win / Loss Notifications
+
+Use the following methods to let Bidon know whether or not it won the show opportunity.
+
+```c#
+bidonInter.NotifyWin();
+```
+
+```c#
+bidonInter.NotifyLoss("winner_demand_id", (double)winnerEcpm);
+```
