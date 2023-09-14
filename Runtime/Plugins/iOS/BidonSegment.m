@@ -80,3 +80,7 @@ void BDNUnityPluginSegmentSetCustomAttributeDouble(const char* name, double valu
 void BDNUnityPluginSegmentSetCustomAttributeString(const char* name, const char* value) {
     [[BDNSdk segment] setCustomAttribute:[NSString stringWithUTF8String:value] for:[NSString stringWithUTF8String:name]];
 }
+
+void BDNUnityPluginSegmentSetCustomAttributeNull(const char* name) {
+    [[BDNSdk segment] setCustomAttribute:nil for:[NSString stringWithUTF8String:name]];
+}

@@ -60,6 +60,9 @@ namespace Bidon.Mediation
             BidonSetBaseUrl(baseUrl);
         }
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataBool")]
+        private static extern void BidonSetExtraDataBool(string key, bool value);
+
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataInt")]
         private static extern void BidonSetExtraDataInt(string key, int value);
 
@@ -72,19 +75,25 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataDouble")]
         private static extern void BidonSetExtraDataDouble(string key, double value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataBool")]
-        private static extern void BidonSetExtraDataBool(string key, bool value);
-
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataChar")]
-        private static extern void BidonSetExtraDataChar(string key, char value);
-
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataString")]
         private static extern void BidonSetExtraDataString(string key, string value);
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataNull")]
+        private static extern void BidonSetExtraDataNull(string key);
+
         public void SetExtraData(string key, object value)
         {
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+
             switch (value)
             {
+                case bool valueBool:
+                    BidonSetExtraDataBool(key, valueBool);
+                    break;
+                case char valueChar:
+                    BidonSetExtraDataString(key, valueChar.ToString());
+                    break;
                 case int valueInt:
                     BidonSetExtraDataInt(key, valueInt);
                     break;
@@ -97,14 +106,11 @@ namespace Bidon.Mediation
                 case double valueDouble:
                     BidonSetExtraDataDouble(key, valueDouble);
                     break;
-                case bool valueBool:
-                    BidonSetExtraDataBool(key, valueBool);
-                    break;
-                case char valueChar:
-                    BidonSetExtraDataChar(key, valueChar);
-                    break;
                 case string valueString:
                     BidonSetExtraDataString(key, valueString);
+                    break;
+                case null:
+                    BidonSetExtraDataNull(key);
                     break;
             }
         }

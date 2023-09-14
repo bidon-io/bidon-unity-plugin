@@ -93,8 +93,14 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetCustomAttributeString")]
         private static extern void BidonSegmentSetCustomAttributeString(string name, string value);
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetCustomAttributeNull")]
+        private static extern void BidonSegmentSetCustomAttributeNull(string name);
+
         public void SetCustomAttribute(string name, object value)
         {
+            if (!(value is bool) && !(value is int) && !(value is long) && !(value is double)
+                && !(value is string) && value != null) return;
+
             switch (value)
             {
                 case bool valueBool:
@@ -111,6 +117,9 @@ namespace Bidon.Mediation
                     break;
                 case string valueString:
                     BidonSegmentSetCustomAttributeString(name, valueString);
+                    break;
+                case null:
+                    BidonSegmentSetCustomAttributeNull(name);
                     break;
             }
         }

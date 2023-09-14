@@ -63,7 +63,11 @@ namespace Bidon.Mediation
 
         public void SetExtraData(string key, object value)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key, AndroidBidonJavaHelper.GetJavaObject(value));
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key,
+                value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public void RegisterDefaultAdapters()
