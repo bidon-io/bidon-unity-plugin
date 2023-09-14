@@ -2,12 +2,20 @@
 
 ## Changelog
 
+### 0.3.0 (September 14, 2023)
++ Updated Bidon Android SDK to v0.3.2
++ Updated Bidon iOS SDK to v0.3.3
++ Implemented `Segments` API
++ Implemented `Regulations` API
++ Added `SetTestMode()` & `IsTestModeEnabled()` methods to `BidonSdk` class
++ Added `SetExtraData()`, `GetExtraData()`, `NotifyLoss()`, and `NotifyWin()` methods to `AdObject` classes
+
 ### 0.2.1 (June 20, 2023)
 
-+ Updated Bidon Android SDK v0.2.1
-+ Updated Bidon iOS SDK v0.2.1
++ Updated Bidon Android SDK to v0.2.1
++ Updated Bidon iOS SDK to v0.2.1
 + Changed minimal supported Unity version to v2020.1
-+ Added <code>SetExtraData</code> method
++ Added `SetExtraData` method
 + Removed placements and auction callbacks logic
 + Updated iOS bridge (synced callbacks with android platform)
 + Implemented some internal improvements
