@@ -1,5 +1,4 @@
 #if UNITY_IOS || BIDON_DEV_IOS
-using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -76,52 +75,8 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetCustomAttributes")]
         private static extern string BidonSegmentGetCustomAttributes();
 
-        public IDictionary<string, object> CustomAttributes
-        {
-            get
-            {
-                var outputDict = new Dictionary<string, object>();
-
-                string iosDictString = BidonSegmentGetCustomAttributes();
-
-                iosDictString = iosDictString
-                    .Replace("{", String.Empty)
-                    .Replace("}", String.Empty)
-                    .Replace("\"", String.Empty);
-
-                string[] items = iosDictString.Split(',');
-
-                foreach (string item in items)
-                {
-                    string[] kvp = item.Split(':');
-
-                    if (Boolean.TryParse(kvp[1], out bool valueBool))
-                    {
-                        outputDict.Add(kvp[0], valueBool);
-                    }
-                    else if (Int32.TryParse(kvp[1], out int valueInt))
-                    {
-                        outputDict.Add(kvp[0], valueInt);
-                    }
-                    else if (Int64.TryParse(kvp[1], out long valueLong))
-                    {
-                        outputDict.Add(kvp[0], valueLong);
-                    }
-                    else if (Double.TryParse(kvp[1], out double valueDouble)
-                             && !Double.IsNaN(valueDouble)
-                             && !Double.IsInfinity(valueDouble))
-                    {
-                        outputDict.Add(kvp[0], valueDouble);
-                    }
-                    else
-                    {
-                        outputDict.Add(kvp[0], kvp[1]);
-                    }
-                }
-
-                return outputDict;
-            }
-        }
+        public IDictionary<string, object> CustomAttributes =>
+            IosBidonHelper.GetDictionaryFromJsonString(BidonSegmentGetCustomAttributes());
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetCustomAttributeBool")]
         private static extern void BidonSegmentSetCustomAttributeBool(string name, bool value);
