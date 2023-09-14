@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
@@ -33,6 +34,26 @@ namespace Bidon.Mediation
         }
 
         public void Destroy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetExtraData(string key, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<string, object> GetExtraData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyLoss(string winnerDemandId, double ecpm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotifyWin()
         {
             throw new NotImplementedException();
         }

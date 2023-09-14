@@ -1,5 +1,6 @@
 #if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -55,6 +56,30 @@ namespace Bidon.Mediation
         public void Destroy()
         {
             _interstitialAdJavaObject?.Call("destroyAd");
+        }
+
+        public void SetExtraData(string key, object value)
+        {
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+
+            _interstitialAdJavaObject?.Call("addExtra", key,
+                value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
+        }
+
+        public IDictionary<string, object> GetExtraData()
+        {
+            return AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_interstitialAdJavaObject?.Call<AndroidJavaObject>("getExtras"));
+        }
+
+        public void NotifyLoss(string winnerDemandId, double ecpm)
+        {
+            _interstitialAdJavaObject?.Call("notifyLoss", winnerDemandId, ecpm);
+        }
+
+        public void NotifyWin()
+        {
+            _interstitialAdJavaObject?.Call("notifyWin");
         }
 
         #region Callbacks

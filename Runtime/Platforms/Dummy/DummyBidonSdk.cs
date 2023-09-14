@@ -6,9 +6,28 @@ namespace Bidon.Mediation
 {
     internal class DummyBidonSdk : IBidonSdk
     {
+        public IBidonSegment Segment { get; }
+        public IBidonRegulation Regulation { get; }
+
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
+        internal DummyBidonSdk()
+        {
+            Segment = new DummyBidonSegment();
+            Regulation = new DummyBidonRegulation();
+        }
+
         public void SetLogLevel(BidonLogLevel logLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTestMode(bool isEnabled)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsTestModeEnabled()
         {
             throw new NotImplementedException();
         }

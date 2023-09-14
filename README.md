@@ -25,7 +25,11 @@
 
 ## Why build Bidon?
 
-Header bidding hasn't conquered the world. **Ad mediations** are still in place, most of them have demand that can't be disabled and could have priority against other demand partners that lead to less transparency, **unfair auctions**, hidden fees and can cut Publisher's revenues. Also, almost all of the companies who run Ad Mediations have their own publishing divisions that compete with their clients and have a huge unfair advantage of using all platform data & the ability to buy any connected audience.
+Header bidding hasn't conquered the world. **Ad mediations** are still in place, most of them have demand that can't
+be disabled and could have priority against other demand partners that lead to less transparency, **unfair auctions**,
+hidden fees and can cut Publisher's revenues. Also, almost all of the companies who run Ad Mediations have their own
+publishing divisions that compete with their clients and have a huge unfair advantage of using all platform data & the
+ability to buy any connected audience.
 
 ## Project Goals
 
@@ -34,7 +38,8 @@ To provide control over advertising auctions to Publishers, while making it fair
 -   Decide how to connect any type of the Demand partner, even multiple Ad Mediators
 -   Ability to remove any Demand partner
 -   Ability to A/B test different Demand partners, even Ad Mediators
--   To let market players and the community contribute to the solution, to add new partners, new integrations, and new features which are demanded by the industry.
+-   To let market players and the community contribute to the solution, to add new partners, new integrations, and new
+features which are demanded by the industry.
 
 ## Getting started
 

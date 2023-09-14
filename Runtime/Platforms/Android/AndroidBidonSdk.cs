@@ -12,6 +12,9 @@ namespace Bidon.Mediation
         private readonly AndroidJavaObject _bidonSdkJavaClass;
         private readonly AndroidJavaObject _activityJavaObject;
 
+        public IBidonSegment Segment { get; }
+        public IBidonRegulation Regulation { get; }
+
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
         internal AndroidBidonSdk()
@@ -27,6 +30,9 @@ namespace Bidon.Mediation
                 return;
             }
 
+            Segment = new AndroidBidonSegment(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getSegment"));
+            Regulation = new AndroidBidonRegulation(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getRegulation"));
+
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFramework", "unity");
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFrameworkVersion", Application.unityVersion);
             _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setPluginVersion", BidonSdk.PluginVersion);
@@ -36,40 +42,18 @@ namespace Bidon.Mediation
 
         public void SetLogLevel(BidonLogLevel logLevel)
         {
-            AndroidJavaClass logLevelJavaClass;
-            try
-            {
-                logLevelJavaClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"BidonSdk operation is not possible due to incorrect integration: {e.Message}");
-                return;
-            }
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", AndroidBidonJavaHelper.GetLogLevelJavaObject(logLevel));
+        }
 
-            switch (logLevel)
-            {
-                case BidonLogLevel.Off:
-                {
-                    _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", logLevelJavaClass.CallStatic<AndroidJavaObject>("valueOf", "Off"));
-                    break;
-                }
-                case BidonLogLevel.Error:
-                {
-                    _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", logLevelJavaClass.CallStatic<AndroidJavaObject>("valueOf", "Error"));
-                    break;
-                }
-                case BidonLogLevel.Verbose:
-                case BidonLogLevel.Debug:
-                case BidonLogLevel.Info:
-                case BidonLogLevel.Warning:
-                {
-                    _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", logLevelJavaClass.CallStatic<AndroidJavaObject>("valueOf", "Verbose"));
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null);
-            }
+        public void SetTestMode(bool isEnabled)
+        {
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setTestMode", isEnabled);
+        }
+
+        public bool IsTestModeEnabled()
+        {
+            Debug.Log("Method IsTestModeEnabled() is not yet supported on Android Platform");
+            return false;
         }
 
         public void SetBaseUrl(string baseUrl)
@@ -79,7 +63,11 @@ namespace Bidon.Mediation
 
         public void SetExtraData(string key, object value)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key, AndroidBidonJavaHelper.GetJavaObject(value));
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+
+            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key,
+                value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public void RegisterDefaultAdapters()

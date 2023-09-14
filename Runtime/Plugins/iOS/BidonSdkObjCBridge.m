@@ -10,33 +10,25 @@
 typedef void (*InitializationFinishedCallback)();
 
 void BDNUnityPluginSetLogLevel(int logLevel) {
-    switch (logLevel) {
-        case 0:
-            [BDNSdk setLogLevel:BDNLoggerLevelVerbose];
-            break;
-        case 1:
-            [BDNSdk setLogLevel:BDNLoggerLevelDebug];
-            break;
-        case 2:
-            [BDNSdk setLogLevel:BDNLoggerLevelInfo];
-            break;
-        case 3:
-            [BDNSdk setLogLevel:BDNLoggerLevelWarning];
-            break;
-        case 4:
-            [BDNSdk setLogLevel:BDNLoggerLevelError];
-            break;
-        case 5:
-            [BDNSdk setLogLevel:BDNLoggerLevelOff];
-            break;
-        default:
-            break;
-    }
+    [BDNSdk setLogLevel:(BDNLoggerLevel)logLevel];
+}
+
+void BDNUnityPluginSetTestMode(bool isEnabled) {
+    [BDNSdk setIsTestMode:isEnabled];
+}
+
+bool BDNUnityPluginIsTestModeEnabled() {
+    return [BDNSdk isTestMode];
 }
 
 void BDNUnityPluginSetBaseUrl(const char* baseUrl) {
     NSString* baseUrlNSString = [NSString stringWithUTF8String:baseUrl];
     [BDNSdk setBaseURL:baseUrlNSString];
+}
+
+void BDNUnityPluginSetExtraDataBool(const char* key, bool value) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:[NSNumber numberWithBool:value] for:keyNSString];
 }
 
 void BDNUnityPluginSetExtraDataInt(const char* key, int value) {
@@ -59,20 +51,15 @@ void BDNUnityPluginSetExtraDataDouble(const char* key, double value) {
     [BDNSdk setExtraValue:[NSNumber numberWithDouble:value] for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataBool(const char* key, bool value) {
-    NSString* keyNSString = [NSString stringWithUTF8String:key];
-    [BDNSdk setExtraValue:[NSNumber numberWithBool:value] for:keyNSString];
-}
-
-void BDNUnityPluginSetExtraDataChar(const char* key, char value) {
-    NSString* keyNSString = [NSString stringWithUTF8String:key];
-    [BDNSdk setExtraValue:[NSNumber numberWithChar:value] for:keyNSString];
-}
-
 void BDNUnityPluginSetExtraDataString(const char* key, const char* value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     NSString* valueNSString = [NSString stringWithUTF8String:value];
     [BDNSdk setExtraValue:valueNSString for:keyNSString];
+}
+
+void BDNUnityPluginSetExtraDataNull(const char* key) {
+    NSString* keyNSString = [NSString stringWithUTF8String:key];
+    [BDNSdk setExtraValue:nil for:keyNSString];
 }
 
 void BDNUnityPluginRegisterDefaultAdapters() {

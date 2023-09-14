@@ -1,5 +1,6 @@
 #if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -24,6 +25,11 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass NoAppropriateAdUnitIdJClass;
         private static readonly AndroidJavaClass ExpiredJClass;
 
+        private static readonly AndroidJavaClass LogLevelJClass;
+        private static readonly AndroidJavaClass GenderJClass;
+        private static readonly AndroidJavaClass GdprConsentStatusJClass;
+        private static readonly AndroidJavaClass CoppaApplicabilityStatusJClass;
+
         static AndroidBidonJavaHelper()
         {
             try
@@ -44,6 +50,11 @@ namespace Bidon.Mediation
                 FullscreenAdNotReadyJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$FullscreenAdNotReady");
                 NoAppropriateAdUnitIdJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoAppropriateAdUnitId");
                 ExpiredJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$Expired");
+
+                LogLevelJClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
+                GenderJClass = new AndroidJavaClass("org.bidon.sdk.segment.models.Gender");
+                GdprConsentStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Gdpr");
+                CoppaApplicabilityStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Coppa");
             }
             catch (Exception e)
             {
@@ -207,16 +218,114 @@ namespace Bidon.Mediation
             };
         }
 
+        public static IDictionary<string, object> GetDictionaryFromJavaMap(AndroidJavaObject jMap)
+        {
+            var outputDict = new Dictionary<string, object>();
+
+            if (jMap == null) return outputDict;
+
+            using var jList = new AndroidJavaObject("java.util.ArrayList", jMap.Call<AndroidJavaObject>("entrySet"));
+
+            int countOfEntries = jList.Call<int>("size");
+            for(int i = 0; i < countOfEntries; i++)
+            {
+                var jEntry = jList.Call<AndroidJavaObject>("get", i);
+                outputDict.Add(jEntry.Call<string>("getKey"), GetCSharpObject(jEntry.Call<AndroidJavaObject>("getValue")));
+            }
+            return outputDict;
+        }
+
+        public static AndroidJavaObject GetLogLevelJavaObject(BidonLogLevel logLevel)
+        {
+            return logLevel switch
+            {
+                BidonLogLevel.Off => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Off"),
+                BidonLogLevel.Error => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Error"),
+                BidonLogLevel.Verbose => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                BidonLogLevel.Debug => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                BidonLogLevel.Info => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                BidonLogLevel.Warning => LogLevelJClass?.CallStatic<AndroidJavaObject>("valueOf", "Verbose"),
+                _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null)
+            };
+        }
+
+        public static AndroidJavaObject GetGenderJavaObject(BidonUserGender gender)
+        {
+            return gender switch
+            {
+                BidonUserGender.Male => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Male"),
+                BidonUserGender.Female => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Female"),
+                BidonUserGender.Other => GenderJClass?.CallStatic<AndroidJavaObject>("valueOf", "Other"),
+                _ => throw new ArgumentOutOfRangeException(nameof(gender), gender, null)
+            };
+        }
+
+        public static AndroidJavaObject GetGdprConsentStatusJavaObject(BidonGdprConsentStatus consentStatus)
+        {
+            return consentStatus switch
+            {
+                BidonGdprConsentStatus.Unknown => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
+                BidonGdprConsentStatus.Denied => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Denied"),
+                BidonGdprConsentStatus.Given => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Given"),
+                _ => throw new ArgumentOutOfRangeException(nameof(consentStatus), consentStatus, null)
+            };
+        }
+
+        public static AndroidJavaObject GetCoppaApplicabilityStatusJavaObject(BidonCoppaApplicabilityStatus applicabilityStatus)
+        {
+            return applicabilityStatus switch
+            {
+                BidonCoppaApplicabilityStatus.Unknown => CoppaApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
+                BidonCoppaApplicabilityStatus.No => CoppaApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "No"),
+                BidonCoppaApplicabilityStatus.Yes => CoppaApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Yes"),
+                _ => throw new ArgumentOutOfRangeException(nameof(applicabilityStatus), applicabilityStatus, null)
+            };
+        }
+
+        private static object GetCSharpObject(AndroidJavaObject jObject)
+        {
+            using var boolJClass = new AndroidJavaClass("java.lang.Boolean");
+            using var charJClass = new AndroidJavaClass("java.lang.Character");
+            using var intJClass = new AndroidJavaClass("java.lang.Integer");
+            using var longJClass = new AndroidJavaClass("java.lang.Long");
+            using var floatJClass = new AndroidJavaClass("java.lang.Float");
+            using var doubleJClass = new AndroidJavaClass("java.lang.Double");
+            using var stringJClass = new AndroidJavaClass("java.lang.String");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), boolJClass.GetRawClass()))
+                return jObject.Call<bool>("booleanValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), charJClass.GetRawClass()))
+                return jObject.Call<char>("charValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), intJClass.GetRawClass()))
+                return jObject.Call<int>("intValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), longJClass.GetRawClass()))
+                return jObject.Call<long>("longValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), floatJClass.GetRawClass()))
+                return jObject.Call<float>("floatValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), doubleJClass.GetRawClass()))
+                return jObject.Call<double>("doubleValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), stringJClass.GetRawClass()))
+                return jObject.Call<string>("toString");
+
+            throw new ArgumentException("Not supported type was detected");
+        }
+
         public static object GetJavaObject(object value)
         {
             return value switch
             {
+                bool _ => new AndroidJavaObject("java.lang.Boolean", value),
+                char _ => new AndroidJavaObject("java.lang.Character", value),
                 int _ => new AndroidJavaObject("java.lang.Integer", value),
                 long _ => new AndroidJavaObject("java.lang.Long", value),
                 float _ => new AndroidJavaObject("java.lang.Float", value),
                 double _ => new AndroidJavaObject("java.lang.Double", value),
-                bool _ => new AndroidJavaObject("java.lang.Boolean", value),
-                char _ => new AndroidJavaObject("java.lang.Character", value),
                 string _ => value,
                 _ => throw new ArgumentException("Incorrect type")
             };

@@ -1,5 +1,6 @@
 #if UNITY_IOS || BIDON_DEV_IOS
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using AOT;
@@ -98,6 +99,78 @@ namespace Bidon.Mediation
             _interstitialAdPtr = IntPtr.Zero;
             _interstitialDelegatePtr = IntPtr.Zero;
         }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataBool")]
+        private static extern void BidonInterstitialAdSetExtraDataBool(IntPtr ptr, string key, bool value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataInt")]
+        private static extern void BidonInterstitialAdSetExtraDataInt(IntPtr ptr, string key, int value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataLong")]
+        private static extern void BidonInterstitialAdSetExtraDataLong(IntPtr ptr, string key, long value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataFloat")]
+        private static extern void BidonInterstitialAdSetExtraDataFloat(IntPtr ptr, string key, float value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataDouble")]
+        private static extern void BidonInterstitialAdSetExtraDataDouble(IntPtr ptr, string key, double value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataString")]
+        private static extern void BidonInterstitialAdSetExtraDataString(IntPtr ptr, string key, string value);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdSetExtraDataNull")]
+        private static extern void BidonInterstitialAdSetExtraDataNull(IntPtr ptr, string key);
+
+        public void SetExtraData(string key, object value)
+        {
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+
+            switch (value)
+            {
+                case bool valueBool:
+                    BidonInterstitialAdSetExtraDataBool(_interstitialAdPtr, key, valueBool);
+                    break;
+                case char valueChar:
+                    BidonInterstitialAdSetExtraDataString(_interstitialAdPtr, key, valueChar.ToString());
+                    break;
+                case int valueInt:
+                    BidonInterstitialAdSetExtraDataInt(_interstitialAdPtr, key, valueInt);
+                    break;
+                case long valueLong:
+                    BidonInterstitialAdSetExtraDataLong(_interstitialAdPtr, key, valueLong);
+                    break;
+                case float valueFloat:
+                    BidonInterstitialAdSetExtraDataFloat(_interstitialAdPtr, key, valueFloat);
+                    break;
+                case double valueDouble:
+                    BidonInterstitialAdSetExtraDataDouble(_interstitialAdPtr, key, valueDouble);
+                    break;
+                case string valueString:
+                    BidonInterstitialAdSetExtraDataString(_interstitialAdPtr, key, valueString);
+                    break;
+                case null:
+                    BidonInterstitialAdSetExtraDataNull(_interstitialAdPtr, key);
+                    break;
+            }
+        }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdGetExtraData")]
+        private static extern string BidonInterstitialAdGetExtraData(IntPtr ptr);
+
+        public IDictionary<string, object> GetExtraData() =>
+            IosBidonHelper.GetDictionaryFromJsonString(BidonInterstitialAdGetExtraData(_interstitialAdPtr));
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdNotifyLoss")]
+        private static extern void BidonInterstitialAdNotifyLoss(IntPtr ptr, string winnerDemandId, double ecpm);
+
+        public void NotifyLoss(string winnerDemandId, double ecpm) =>
+            BidonInterstitialAdNotifyLoss(_interstitialAdPtr, winnerDemandId, ecpm);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdNotifyWin")]
+        private static extern void BidonInterstitialAdNotifyWin(IntPtr ptr);
+
+        public void NotifyWin() => BidonInterstitialAdNotifyWin(_interstitialAdPtr);
 
         [MonoPInvokeCallback(typeof(AdLoadedCallback))]
         private static void AdLoaded(IntPtr iosBidonAdPtr)
