@@ -1,5 +1,6 @@
 #if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -217,6 +218,23 @@ namespace Bidon.Mediation
             };
         }
 
+        public static IDictionary<string, object> GetDictionaryFromJavaMap(AndroidJavaObject jMap)
+        {
+            var outputDict = new Dictionary<string, object>();
+
+            if (jMap == null) return outputDict;
+
+            using var jList = new AndroidJavaObject("java.util.ArrayList", jMap.Call<AndroidJavaObject>("entrySet"));
+
+            int countOfEntries = jList.Call<int>("size");
+            for(int i = 0; i < countOfEntries; i++)
+            {
+                var jEntry = jList.Call<AndroidJavaObject>("get", i);
+                outputDict.Add(jEntry.Call<string>("getKey"), GetCSharpObject(jEntry.Call<AndroidJavaObject>("getValue")));
+            }
+            return outputDict;
+        }
+
         public static AndroidJavaObject GetLogLevelJavaObject(BidonLogLevel logLevel)
         {
             return logLevel switch
@@ -264,16 +282,50 @@ namespace Bidon.Mediation
             };
         }
 
+        private static object GetCSharpObject(AndroidJavaObject jObject)
+        {
+            using var boolJClass = new AndroidJavaClass("java.lang.Boolean");
+            using var charJClass = new AndroidJavaClass("java.lang.Character");
+            using var intJClass = new AndroidJavaClass("java.lang.Integer");
+            using var longJClass = new AndroidJavaClass("java.lang.Long");
+            using var floatJClass = new AndroidJavaClass("java.lang.Float");
+            using var doubleJClass = new AndroidJavaClass("java.lang.Double");
+            using var stringJClass = new AndroidJavaClass("java.lang.String");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), boolJClass.GetRawClass()))
+                return jObject.Call<bool>("booleanValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), charJClass.GetRawClass()))
+                return jObject.Call<char>("charValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), intJClass.GetRawClass()))
+                return jObject.Call<int>("intValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), longJClass.GetRawClass()))
+                return jObject.Call<long>("longValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), floatJClass.GetRawClass()))
+                return jObject.Call<float>("floatValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), doubleJClass.GetRawClass()))
+                return jObject.Call<double>("doubleValue");
+
+            if (AndroidJNI.IsInstanceOf(jObject.GetRawObject(), stringJClass.GetRawClass()))
+                return jObject.Call<string>("toString");
+
+            throw new ArgumentException("Not supported type was detected");
+        }
+
         public static object GetJavaObject(object value)
         {
             return value switch
             {
+                bool _ => new AndroidJavaObject("java.lang.Boolean", value),
+                char _ => new AndroidJavaObject("java.lang.Character", value),
                 int _ => new AndroidJavaObject("java.lang.Integer", value),
                 long _ => new AndroidJavaObject("java.lang.Long", value),
                 float _ => new AndroidJavaObject("java.lang.Float", value),
                 double _ => new AndroidJavaObject("java.lang.Double", value),
-                bool _ => new AndroidJavaObject("java.lang.Boolean", value),
-                char _ => new AndroidJavaObject("java.lang.Character", value),
                 string _ => value,
                 _ => throw new ArgumentException("Incorrect type")
             };

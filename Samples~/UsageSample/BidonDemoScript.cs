@@ -116,6 +116,22 @@ public class BidonDemoScript : MonoBehaviour
         _interstitialAd = new BidonInterstitialAd();
 
         SubscribeForInterstitialEvents();
+
+        _interstitialAd.SetExtraData("bool_key", false);
+        _interstitialAd.SetExtraData("int_key", 42);
+        _interstitialAd.SetExtraData("long_key", long.MaxValue);
+        _interstitialAd.SetExtraData("double_key", double.Epsilon);
+        _interstitialAd.SetExtraData("float_key", float.MaxValue);
+        _interstitialAd.SetExtraData("char_key", 'v');
+        _interstitialAd.SetExtraData("string_key", "string_value");
+        _interstitialAd.SetExtraData("bool_key", null);
+
+        string extraData = String.Join(", ", _interstitialAd.GetExtraData()
+            .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
+            .ToArray());
+        Debug.Log($"[BidonPlugin] [InterstitialAd] Extra data: {extraData}");
+
+        SubscribeForInterstitialEvents();
     }
 
     public void LoadInterstitialAd()
@@ -170,6 +186,20 @@ public class BidonDemoScript : MonoBehaviour
         _rewardedAd = new BidonRewardedAd();
 
         SubscribeForRewardedEvents();
+
+        _rewardedAd.SetExtraData("bool_key", false);
+        _rewardedAd.SetExtraData("int_key", 42);
+        _rewardedAd.SetExtraData("long_key", long.MaxValue);
+        _rewardedAd.SetExtraData("double_key", double.Epsilon);
+        _rewardedAd.SetExtraData("float_key", float.MaxValue);
+        _rewardedAd.SetExtraData("char_key", 'v');
+        _rewardedAd.SetExtraData("string_key", "string_value");
+        _rewardedAd.SetExtraData("char_key", null);
+
+        string extraData = String.Join(", ", _rewardedAd.GetExtraData()
+            .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
+            .ToArray());
+        Debug.Log($"[BidonPlugin] [RewardedAd] Extra data: {extraData}");
     }
 
     public void LoadRewardedAd()
