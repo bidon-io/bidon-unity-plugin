@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable once CheckNamespace
@@ -54,5 +55,13 @@ namespace Bidon.Mediation
         public void Show() => _bidonRewardedAdImpl.Show();
 
         public void Destroy() => _bidonRewardedAdImpl.Destroy();
+
+        public void SetExtraData(string key, object value) => _bidonRewardedAdImpl.SetExtraData(key, value);
+
+        public IDictionary<string, object> GetExtraData() => _bidonRewardedAdImpl.GetExtraData();
+
+        public void NotifyLoss(string winnerDemandId, double ecpm) => _bidonRewardedAdImpl.NotifyLoss(winnerDemandId, ecpm);
+
+        public void NotifyWin() => _bidonRewardedAdImpl.NotifyWin();
     }
 }

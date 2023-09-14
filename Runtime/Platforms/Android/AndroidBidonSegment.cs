@@ -54,11 +54,12 @@ namespace Bidon.Mediation
 
         public void SetCustomAttribute(string name, object value)
         {
-            if (!(value is bool) && !(value is int) && !(value is long) && !(value is double) && !(value is string)) return;
+            if (!(value is bool) && !(value is int) && !(value is long) && !(value is double)
+                && !(value is string) && value != null) return;
 
             _bidonSegmentJavaObject?.Call("putCustomAttribute",
                 AndroidBidonJavaHelper.GetJavaObject(name),
-                AndroidBidonJavaHelper.GetJavaObject(value));
+                value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
         }
     }
 }

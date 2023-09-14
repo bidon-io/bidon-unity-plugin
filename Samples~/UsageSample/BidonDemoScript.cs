@@ -41,18 +41,32 @@ public class BidonDemoScript : MonoBehaviour
         BidonSdk.Instance.SetLogLevel(BidonLogLevel.Verbose);
         BidonSdk.Instance.SetBaseUrl("https://b.appbaqend.com");
 
-        BidonSdk.Instance.SetExtraData("answer", 42);
-        BidonSdk.Instance.SetExtraData("key_long", long.MaxValue);
-        BidonSdk.Instance.SetExtraData("key_float", float.MaxValue);
-        BidonSdk.Instance.SetExtraData("key_double", double.MaxValue);
-        BidonSdk.Instance.SetExtraData("is_cake_a_lie", true);
-        BidonSdk.Instance.SetExtraData("key_char", 'v');
-        BidonSdk.Instance.SetExtraData("key_string", "string_value");
+        BidonSdk.Instance.SetTestMode(false);
+        Debug.Log($"[BidonPlugin] Is test mode enabled: {BidonSdk.Instance.IsTestModeEnabled()}");
+
+        BidonSdk.Instance.Regulation.GdprConsentString = "gdpr_consent_string";
+        BidonSdk.Instance.Regulation.UsPrivacyString = "us_privacy_string";
+        BidonSdk.Instance.Regulation.GdprConsentStatus = BidonGdprConsentStatus.Given;
+        BidonSdk.Instance.Regulation.CoppaApplicabilityStatus = BidonCoppaApplicabilityStatus.Yes;
+        Debug.Log($"[BidonPlugin] [Regulation] GdprConsentString: {BidonSdk.Instance.Regulation.GdprConsentString}");
+        Debug.Log($"[BidonPlugin] [Regulation] UsPrivacyString: {BidonSdk.Instance.Regulation.UsPrivacyString}");
+        Debug.Log($"[BidonPlugin] [Regulation] GdprConsentStatus: {BidonSdk.Instance.Regulation.GdprConsentStatus}");
+        Debug.Log($"[BidonPlugin] [Regulation] CoppaApplicabilityStatus: {BidonSdk.Instance.Regulation.CoppaApplicabilityStatus}");
+
+        BidonSdk.Instance.SetExtraData("sdk_extra_bool_key", false);
+        BidonSdk.Instance.SetExtraData("sdk_extra_char_key", 'v');
+        BidonSdk.Instance.SetExtraData("sdk_extra_int_key", 42);
+        BidonSdk.Instance.SetExtraData("sdk_extra_long_key", Int64.MaxValue);
+        BidonSdk.Instance.SetExtraData("sdk_extra_float_key", Single.MinValue);
+        BidonSdk.Instance.SetExtraData("sdk_extra_double_key", Double.MaxValue);
+        BidonSdk.Instance.SetExtraData("sdk_extra_string_key", "sdk_extra_string_value");
+        BidonSdk.Instance.SetExtraData("sdk_extra_unwanted_key", 11);
+        BidonSdk.Instance.SetExtraData("sdk_extra_unwanted_key", null);
 
         BidonSdk.Instance.Segment.Age = 42;
         BidonSdk.Instance.Segment.Gender = BidonUserGender.Male;
-        BidonSdk.Instance.Segment.Level = 13;
-        BidonSdk.Instance.Segment.TotalInAppsAmount = double.MaxValue;
+        BidonSdk.Instance.Segment.Level = 11;
+        BidonSdk.Instance.Segment.TotalInAppsAmount = Double.MaxValue;
         BidonSdk.Instance.Segment.IsPaying = true;
         Debug.Log($"[BidonPlugin] [Segment] Age: {BidonSdk.Instance.Segment.Age}");
         Debug.Log($"[BidonPlugin] [Segment] Gender: {BidonSdk.Instance.Segment.Gender}");
@@ -60,15 +74,17 @@ public class BidonDemoScript : MonoBehaviour
         Debug.Log($"[BidonPlugin] [Segment] InAppsAmount: {BidonSdk.Instance.Segment.TotalInAppsAmount}");
         Debug.Log($"[BidonPlugin] [Segment] IsPaying: {BidonSdk.Instance.Segment.IsPaying}");
 
-        BidonSdk.Instance.Segment.SetCustomAttribute("bool_attr", true);
-        BidonSdk.Instance.Segment.SetCustomAttribute("int_attr", int.MaxValue);
-        BidonSdk.Instance.Segment.SetCustomAttribute("long_attr", long.MaxValue);
-        BidonSdk.Instance.Segment.SetCustomAttribute("double_attr", double.MaxValue);
-        BidonSdk.Instance.Segment.SetCustomAttribute("string_attr", "string_value");
-        BidonSdk.Instance.Segment.SetCustomAttribute("unsupported_attr", 'c');
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_bool_attr", true);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_int_attr", Int32.MinValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_long_attr", Int64.MaxValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_double_attr", Double.MinValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_string_attr", "segment_string_value");
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unsupported_attr", 's');
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unwanted_attr", false);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unwanted_attr", null);
         string attributes = String.Join(", ",
             BidonSdk.Instance.Segment.CustomAttributes
-                .Select(attr => $"{attr.Key}:{attr.Value}")
+                .Select(attr => $"{attr.Key}:({attr.Value.GetType()}){attr.Value}")
                 .ToArray());
         Debug.Log($"[BidonPlugin] [Segment] Custom Attributes: {attributes}");
 
@@ -104,6 +120,23 @@ public class BidonDemoScript : MonoBehaviour
         _interstitialAd = new BidonInterstitialAd();
 
         SubscribeForInterstitialEvents();
+
+        _interstitialAd.SetExtraData("interstitial_bool_key", false);
+        _interstitialAd.SetExtraData("interstitial_char_key", 'i');
+        _interstitialAd.SetExtraData("interstitial_int_key", Int32.MinValue);
+        _interstitialAd.SetExtraData("interstitial_long_key", Int64.MaxValue);
+        _interstitialAd.SetExtraData("interstitial_float_key", Single.MinValue);
+        _interstitialAd.SetExtraData("interstitial_double_key", Double.MaxValue);
+        _interstitialAd.SetExtraData("interstitial_string_key", "interstitial_string_value");
+        _interstitialAd.SetExtraData("interstitial_unwanted_key", false);
+        _interstitialAd.SetExtraData("interstitial_unwanted_key", null);
+
+        string extraData = String.Join(", ", _interstitialAd.GetExtraData()
+            .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
+            .ToArray());
+        Debug.Log($"[BidonPlugin] [InterstitialAd] Extra data: {extraData}");
+
+        SubscribeForInterstitialEvents();
     }
 
     public void LoadInterstitialAd()
@@ -126,6 +159,7 @@ public class BidonDemoScript : MonoBehaviour
 
         if (_interstitialAd.IsReady())
         {
+            _interstitialAd.NotifyWin();
             _interstitialAd.Show();
         }
         else
@@ -143,6 +177,7 @@ public class BidonDemoScript : MonoBehaviour
         }
 
         UnsubscribeFromInterstitialEvents();
+        _interstitialAd.NotifyLoss("some_winner_id", 0.5);
         _interstitialAd.Destroy();
         _interstitialAd = null;
     }
@@ -158,6 +193,21 @@ public class BidonDemoScript : MonoBehaviour
         _rewardedAd = new BidonRewardedAd();
 
         SubscribeForRewardedEvents();
+
+        _rewardedAd.SetExtraData("rewarded_bool_key", true);
+        _rewardedAd.SetExtraData("rewarded_char_key", 'r');
+        _rewardedAd.SetExtraData("rewarded_int_key", Int32.MinValue);
+        _rewardedAd.SetExtraData("rewarded_long_key", Int64.MaxValue);
+        _rewardedAd.SetExtraData("rewarded_float_key", Single.MinValue);
+        _rewardedAd.SetExtraData("rewarded_double_key", Double.MaxValue);
+        _rewardedAd.SetExtraData("rewarded_string_key", "rewarded_string_value");
+        _rewardedAd.SetExtraData("rewarded_unwanted_key", false);
+        _rewardedAd.SetExtraData("rewarded_unwanted_key", null);
+
+        string extraData = String.Join(", ", _rewardedAd.GetExtraData()
+            .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
+            .ToArray());
+        Debug.Log($"[BidonPlugin] [RewardedAd] Extra data: {extraData}");
     }
 
     public void LoadRewardedAd()
@@ -180,6 +230,7 @@ public class BidonDemoScript : MonoBehaviour
 
         if (_rewardedAd.IsReady())
         {
+            _rewardedAd.NotifyWin();
             _rewardedAd.Show();
         }
         else
@@ -197,6 +248,7 @@ public class BidonDemoScript : MonoBehaviour
         }
 
         UnsubscribeFromRewardedEvents();
+        _rewardedAd.NotifyLoss("some_winner_id", 0.9);
         _rewardedAd.Destroy();
         _rewardedAd = null;
     }

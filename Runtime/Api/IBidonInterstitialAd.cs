@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
@@ -18,5 +19,9 @@ namespace Bidon.Mediation
         bool IsReady();
         void Show();
         void Destroy();
+        void SetExtraData(string key, object value);
+        IDictionary<string, object> GetExtraData();
+        void NotifyLoss(string winnerDemandId, double ecpm);
+        void NotifyWin();
     }
 }

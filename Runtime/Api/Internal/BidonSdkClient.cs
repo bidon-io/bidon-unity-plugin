@@ -10,6 +10,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
 
         public IBidonSegment Segment { get; }
+        public IBidonRegulation Regulation { get; }
 
         internal BidonSdkClient()
         {
@@ -23,12 +24,24 @@ namespace Bidon.Mediation
             _bidonSdkImpl = new DummyBidonSdk();
 #endif
             _bidonSdkImpl.OnInitializationFinished += (sender, args) => OnInitializationFinished?.Invoke(this, args);
+
             Segment = _bidonSdkImpl.Segment;
+            Regulation = _bidonSdkImpl.Regulation;
         }
 
         public void SetLogLevel(BidonLogLevel logLevel)
         {
             _bidonSdkImpl.SetLogLevel(logLevel);
+        }
+
+        public void SetTestMode(bool isEnabled)
+        {
+            _bidonSdkImpl.SetTestMode(isEnabled);
+        }
+
+        public bool IsTestModeEnabled()
+        {
+            return _bidonSdkImpl.IsTestModeEnabled();
         }
 
         public void SetBaseUrl(string baseUrl)
