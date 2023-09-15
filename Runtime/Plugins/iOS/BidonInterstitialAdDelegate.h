@@ -1,6 +1,6 @@
 //
 //  BidonInterstitialAdDelegate.h
-//  Bion Unity Plugin
+//  Bidon Unity Plugin
 //
 //  Created by Dmitrii Feshchenko on 02/03/2023.
 //
