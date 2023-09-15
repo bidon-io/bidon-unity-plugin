@@ -12,6 +12,7 @@ public class BidonDemoScript : MonoBehaviour
     [SerializeField] private Button initButton;
     [SerializeField] private Text versionText;
 
+    private BidonBannerAd _bannerAd;
     private BidonInterstitialAd _interstitialAd;
     private BidonRewardedAd _rewardedAd;
 
@@ -109,6 +110,92 @@ public class BidonDemoScript : MonoBehaviour
         initButton.interactable = false;
     }
 
+    public void CreateBannerAd()
+    {
+        if (_bannerAd != null)
+        {
+            Debug.LogWarning($"[BidonPlugin] Destroy the banner first");
+            return;
+        }
+
+        _bannerAd = new BidonBannerAd();
+
+        _bannerAd.SetFormat(BidonBannerFormat.Banner);
+        _bannerAd.SetPredefinedPosition(BidonBannerPosition.VerticalLeft);
+        // _bannerAd.SetCustomPositionAndRotation(new Vector2Int(20, 20), 5, new Vector2(0.5f, 0.2f));
+
+        SubscribeForBannerEvents();
+
+        _bannerAd.SetExtraData("banner_bool_key", false);
+        _bannerAd.SetExtraData("banner_char_key", 'i');
+        _bannerAd.SetExtraData("banner_int_key", Int32.MinValue);
+        _bannerAd.SetExtraData("banner_long_key", Int64.MaxValue);
+        _bannerAd.SetExtraData("banner_float_key", Single.MinValue);
+        _bannerAd.SetExtraData("banner_double_key", Double.MaxValue);
+        _bannerAd.SetExtraData("banner_string_key", "banner_string_value");
+        _bannerAd.SetExtraData("banner_unwanted_key", false);
+        _bannerAd.SetExtraData("banner_unwanted_key", null);
+
+        string extraData = String.Join(", ", _bannerAd.GetExtraData()
+            .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
+            .ToArray());
+        Debug.Log($"[BidonPlugin] [BannerAd] Extra data: {extraData}");
+    }
+
+    public void LoadBannerAd()
+    {
+        if (_bannerAd == null)
+        {
+            Debug.LogWarning("[BidonPlugin] Create the banner first");
+            return;
+        }
+        _bannerAd.Load(0.01d);
+    }
+
+    public void ShowBannerAd()
+    {
+        if (_bannerAd == null)
+        {
+            Debug.LogWarning("[BidonPlugin] Create the banner first");
+            return;
+        }
+
+        if (_bannerAd.IsReady())
+        {
+            _bannerAd.NotifyWin();
+            _bannerAd.Show();
+        }
+        else
+        {
+            Debug.LogWarning("[BidonPlugin] Load the banner first");
+        }
+    }
+
+    public void HideBannerAd()
+    {
+        if (_bannerAd == null)
+        {
+            Debug.LogWarning("[BidonPlugin] Create the banner first");
+            return;
+        }
+
+        _bannerAd.Hide();
+    }
+
+    public void DestroyBannerAd()
+    {
+        if (_bannerAd == null)
+        {
+            Debug.LogWarning("[BidonPlugin] Create the banner first");
+            return;
+        }
+
+        UnsubscribeFromBannerEvents();
+        _bannerAd.NotifyLoss("some_winner_id", 0.2);
+        _bannerAd.Destroy();
+        _bannerAd = null;
+    }
+
     public void CreateInterstitialAd()
     {
         if (_interstitialAd != null)
@@ -135,8 +222,6 @@ public class BidonDemoScript : MonoBehaviour
             .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
             .ToArray());
         Debug.Log($"[BidonPlugin] [InterstitialAd] Extra data: {extraData}");
-
-        SubscribeForInterstitialEvents();
     }
 
     public void LoadInterstitialAd()
@@ -255,6 +340,28 @@ public class BidonDemoScript : MonoBehaviour
 
     #region Callbacks
 
+    private void SubscribeForBannerEvents()
+    {
+        _bannerAd.OnAdLoaded += OnBannerAdLoaded;
+        _bannerAd.OnAdLoadFailed += OnBannerAdLoadFailed;
+        _bannerAd.OnAdShown += OnBannerAdShown;
+        _bannerAd.OnAdShowFailed += OnBannerAdShowFailed;
+        _bannerAd.OnAdClicked += OnBannerAdClicked;
+        _bannerAd.OnAdExpired += OnBannerAdExpired;
+        _bannerAd.OnAdRevenueReceived += OnBannerAdRevenueReceived;
+    }
+
+    private void UnsubscribeFromBannerEvents()
+    {
+        _bannerAd.OnAdLoaded -= OnBannerAdLoaded;
+        _bannerAd.OnAdLoadFailed -= OnBannerAdLoadFailed;
+        _bannerAd.OnAdShown -= OnBannerAdShown;
+        _bannerAd.OnAdShowFailed -= OnBannerAdShowFailed;
+        _bannerAd.OnAdClicked -= OnBannerAdClicked;
+        _bannerAd.OnAdExpired -= OnBannerAdExpired;
+        _bannerAd.OnAdRevenueReceived -= OnBannerAdRevenueReceived;
+    }
+
     private void SubscribeForInterstitialEvents()
     {
         _interstitialAd.OnAdLoaded += OnInterstitialAdLoaded;
@@ -303,6 +410,41 @@ public class BidonDemoScript : MonoBehaviour
         _rewardedAd.OnAdExpired -= OnRewardedAdExpired;
         _rewardedAd.OnAdRevenueReceived -= OnRewardedAdRevenueReceived;
         _rewardedAd.OnUserRewarded -= OnRewardedUserRewarded;
+    }
+
+    private void OnBannerAdLoaded(object sender, BidonAdLoadedEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoaded raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+    }
+
+    private void OnBannerAdLoadFailed(object sender, BidonAdLoadFailedEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoadFailed raised. Reason: {args.Cause.ToString()}");
+    }
+
+    private void OnBannerAdShown(object sender, BidonAdShownEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdShown raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+    }
+
+    private void OnBannerAdShowFailed(object sender, BidonAdShowFailedEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdShowFailed raised. Reason: {args.Cause.ToString()}");
+    }
+
+    private void OnBannerAdClicked(object sender, BidonAdClickedEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdClicked raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+    }
+
+    private void OnBannerAdExpired(object sender, BidonAdExpiredEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdExpired raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+    }
+
+    private void OnBannerAdRevenueReceived(object sender, BidonAdRevenueReceivedEventArgs args)
+    {
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdRevenueReceived raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}, AdValue: {args.AdValue?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnInterstitialAdLoaded(object sender, BidonAdLoadedEventArgs args)
