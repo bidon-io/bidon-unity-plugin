@@ -101,7 +101,7 @@ namespace Bidon.Mediation
 
         public void NotifyLoss(string winnerDemandId, double ecpm)
         {
-            _bannerAdJavaObject?.Call("notifyLoss", winnerDemandId, ecpm);
+            _bannerAdJavaObject?.Call("notifyLoss", _activityJavaObject, winnerDemandId, ecpm);
         }
 
         public void NotifyWin()
