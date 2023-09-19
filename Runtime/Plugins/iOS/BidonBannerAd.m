@@ -5,6 +5,7 @@
 //  Created by Dmitrii Feshchenko on 15/09/2023.
 //
 
+#import <UIKit/UIKit.h>
 #import <Bidon/Bidon-Swift.h>
 #import <UnityAppController.h>
 #import <BidonBannerAdDelegate.h>
@@ -32,9 +33,10 @@ void BDNUnityPluginBannerAdSetCustomPositionAndRotation(void* ptr,
                                                         float anchorX,
                                                         float anchorY) {
     if (!ptr) return;
+    float scaleFactor = [[UIScreen mainScreen] scale];
     CGPoint offset;
-    offset.x = (CGFloat)offsetX;
-    offset.y = (CGFloat)offsetY;
+    offset.x = (CGFloat)offsetX / scaleFactor;
+    offset.y = (CGFloat)offsetY / scaleFactor;
 
     CGPoint anchor;
     anchor.x = (CGFloat)anchorX;
