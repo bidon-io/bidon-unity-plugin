@@ -25,6 +25,8 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass NoAppropriateAdUnitIdJClass;
         private static readonly AndroidJavaClass ExpiredJClass;
 
+        private static readonly AndroidJavaClass BannerFormatJClass;
+        private static readonly AndroidJavaClass BannerPositionJClass;
         private static readonly AndroidJavaClass LogLevelJClass;
         private static readonly AndroidJavaClass GenderJClass;
         private static readonly AndroidJavaClass GdprConsentStatusJClass;
@@ -51,6 +53,8 @@ namespace Bidon.Mediation
                 NoAppropriateAdUnitIdJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoAppropriateAdUnitId");
                 ExpiredJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$Expired");
 
+                BannerFormatJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerFormat");
+                BannerPositionJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerPosition");
                 LogLevelJClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
                 GenderJClass = new AndroidJavaClass("org.bidon.sdk.segment.models.Gender");
                 GdprConsentStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Gdpr");
@@ -233,6 +237,40 @@ namespace Bidon.Mediation
                 outputDict.Add(jEntry.Call<string>("getKey"), GetCSharpObject(jEntry.Call<AndroidJavaObject>("getValue")));
             }
             return outputDict;
+        }
+
+        public static AndroidJavaObject GetPointJavaObject(Vector2Int vector)
+        {
+            return new AndroidJavaObject("android.graphics.Point", vector.x, vector.y);
+        }
+
+        public static AndroidJavaObject GetPointFJavaObject(Vector2 vector)
+        {
+            return new AndroidJavaObject("android.graphics.PointF", vector.x, vector.y);
+        }
+
+        public static AndroidJavaObject GetBannerFormatJavaObject(BidonBannerFormat format)
+        {
+            return format switch
+            {
+                BidonBannerFormat.Banner => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "Banner"),
+                BidonBannerFormat.Leaderboard => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "LeaderBoard"),
+                BidonBannerFormat.Mrec => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "MRec"),
+                BidonBannerFormat.Adaptive => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "Adaptive"),
+                _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
+            };
+        }
+
+        public static AndroidJavaObject GetBannerPositionJavaObject(BidonBannerPosition position)
+        {
+            return position switch
+            {
+                BidonBannerPosition.HorizontalTop => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "HorizontalTop"),
+                BidonBannerPosition.HorizontalBottom => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "HorizontalBottom"),
+                BidonBannerPosition.VerticalLeft => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "VerticalLeft"),
+                BidonBannerPosition.VerticalRight => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "VerticalRight"),
+                _ => throw new ArgumentOutOfRangeException(nameof(position), position, null)
+            };
         }
 
         public static AndroidJavaObject GetLogLevelJavaObject(BidonLogLevel logLevel)
