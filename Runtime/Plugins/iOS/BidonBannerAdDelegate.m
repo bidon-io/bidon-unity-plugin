@@ -46,7 +46,7 @@ void BDNUnityPluginBannerAdDestroyDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.bannerDidLoadCallback(&unityAd);
 }
 
@@ -59,7 +59,7 @@ void BDNUnityPluginBannerAdDestroyDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordImpression:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidRecordImpressionCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.bannerDidRecordImpressionCallback(&unityAd);
 }
 
@@ -72,22 +72,22 @@ void BDNUnityPluginBannerAdDestroyDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidClickCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.bannerDidClickCallback(&unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject>)adObject didExpireAd:(id<BDNAd>)ad {
     if (!self.bannerDidExpireCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.bannerDidExpireCallback(&unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
-    BDNUnityPluginAdRevenue unityAdRevenue = GetBDNUnityPluginAdRevenue(revenue);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAdRevenue unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
     self.bannerDidPayRevenueCallback(&unityAd, &unityAdRevenue);
 }
 

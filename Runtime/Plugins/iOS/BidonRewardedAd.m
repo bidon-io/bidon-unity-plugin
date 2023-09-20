@@ -9,28 +9,28 @@
 #import <UnityAppController.h>
 #import <BidonRewardedAdDelegate.h>
 
-void* BDNUnityPluginCreateRewarded(void* delegatePtr) {
+void* BDNUnityPluginRewardedAdCreateInstance(void* delegatePtr) {
     BDNRewardedAd* ad = [[BDNRewardedAd alloc] initWithPlacement:@"default"];
     ad.delegate = (__bridge BDNUnityPluginRewardedAdDelegate*)delegatePtr;
     return (__bridge_retained void*)ad;
 }
 
-void BDNUnityPluginLoadRewarded(void* ptr, double priceFloor) {
+void BDNUnityPluginRewardedAdLoad(void* ptr, double priceFloor) {
     if (!ptr) return;
     [(__bridge BDNRewardedAd*)ptr loadAdWith:priceFloor];
 }
 
-bool BDNUnityPluginIsRewardedReady(void* ptr) {
+bool BDNUnityPluginRewardedAdIsReady(void* ptr) {
     if (!ptr) return false;
     return [(__bridge BDNRewardedAd*)ptr isReady];
 }
 
-void BDNUnityPluginShowRewarded(void* ptr) {
+void BDNUnityPluginRewardedAdShow(void* ptr) {
     if (!ptr) return;
     [(__bridge BDNRewardedAd*)ptr showAdFrom:[GetAppController() rootViewController]];
 }
 
-void BDNUnityPluginDestroyRewarded(void* ptr) {
+void BDNUnityPluginRewardedAdDestroy(void* ptr) {
     if (!ptr) return;
     (void)(__bridge_transfer BDNRewardedAd*)ptr;
 }

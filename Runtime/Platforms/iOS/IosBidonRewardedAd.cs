@@ -36,7 +36,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewardedDelegate")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreateDelegate")]
         private static extern IntPtr BidonCreateRewardedDelegate(AdLoadedCallback onAdLoaded,
                                                                  AdLoadFailedCallback onAdLoadFailed,
                                                                  AdShownCallback onAdShown,
@@ -47,7 +47,7 @@ namespace Bidon.Mediation
                                                                  AdRevenueReceivedCallback onAdRevenueReceived,
                                                                  UserRewardedCallback onUserRewarded);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewarded")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreateInstance")]
         private static extern IntPtr BidonCreateRewarded(IntPtr delegatePtr);
 
         internal IosBidonRewardedAd()
@@ -66,7 +66,7 @@ namespace Bidon.Mediation
             _rewardedAdPtr = BidonCreateRewarded(_rewardedDelegatePtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginLoadRewarded")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdLoad")]
         private static extern void BidonLoadRewarded(IntPtr ptr, double priceFloor);
 
         public void Load(double priceFloor)
@@ -74,7 +74,7 @@ namespace Bidon.Mediation
             BidonLoadRewarded(_rewardedAdPtr, priceFloor);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginIsRewardedReady")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdIsReady")]
         private static extern bool BidonIsRewardedReady(IntPtr ptr);
 
         public bool IsReady()
@@ -82,7 +82,7 @@ namespace Bidon.Mediation
             return BidonIsRewardedReady(_rewardedAdPtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginShowRewarded")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdShow")]
         private static extern void BidonShowRewarded(IntPtr ptr);
 
         public void Show()
@@ -90,10 +90,10 @@ namespace Bidon.Mediation
             BidonShowRewarded(_rewardedAdPtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginDestroyRewarded")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDestroy")]
         private static extern void BidonDestroyRewarded(IntPtr ptr);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginDestroyRewardedDelegate")]
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDestroyDelegate")]
         private static extern void BidonDestroyRewardedDelegate(IntPtr delegatePtr);
 
         public void Destroy()

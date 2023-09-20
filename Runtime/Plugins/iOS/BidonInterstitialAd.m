@@ -9,28 +9,28 @@
 #import <UnityAppController.h>
 #import <BidonInterstitialAdDelegate.h>
 
-void* BDNUnityPluginCreateInterstitial(void* delegatePtr) {
+void* BDNUnityPluginInterstitialAdCreateInstance(void* delegatePtr) {
     BDNInterstitial* ad = [[BDNInterstitial alloc] initWithPlacement:@"default"];
     ad.delegate = (__bridge BDNUnityPluginInterstitialAdDelegate*)delegatePtr;
     return (__bridge_retained void*)ad;
 }
 
-void BDNUnityPluginLoadInterstitial(void* ptr, double priceFloor) {
+void BDNUnityPluginInterstitialAdLoad(void* ptr, double priceFloor) {
     if (!ptr) return;
     [(__bridge BDNInterstitial*)ptr loadAdWith:priceFloor];
 }
 
-bool BDNUnityPluginIsInterstitialReady(void* ptr) {
+bool BDNUnityPluginInterstitialAdIsReady(void* ptr) {
     if (!ptr) return false;
     return [(__bridge BDNInterstitial*)ptr isReady];
 }
 
-void BDNUnityPluginShowInterstitial(void* ptr) {
+void BDNUnityPluginInterstitialAdShow(void* ptr) {
     if (!ptr) return;
     [(__bridge BDNInterstitial*)ptr showAdFrom:[GetAppController() rootViewController]];
 }
 
-void BDNUnityPluginDestroyInterstitial(void* ptr) {
+void BDNUnityPluginInterstitialAdDestroy(void* ptr) {
     if (!ptr) return;
     (void)(__bridge_transfer BDNInterstitial*)ptr;
 }
