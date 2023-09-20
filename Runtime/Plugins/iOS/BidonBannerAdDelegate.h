@@ -6,7 +6,7 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-#import <BidonUnityPluginCallbacks.h>
+#import <BidonUnityPluginTypes.h>
 
 @interface BDNUnityPluginBannerAdDelegate : NSObject <BDNAdObjectDelegate>
 

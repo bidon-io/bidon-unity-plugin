@@ -36,70 +36,70 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreateDelegate")]
-        private static extern IntPtr BidonCreateRewardedDelegate(AdLoadedCallback onAdLoaded,
-                                                                 AdLoadFailedCallback onAdLoadFailed,
-                                                                 AdShownCallback onAdShown,
-                                                                 AdShowFailedCallback onAdShowFailed,
-                                                                 AdClickedCallback onAdClicked,
-                                                                 AdClosedCallback onAdClosed,
-                                                                 AdExpiredCallback onAdExpired,
-                                                                 AdRevenueReceivedCallback onAdRevenueReceived,
-                                                                 UserRewardedCallback onUserRewarded);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDelegateCreate")]
+        private static extern IntPtr BidonRewardedAdDelegateCreate(AdLoadedCallback onAdLoaded,
+                                                                   AdLoadFailedCallback onAdLoadFailed,
+                                                                   AdShownCallback onAdShown,
+                                                                   AdShowFailedCallback onAdShowFailed,
+                                                                   AdClickedCallback onAdClicked,
+                                                                   AdClosedCallback onAdClosed,
+                                                                   AdExpiredCallback onAdExpired,
+                                                                   AdRevenueReceivedCallback onAdRevenueReceived,
+                                                                   UserRewardedCallback onUserRewarded);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreateInstance")]
-        private static extern IntPtr BidonCreateRewarded(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreate")]
+        private static extern IntPtr BidonRewardedAdCreate(IntPtr delegatePtr);
 
         internal IosBidonRewardedAd()
         {
             _instance = this;
 
-            _rewardedDelegatePtr = BidonCreateRewardedDelegate(AdLoaded,
-                                                               AdLoadFailed,
-                                                               AdShown,
-                                                               AdShowFailed,
-                                                               AdClicked,
-                                                               AdClosed,
-                                                               AdExpired,
-                                                               AdRevenueReceived,
-                                                               UserRewarded);
-            _rewardedAdPtr = BidonCreateRewarded(_rewardedDelegatePtr);
+            _rewardedDelegatePtr = BidonRewardedAdDelegateCreate(AdLoaded,
+                                                                 AdLoadFailed,
+                                                                 AdShown,
+                                                                 AdShowFailed,
+                                                                 AdClicked,
+                                                                 AdClosed,
+                                                                 AdExpired,
+                                                                 AdRevenueReceived,
+                                                                 UserRewarded);
+            _rewardedAdPtr = BidonRewardedAdCreate(_rewardedDelegatePtr);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdLoad")]
-        private static extern void BidonLoadRewarded(IntPtr ptr, double priceFloor);
+        private static extern void BidonRewardedAdLoad(IntPtr ptr, double priceFloor);
 
         public void Load(double priceFloor)
         {
-            BidonLoadRewarded(_rewardedAdPtr, priceFloor);
+            BidonRewardedAdLoad(_rewardedAdPtr, priceFloor);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdIsReady")]
-        private static extern bool BidonIsRewardedReady(IntPtr ptr);
+        private static extern bool BidonRewardedAdIsReady(IntPtr ptr);
 
         public bool IsReady()
         {
-            return BidonIsRewardedReady(_rewardedAdPtr);
+            return BidonRewardedAdIsReady(_rewardedAdPtr);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdShow")]
-        private static extern void BidonShowRewarded(IntPtr ptr);
+        private static extern void BidonRewardedAdShow(IntPtr ptr);
 
         public void Show()
         {
-            BidonShowRewarded(_rewardedAdPtr);
+            BidonRewardedAdShow(_rewardedAdPtr);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDestroy")]
-        private static extern void BidonDestroyRewarded(IntPtr ptr);
+        private static extern void BidonRewardedAdDestroy(IntPtr ptr);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDestroyDelegate")]
-        private static extern void BidonDestroyRewardedDelegate(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDelegateDestroy")]
+        private static extern void BidonRewardedAdDelegateDestroy(IntPtr delegatePtr);
 
         public void Destroy()
         {
-            BidonDestroyRewarded(_rewardedAdPtr);
-            BidonDestroyRewardedDelegate(_rewardedDelegatePtr);
+            BidonRewardedAdDestroy(_rewardedAdPtr);
+            BidonRewardedAdDelegateDestroy(_rewardedDelegatePtr);
             _rewardedAdPtr = IntPtr.Zero;
             _rewardedDelegatePtr = IntPtr.Zero;
         }

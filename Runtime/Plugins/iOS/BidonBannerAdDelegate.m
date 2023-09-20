@@ -8,13 +8,13 @@
 #import "BidonBannerAdDelegate.h"
 #import "BidonHelperMethods.h"
 
-void* BDNUnityPluginBannerAdCreateDelegate(DidLoad didLoadCallback,
-                                           DidFailToLoad didFailToLoadCallback,
-                                           DidRecordImpression didRecordImpressionCallback,
-                                           DidFailToPresent didFailToPresentCallback,
-                                           DidClick didClickCallback,
-                                           DidExpire didExpireCallback,
-                                           DidPayRevenue didPayRevenueCallback) {
+CFBDNUnityPluginBannerAdDelegateRef BDNUnityPluginBannerAdDelegateCreate(DidLoad didLoadCallback,
+                                                                         DidFailToLoad didFailToLoadCallback,
+                                                                         DidRecordImpression didRecordImpressionCallback,
+                                                                         DidFailToPresent didFailToPresentCallback,
+                                                                         DidClick didClickCallback,
+                                                                         DidExpire didExpireCallback,
+                                                                         DidPayRevenue didPayRevenueCallback) {
     BDNUnityPluginBannerAdDelegate* delegate = [BDNUnityPluginBannerAdDelegate new];
     delegate.bannerDidLoadCallback = didLoadCallback;
     delegate.bannerDidFailToLoadCallback = didFailToLoadCallback;
@@ -24,13 +24,13 @@ void* BDNUnityPluginBannerAdCreateDelegate(DidLoad didLoadCallback,
     delegate.bannerDidExpireCallback = didExpireCallback;
     delegate.bannerDidPayRevenueCallback = didPayRevenueCallback;
 
-    return (__bridge_retained void*)delegate;
+    return (__bridge_retained CFBDNUnityPluginBannerAdDelegateRef)delegate;
 }
 
-void BDNUnityPluginBannerAdDestroyDelegate(void* delegatePtr) {
+void BDNUnityPluginBannerAdDelegateDestroy(CFBDNUnityPluginBannerAdDelegateRef delegatePtr) {
     if (!delegatePtr) return;
 
-    BDNUnityPluginBannerAdDelegate* delegate = (__bridge_transfer BDNUnityPluginBannerAdDelegate *)delegatePtr;
+    BDNUnityPluginBannerAdDelegate* delegate = (__bridge_transfer BDNUnityPluginBannerAdDelegate*)delegatePtr;
 
     delegate.bannerDidLoadCallback = nil;
     delegate.bannerDidFailToLoadCallback = nil;

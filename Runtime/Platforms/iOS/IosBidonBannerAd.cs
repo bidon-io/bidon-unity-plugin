@@ -33,30 +33,30 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdCreateDelegate")]
-        private static extern IntPtr BidonBannerAdCreateDelegate(AdLoadedCallback onAdLoaded,
-                                                               AdLoadFailedCallback onAdLoadFailed,
-                                                               AdShownCallback onAdShown,
-                                                               AdShowFailedCallback onAdShowFailed,
-                                                               AdClickedCallback onAdClicked,
-                                                               AdExpiredCallback onAdExpired,
-                                                               AdRevenueReceivedCallback onAdRevenueReceived);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdDelegateCreate")]
+        private static extern IntPtr BidonBannerAdDelegateCreate(AdLoadedCallback onAdLoaded,
+                                                                 AdLoadFailedCallback onAdLoadFailed,
+                                                                 AdShownCallback onAdShown,
+                                                                 AdShowFailedCallback onAdShowFailed,
+                                                                 AdClickedCallback onAdClicked,
+                                                                 AdExpiredCallback onAdExpired,
+                                                                 AdRevenueReceivedCallback onAdRevenueReceived);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdCreateInstance")]
-        private static extern IntPtr BidonBannerAdCreateInstance(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdCreate")]
+        private static extern IntPtr BidonBannerAdCreate(IntPtr delegatePtr);
 
         internal IosBidonBannerAd()
         {
             _instance = this;
 
-            _bannerDelegatePtr = BidonBannerAdCreateDelegate(AdLoaded,
-                                                           AdLoadFailed,
-                                                           AdShown,
-                                                           AdShowFailed,
-                                                           AdClicked,
-                                                           AdExpired,
-                                                           AdRevenueReceived);
-            _bannerAdPtr = BidonBannerAdCreateInstance(_bannerDelegatePtr);
+            _bannerDelegatePtr = BidonBannerAdDelegateCreate(AdLoaded,
+                                                             AdLoadFailed,
+                                                             AdShown,
+                                                             AdShowFailed,
+                                                             AdClicked,
+                                                             AdExpired,
+                                                             AdRevenueReceived);
+            _bannerAdPtr = BidonBannerAdCreate(_bannerDelegatePtr);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdSetFormat")]
@@ -122,16 +122,16 @@ namespace Bidon.Mediation
             BidonBannerAdHide(_bannerAdPtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdDestroyInstance")]
-        private static extern void BidonBannerAdDestroyInstance(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdDestroy")]
+        private static extern void BidonBannerAdDestroy(IntPtr ptr);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdDestroyDelegate")]
-        private static extern void BidonBannerAdDestroyDelegate(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdDelegateDestroy")]
+        private static extern void BidonBannerAdDelegateDestroy(IntPtr delegatePtr);
 
         public void Destroy()
         {
-            BidonBannerAdDestroyInstance(_bannerAdPtr);
-            BidonBannerAdDestroyDelegate(_bannerDelegatePtr);
+            BidonBannerAdDestroy(_bannerAdPtr);
+            BidonBannerAdDelegateDestroy(_bannerDelegatePtr);
             _bannerAdPtr = IntPtr.Zero;
             _bannerDelegatePtr = IntPtr.Zero;
         }

@@ -6,7 +6,7 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-#import <BidonUnityPluginStructs.h>
+#import <BidonUnityPluginTypes.h>
 
 extern BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad);
 
