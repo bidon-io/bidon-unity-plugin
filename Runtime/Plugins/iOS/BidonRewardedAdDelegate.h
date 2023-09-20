@@ -6,17 +6,7 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-#import <BidonUnityPluginStructs.h>
-
-typedef void (*DidLoad)(BDNUnityPluginAd* ad);
-typedef void (*DidFailToLoad)(int error);
-typedef void (*WillPresent)(BDNUnityPluginAd* ad);
-typedef void (*DidFailToPresent)(int error);
-typedef void (*DidClick)(BDNUnityPluginAd* ad);
-typedef void (*DidHide)(BDNUnityPluginAd* ad);
-typedef void (*DidExpire)(BDNUnityPluginAd* ad);
-typedef void (*DidPayRevenue)(BDNUnityPluginAd* ad, BDNUnityPluginAdRevenue* revenue);
-typedef void (*DidReceiveReward)(BDNUnityPluginAd* ad, BDNUnityPluginReward* reward);
+#import <BidonHelperMethods.h>
 
 @interface BDNUnityPluginRewardedAdDelegate : NSObject <BDNRewardedAdDelegate>
 

@@ -6,17 +6,16 @@
 //
 
 #import "BidonRewardedAdDelegate.h"
-#import "BidonHelperMethods.h"
 
-void* BDNUnityPluginCreateRewardedDelegate(DidLoad didLoadCallback,
-                                           DidFailToLoad didFailToLoadCallback,
-                                           WillPresent willPresentCallback,
-                                           DidFailToPresent didFailToPresentCallback,
-                                           DidClick didClickCallback,
-                                           DidHide didHideCallback,
-                                           DidExpire didExpireCallback,
-                                           DidPayRevenue didPayRevenueCallback,
-                                           DidReceiveReward didReceiveRewardCallback) {
+CFBDNUnityPluginRewardedAdDelegateRef BDNUnityPluginRewardedAdDelegateCreate(DidLoad didLoadCallback,
+                                                                             DidFailToLoad didFailToLoadCallback,
+                                                                             WillPresent willPresentCallback,
+                                                                             DidFailToPresent didFailToPresentCallback,
+                                                                             DidClick didClickCallback,
+                                                                             DidHide didHideCallback,
+                                                                             DidExpire didExpireCallback,
+                                                                             DidPayRevenue didPayRevenueCallback,
+                                                                             DidReceiveReward didReceiveRewardCallback) {
     BDNUnityPluginRewardedAdDelegate* delegate = [BDNUnityPluginRewardedAdDelegate new];
     delegate.rewardedDidLoadCallback = didLoadCallback;
     delegate.rewardedDidFailToLoadCallback = didFailToLoadCallback;
@@ -28,13 +27,13 @@ void* BDNUnityPluginCreateRewardedDelegate(DidLoad didLoadCallback,
     delegate.rewardedDidPayRevenueCallback = didPayRevenueCallback;
     delegate.rewardedDidReceiveRewardCallback = didReceiveRewardCallback;
 
-    return (__bridge_retained void*)delegate;
+    return (__bridge_retained CFBDNUnityPluginRewardedAdDelegateRef)delegate;
 }
 
-void BDNUnityPluginDestroyRewardedDelegate(void* delegatePtr) {
+void BDNUnityPluginRewardedAdDelegateDestroy(CFBDNUnityPluginRewardedAdDelegateRef delegatePtr) {
     if (!delegatePtr) return;
 
-    BDNUnityPluginRewardedAdDelegate* delegate = (__bridge_transfer BDNUnityPluginRewardedAdDelegate *)delegatePtr;
+    BDNUnityPluginRewardedAdDelegate* delegate = (__bridge_transfer BDNUnityPluginRewardedAdDelegate*)delegatePtr;
 
     delegate.rewardedDidLoadCallback = nil;
     delegate.rewardedDidFailToLoadCallback = nil;
@@ -52,7 +51,7 @@ void BDNUnityPluginDestroyRewardedDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.rewardedDidLoadCallback(&unityAd);
 }
 
@@ -65,7 +64,7 @@ void BDNUnityPluginDestroyRewardedDelegate(void* delegatePtr) {
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedWillPresentCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.rewardedWillPresentCallback(&unityAd);
 }
 
@@ -78,37 +77,37 @@ void BDNUnityPluginDestroyRewardedDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidClickCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.rewardedDidClickCallback(&unityAd);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didDismissAd:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidHideCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.rewardedDidHideCallback(&unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject>)adObject didExpireAd:(id<BDNAd>)ad {
     if (!self.rewardedDidExpireCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.rewardedDidExpireCallback(&unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
-    BDNUnityPluginAdRevenue unityAdRevenue = GetBDNUnityPluginAdRevenue(revenue);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAdRevenue unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
     self.rewardedDidPayRevenueCallback(&unityAd, &unityAdRevenue);
 }
 
 - (void)rewardedAd:(id<BDNRewardedAd> _Nonnull)rewardedAd didRewardUser:(id<BDNReward> _Nonnull)reward ad:(id<BDNAd> _Nonnull)ad {
     if (!self.rewardedDidReceiveRewardCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
-    BDNUnityPluginReward unityReward = GetBDNUnityPluginReward(reward);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginReward unityReward = BDNUnityPluginHelperGetReward(reward);
     self.rewardedDidReceiveRewardCallback(&unityAd, &unityReward);
 }
 

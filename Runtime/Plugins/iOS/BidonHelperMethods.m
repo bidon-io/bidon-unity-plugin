@@ -7,7 +7,7 @@
 
 #import <BidonHelperMethods.h>
 
-BDNUnityPluginAd GetBDNUnityPluginAd(id<BDNAd>ad) {
+BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad) {
     BDNUnityPluginAd unityAd;
     unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
     unityAd.AuctionId = ad.auctionId ? [ad.auctionId UTF8String] : nil;
@@ -20,7 +20,7 @@ BDNUnityPluginAd GetBDNUnityPluginAd(id<BDNAd>ad) {
     return unityAd;
 }
 
-BDNUnityPluginAdRevenue GetBDNUnityPluginAdRevenue(id<BDNAdRevenue>revenue) {
+BDNUnityPluginAdRevenue BDNUnityPluginHelperGetAdRevenue(id<BDNAdRevenue>revenue) {
     BDNUnityPluginAdRevenue unityAdRevenue;
     unityAdRevenue.Revenue = revenue.revenue;
     unityAdRevenue.RevenuePrecision = (int)revenue.precision;
@@ -28,7 +28,7 @@ BDNUnityPluginAdRevenue GetBDNUnityPluginAdRevenue(id<BDNAdRevenue>revenue) {
     return unityAdRevenue;
 }
 
-BDNUnityPluginReward GetBDNUnityPluginReward(id<BDNReward>reward) {
+BDNUnityPluginReward BDNUnityPluginHelperGetReward(id<BDNReward>reward) {
     BDNUnityPluginReward unityReward;
     unityReward.label = [reward.label UTF8String];
     unityReward.amount = reward.amount;

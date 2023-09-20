@@ -6,16 +6,15 @@
 //
 
 #import "BidonInterstitialAdDelegate.h"
-#import "BidonHelperMethods.h"
 
-void* BDNUnityPluginCreateInterstitialDelegate(DidLoad didLoadCallback,
-                                               DidFailToLoad didFailToLoadCallback,
-                                               WillPresent willPresentCallback,
-                                               DidFailToPresent didFailToPresentCallback,
-                                               DidClick didClickCallback,
-                                               DidHide didHideCallback,
-                                               DidExpire didExpireCallback,
-                                               DidPayRevenue didPayRevenueCallback) {
+CFBDNUnityPluginInterstitialAdDelegateRef BDNUnityPluginInterstitialAdDelegateCreate(DidLoad didLoadCallback,
+                                                                                     DidFailToLoad didFailToLoadCallback,
+                                                                                     WillPresent willPresentCallback,
+                                                                                     DidFailToPresent didFailToPresentCallback,
+                                                                                     DidClick didClickCallback,
+                                                                                     DidHide didHideCallback,
+                                                                                     DidExpire didExpireCallback,
+                                                                                     DidPayRevenue didPayRevenueCallback) {
     BDNUnityPluginInterstitialAdDelegate* delegate = [BDNUnityPluginInterstitialAdDelegate new];
     delegate.interstitialDidLoadCallback = didLoadCallback;
     delegate.interstitialDidFailToLoadCallback = didFailToLoadCallback;
@@ -26,13 +25,13 @@ void* BDNUnityPluginCreateInterstitialDelegate(DidLoad didLoadCallback,
     delegate.interstitialDidExpireCallback = didExpireCallback;
     delegate.interstitialDidPayRevenueCallback = didPayRevenueCallback;
 
-    return (__bridge_retained void*)delegate;
+    return (__bridge_retained CFBDNUnityPluginInterstitialAdDelegateRef)delegate;
 }
 
-void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
+void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdDelegateRef delegatePtr) {
     if (!delegatePtr) return;
 
-    BDNUnityPluginInterstitialAdDelegate* delegate = (__bridge_transfer BDNUnityPluginInterstitialAdDelegate *)delegatePtr;
+    BDNUnityPluginInterstitialAdDelegate* delegate = (__bridge_transfer BDNUnityPluginInterstitialAdDelegate*)delegatePtr;
 
     delegate.interstitialDidLoadCallback = nil;
     delegate.interstitialDidFailToLoadCallback = nil;
@@ -49,7 +48,7 @@ void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.interstitialDidLoadCallback(&unityAd);
 }
 
@@ -62,7 +61,7 @@ void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialWillPresentCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.interstitialWillPresentCallback(&unityAd);
 }
 
@@ -75,29 +74,29 @@ void BDNUnityPluginDestroyInterstitialDelegate(void* delegatePtr) {
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidClickCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.interstitialDidClickCallback(&unityAd);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didDismissAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidHideCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.interstitialDidHideCallback(&unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject>)adObject didExpireAd:(id<BDNAd>)ad {
     if (!self.interstitialDidExpireCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
     self.interstitialDidExpireCallback(&unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd = GetBDNUnityPluginAd(ad);
-    BDNUnityPluginAdRevenue unityAdRevenue = GetBDNUnityPluginAdRevenue(revenue);
+    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAdRevenue unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
     self.interstitialDidPayRevenueCallback(&unityAd, &unityAdRevenue);
 }
 

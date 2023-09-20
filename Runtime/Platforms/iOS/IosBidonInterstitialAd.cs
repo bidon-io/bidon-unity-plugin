@@ -34,68 +34,68 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateInterstitialDelegate")]
-        private static extern IntPtr BidonCreateInterstitialDelegate(AdLoadedCallback onAdLoaded,
-                                                                     AdLoadFailedCallback onAdLoadFailed,
-                                                                     AdShownCallback onAdShown,
-                                                                     AdShowFailedCallback onAdShowFailed,
-                                                                     AdClickedCallback onAdClicked,
-                                                                     AdClosedCallback onAdClosed,
-                                                                     AdExpiredCallback onAdExpired,
-                                                                     AdRevenueReceivedCallback onAdRevenueReceived);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdDelegateCreate")]
+        private static extern IntPtr BidonInterstitialAdDelegateCreate(AdLoadedCallback onAdLoaded,
+                                                                       AdLoadFailedCallback onAdLoadFailed,
+                                                                       AdShownCallback onAdShown,
+                                                                       AdShowFailedCallback onAdShowFailed,
+                                                                       AdClickedCallback onAdClicked,
+                                                                       AdClosedCallback onAdClosed,
+                                                                       AdExpiredCallback onAdExpired,
+                                                                       AdRevenueReceivedCallback onAdRevenueReceived);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateInterstitial")]
-        private static extern IntPtr BidonCreateInterstitial(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdCreate")]
+        private static extern IntPtr BidonInterstitialAdCreate(IntPtr delegatePtr);
 
         internal IosBidonInterstitialAd()
         {
             _instance = this;
 
-            _interstitialDelegatePtr = BidonCreateInterstitialDelegate(AdLoaded,
-                                                                       AdLoadFailed,
-                                                                       AdShown,
-                                                                       AdShowFailed,
-                                                                       AdClicked,
-                                                                       AdClosed,
-                                                                       AdExpired,
-                                                                       AdRevenueReceived);
-            _interstitialAdPtr = BidonCreateInterstitial(_interstitialDelegatePtr);
+            _interstitialDelegatePtr = BidonInterstitialAdDelegateCreate(AdLoaded,
+                                                                         AdLoadFailed,
+                                                                         AdShown,
+                                                                         AdShowFailed,
+                                                                         AdClicked,
+                                                                         AdClosed,
+                                                                         AdExpired,
+                                                                         AdRevenueReceived);
+            _interstitialAdPtr = BidonInterstitialAdCreate(_interstitialDelegatePtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginLoadInterstitial")]
-        private static extern void BidonLoadInterstitial(IntPtr ptr, double priceFloor);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdLoad")]
+        private static extern void BidonInterstitialAdLoad(IntPtr ptr, double priceFloor);
 
         public void Load(double priceFloor)
         {
-            BidonLoadInterstitial(_interstitialAdPtr, priceFloor);
+            BidonInterstitialAdLoad(_interstitialAdPtr, priceFloor);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginIsInterstitialReady")]
-        private static extern bool BidonIsInterstitialReady(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdIsReady")]
+        private static extern bool BidonInterstitialAdIsReady(IntPtr ptr);
 
         public bool IsReady()
         {
-            return BidonIsInterstitialReady(_interstitialAdPtr);
+            return BidonInterstitialAdIsReady(_interstitialAdPtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginShowInterstitial")]
-        private static extern void BidonShowInterstitial(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdShow")]
+        private static extern void BidonInterstitialAdShow(IntPtr ptr);
 
         public void Show()
         {
-            BidonShowInterstitial(_interstitialAdPtr);
+            BidonInterstitialAdShow(_interstitialAdPtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginDestroyInterstitial")]
-        private static extern void BidonDestroyInterstitial(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdDestroy")]
+        private static extern void BidonInterstitialAdDestroy(IntPtr ptr);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginDestroyInterstitialDelegate")]
-        private static extern void BidonDestroyInterstitialDelegate(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInterstitialAdDelegateDestroy")]
+        private static extern void BidonInterstitialAdDelegateDestroy(IntPtr delegatePtr);
 
         public void Destroy()
         {
-            BidonDestroyInterstitial(_interstitialAdPtr);
-            BidonDestroyInterstitialDelegate(_interstitialDelegatePtr);
+            BidonInterstitialAdDestroy(_interstitialAdPtr);
+            BidonInterstitialAdDelegateDestroy(_interstitialDelegatePtr);
             _interstitialAdPtr = IntPtr.Zero;
             _interstitialDelegatePtr = IntPtr.Zero;
         }

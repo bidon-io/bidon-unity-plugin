@@ -6,10 +6,10 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-#import <BidonUnityPluginStructs.h>
+#import <BidonUnityPluginTypes.h>
 
-extern BDNUnityPluginAd GetBDNUnityPluginAd(id<BDNAd>ad);
+extern BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad);
 
-extern BDNUnityPluginAdRevenue GetBDNUnityPluginAdRevenue(id<BDNAdRevenue>revenue);
+extern BDNUnityPluginAdRevenue BDNUnityPluginHelperGetAdRevenue(id<BDNAdRevenue>revenue);
 
-extern BDNUnityPluginReward GetBDNUnityPluginReward(id<BDNReward>reward);
+extern BDNUnityPluginReward BDNUnityPluginHelperGetReward(id<BDNReward>reward);
