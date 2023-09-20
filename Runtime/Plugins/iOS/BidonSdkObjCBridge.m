@@ -6,8 +6,7 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-
-typedef void (*InitializationFinishedCallback)();
+#import <BidonUnityPluginCallbacks.h>
 
 void BDNUnityPluginSdkSetLogLevel(int logLevel) {
     [BDNSdk setLogLevel:(BDNLoggerLevel)logLevel];
