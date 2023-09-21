@@ -5,7 +5,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
-    public interface IBidonBannerAd
+    public interface IBidonBannerAd : IDisposable
     {
         event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
@@ -23,7 +23,6 @@ namespace Bidon.Mediation
         bool IsReady();
         void Show();
         void Hide();
-        void Destroy();
         void SetExtraData(string key, object value);
         IDictionary<string, object> GetExtraData();
         void NotifyLoss(string winnerDemandId, double ecpm);

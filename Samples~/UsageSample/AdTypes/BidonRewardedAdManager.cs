@@ -89,7 +89,7 @@ public class BidonRewardedAdManager : MonoBehaviour
             return;
         }
         UnsubscribeFromRewardedEvents();
-        _rewardedAd.Destroy();
+        _rewardedAd.Dispose();
         _rewardedAd = null;
     }
 
