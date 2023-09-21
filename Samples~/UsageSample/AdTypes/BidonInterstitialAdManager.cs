@@ -89,7 +89,7 @@ public class BidonInterstitialAdManager : MonoBehaviour
             return;
         }
         UnsubscribeFromInterstitialEvents();
-        _interstitialAd.Destroy();
+        _interstitialAd.Dispose();
         _interstitialAd = null;
     }
 

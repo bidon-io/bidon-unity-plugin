@@ -132,7 +132,7 @@ public class BidonBannerAdManager : MonoBehaviour
             return;
         }
         UnsubscribeFromBannerEvents();
-        _bannerAd.Destroy();
+        _bannerAd.Dispose();
         _bannerAd = null;
     }
 

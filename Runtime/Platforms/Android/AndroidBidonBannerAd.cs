@@ -10,8 +10,10 @@ namespace Bidon.Mediation
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     internal class AndroidBidonBannerAd : IBidonBannerAd, IAndroidBannerListener
     {
-        private readonly AndroidJavaObject _bannerAdJavaObject;
-        private readonly AndroidJavaObject _activityJavaObject;
+        private AndroidJavaObject _bannerAdJavaObject;
+        private AndroidJavaObject _activityJavaObject;
+
+        private bool _disposed;
 
         internal AndroidBidonBannerAd()
         {
@@ -29,6 +31,8 @@ namespace Bidon.Mediation
             _bannerAdJavaObject.Call("setBannerListener", new AndroidBannerListener(this));
         }
 
+        ~AndroidBidonBannerAd() => Dispose(false);
+
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -39,16 +43,19 @@ namespace Bidon.Mediation
 
         public void SetFormat(BidonBannerFormat format)
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("setBannerFormat", AndroidBidonJavaHelper.GetBannerFormatJavaObject(format));
         }
 
         public void SetPredefinedPosition(BidonBannerPosition position)
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("setPosition", AndroidBidonJavaHelper.GetBannerPositionJavaObject(position));
         }
 
         public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle, Vector2 anchorPoint)
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("setCustomPosition",
                 AndroidBidonJavaHelper.GetPointJavaObject(positionOffset),
                 rotationAngle,
@@ -57,36 +64,37 @@ namespace Bidon.Mediation
 
         public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle)
         {
+            if (IsDisposed()) return;
             SetCustomPositionAndRotation(positionOffset, rotationAngle, new Vector2(0.5f, 0.5f));
         }
 
         public void Load(double priceFloor)
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("loadAd", _activityJavaObject, priceFloor);
         }
 
         public bool IsReady()
         {
+            if (IsDisposed()) return false;
             return _bannerAdJavaObject?.Call<bool>("isReady") ?? false;
         }
 
         public void Show()
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("showAd", _activityJavaObject);
         }
 
         public void Hide()
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("hideAd", _activityJavaObject);
-        }
-
-        public void Destroy()
-        {
-            _bannerAdJavaObject?.Call("destroyAd", _activityJavaObject);
         }
 
         public void SetExtraData(string key, object value)
         {
+            if (IsDisposed()) return;
             if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
                 && !(value is double) && !(value is string) && value != null) return;
 
@@ -96,17 +104,49 @@ namespace Bidon.Mediation
 
         public IDictionary<string, object> GetExtraData()
         {
+            if (IsDisposed()) return new Dictionary<string, object>();
             return AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_bannerAdJavaObject?.Call<AndroidJavaObject>("getExtras"));
         }
 
         public void NotifyLoss(string winnerDemandId, double ecpm)
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("notifyLoss", _activityJavaObject, winnerDemandId, ecpm);
         }
 
         public void NotifyWin()
         {
+            if (IsDisposed()) return;
             _bannerAdJavaObject?.Call("notifyWin");
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if(disposing)
+            {
+                _bannerAdJavaObject?.Call("destroyAd", _activityJavaObject);
+                _bannerAdJavaObject?.Dispose();
+                _bannerAdJavaObject = null;
+                _activityJavaObject?.Dispose();
+                _activityJavaObject = null;
+            }
+
+            _disposed = true;
+        }
+
+        private bool IsDisposed()
+        {
+            if (!_disposed) return false;
+            Debug.LogError($"[BidonPlugin] {GetType().FullName} instance is disposed. Calling any methods on this instance is not allowed.");
+            return true;
         }
 
         #region Callbacks

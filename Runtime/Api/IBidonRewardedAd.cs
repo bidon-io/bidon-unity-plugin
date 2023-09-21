@@ -4,7 +4,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
-    public interface IBidonRewardedAd
+    public interface IBidonRewardedAd : IDisposable
     {
         event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
@@ -19,7 +19,6 @@ namespace Bidon.Mediation
         void Load(double priceFloor);
         bool IsReady();
         void Show();
-        void Destroy();
         void SetExtraData(string key, object value);
         IDictionary<string, object> GetExtraData();
         void NotifyLoss(string winnerDemandId, double ecpm);

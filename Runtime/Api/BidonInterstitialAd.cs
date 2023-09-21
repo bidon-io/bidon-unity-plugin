@@ -53,8 +53,6 @@ namespace Bidon.Mediation
 
         public void Show() => _bidonInterstitialAdImpl.Show();
 
-        public void Destroy() => _bidonInterstitialAdImpl.Destroy();
-
         public void SetExtraData(string key, object value) => _bidonInterstitialAdImpl.SetExtraData(key, value);
 
         public IDictionary<string, object> GetExtraData() => _bidonInterstitialAdImpl.GetExtraData();
@@ -62,5 +60,7 @@ namespace Bidon.Mediation
         public void NotifyLoss(string winnerDemandId, double ecpm) => _bidonInterstitialAdImpl.NotifyLoss(winnerDemandId, ecpm);
 
         public void NotifyWin() => _bidonInterstitialAdImpl.NotifyWin();
+
+        public void Dispose() => _bidonInterstitialAdImpl.Dispose();
     }
 }

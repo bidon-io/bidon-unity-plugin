@@ -65,8 +65,6 @@ namespace Bidon.Mediation
 
         public void Hide() => _bidonBannerAdImpl.Hide();
 
-        public void Destroy() => _bidonBannerAdImpl.Destroy();
-
         public void SetExtraData(string key, object value) => _bidonBannerAdImpl.SetExtraData(key, value);
 
         public IDictionary<string, object> GetExtraData() => _bidonBannerAdImpl.GetExtraData();
@@ -74,5 +72,7 @@ namespace Bidon.Mediation
         public void NotifyLoss(string winnerDemandId, double ecpm) => _bidonBannerAdImpl.NotifyLoss(winnerDemandId, ecpm);
 
         public void NotifyWin() => _bidonBannerAdImpl.NotifyWin();
+
+        public void Dispose() => _bidonBannerAdImpl.Dispose();
     }
 }

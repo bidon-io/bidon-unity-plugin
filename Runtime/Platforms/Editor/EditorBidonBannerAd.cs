@@ -58,11 +58,6 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
-        public void Destroy()
-        {
-            throw new NotImplementedException();
-        }
-
         public void SetExtraData(string key, object value)
         {
             throw new NotImplementedException();
@@ -79,6 +74,11 @@ namespace Bidon.Mediation
         }
 
         public void NotifyWin()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
         {
             throw new NotImplementedException();
         }

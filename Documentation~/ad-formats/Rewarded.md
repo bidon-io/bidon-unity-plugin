@@ -61,7 +61,7 @@ if (bidonRewarded.IsReady())
 To release resources we recommend destroying instances when you don't need them anymore.
 
 ```c#
-bidonRewarded.Destroy();
+bidonRewarded.Dispose();
 bidonRewarded = null;
 ```
 

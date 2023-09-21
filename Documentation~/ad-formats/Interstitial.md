@@ -60,7 +60,7 @@ if (bidonInter.IsReady())
 To release resources we recommend destroying instances when you don't need them anymore.
 
 ```c#
-bidonInter.Destroy();
+bidonInter.Dispose();
 bidonInter = null;
 ```
 
