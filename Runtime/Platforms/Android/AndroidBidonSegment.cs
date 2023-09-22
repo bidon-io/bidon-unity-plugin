@@ -1,4 +1,5 @@
 #if UNITY_ANDROID || BIDON_DEV_ANDROID
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
@@ -16,37 +17,38 @@ namespace Bidon.Mediation
             _bidonSegmentJavaObject = bidonSegmentJavaObject;
         }
 
-        public string Id => _bidonSegmentJavaObject?.Call<string>("getSegmentId") ?? "";
+        public string Id
+        {
+            get => _bidonSegmentJavaObject?.Call<string>("getSegmentId") ?? "";
+        }
 
         public int Age
         {
-            get => -1;
-            set => _bidonSegmentJavaObject?.Call("setAge",
-                AndroidBidonJavaHelper.GetJavaObject(value));
+            get => _bidonSegmentJavaObject?.Call<AndroidJavaObject>("getAge").Call<int>("intValue") ?? -1;
+            set => _bidonSegmentJavaObject?.Call("setAge", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public BidonUserGender Gender
         {
-            get => BidonUserGender.Other;
-            set => _bidonSegmentJavaObject?.Call("setGender",
-                AndroidBidonJavaHelper.GetGenderJavaObject(value));
+            get => AndroidBidonJavaHelper.GetBidonUserGender(_bidonSegmentJavaObject?.Call<AndroidJavaObject>("getGender"));
+            set => _bidonSegmentJavaObject?.Call("setGender", AndroidBidonJavaHelper.GetGenderJavaObject(value));
         }
 
         public int Level
         {
-            get => -1;
-            set => _bidonSegmentJavaObject?.Call("setLevel", value);
+            get => _bidonSegmentJavaObject?.Call<AndroidJavaObject>("getLevel").Call<int>("intValue") ?? -1;
+            set => _bidonSegmentJavaObject?.Call("setLevel", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public double TotalInAppsAmount
         {
-            get => -1d;
-            set => _bidonSegmentJavaObject?.Call("setTotalInAppAmount", value);
+            get => _bidonSegmentJavaObject?.Call<AndroidJavaObject>("getTotalInAppAmount").Call<double>("doubleValue") ?? -1d;
+            set => _bidonSegmentJavaObject?.Call("setTotalInAppAmount", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public bool IsPaying
         {
-            get => false;
+            get => _bidonSegmentJavaObject?.Call<bool>("isPaying") ?? false;
             set => _bidonSegmentJavaObject?.Call("setPaying", value);
         }
 
@@ -54,6 +56,7 @@ namespace Bidon.Mediation
 
         public void SetCustomAttribute(string name, object value)
         {
+            if (String.IsNullOrEmpty(name)) return;
             if (!(value is bool) && !(value is int) && !(value is long) && !(value is double)
                 && !(value is string) && value != null) return;
 

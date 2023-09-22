@@ -72,6 +72,15 @@ namespace Bidon.Mediation
             BidonBannerAdSetFormat(_bannerAdPtr, format);
         }
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdGetFormat")]
+        private static extern BidonBannerFormat BidonBannerAdGetFormat(IntPtr ptr);
+
+        public BidonBannerFormat GetFormat()
+        {
+            if (IsDisposed()) return BidonBannerFormat.Banner;
+            return BidonBannerAdGetFormat(_bannerAdPtr);
+        }
+
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdSetPredefinedPosition")]
         private static extern void BidonBannerAdSetPredefinedPosition(IntPtr ptr, BidonBannerPosition position);
 
@@ -125,6 +134,15 @@ namespace Bidon.Mediation
             BidonBannerAdShow(_bannerAdPtr);
         }
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdIsShowing")]
+        private static extern bool BidonBannerAdIsShowing(IntPtr ptr);
+
+        public bool IsShowing()
+        {
+            if (IsDisposed()) return false;
+            return BidonBannerAdIsShowing(_bannerAdPtr);
+        }
+
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdHide")]
         private static extern void BidonBannerAdHide(IntPtr ptr);
 
@@ -158,9 +176,6 @@ namespace Bidon.Mediation
         public void SetExtraData(string key, object value)
         {
             if (IsDisposed()) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
             switch (value)
             {
                 case bool valueBool:

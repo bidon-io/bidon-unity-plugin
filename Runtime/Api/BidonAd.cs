@@ -18,6 +18,8 @@ namespace Bidon.Mediation
 
         public BidonAdType AdType;
 
+        public BidonBidType BidType;
+
         public string Dsp;
 
         public double Ecpm;

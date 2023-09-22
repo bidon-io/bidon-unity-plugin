@@ -1,5 +1,6 @@
 #if UNITY_IOS || BIDON_DEV_IOS
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using AOT;
@@ -83,9 +84,6 @@ namespace Bidon.Mediation
 
         public void SetExtraData(string key, object value)
         {
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
             switch (value)
             {
                 case bool valueBool:
@@ -113,6 +111,14 @@ namespace Bidon.Mediation
                     BidonSdkSetExtraDataNull(key);
                     break;
             }
+        }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetExtraData")]
+        private static extern string BidonSdkGetExtraData();
+
+        public IDictionary<string, object> GetExtraData()
+        {
+            return IosBidonHelper.GetDictionaryFromJsonString(BidonSdkGetExtraData());
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkRegisterDefaultAdapters")]

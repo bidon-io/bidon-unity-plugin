@@ -13,6 +13,7 @@ BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad) {
     unityAd.AuctionId = ad.auctionId ? [ad.auctionId UTF8String] : nil;
     unityAd.CurrencyCode = ad.currencyCode ? [ad.currencyCode UTF8String] : nil;
     unityAd.AdType = (int)ad.adType;
+    unityAd.BidType = (int)ad.bidType;
     unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
     unityAd.Ecpm = ad.eCPM;
     unityAd.NetworkName = [ad.networkName UTF8String];

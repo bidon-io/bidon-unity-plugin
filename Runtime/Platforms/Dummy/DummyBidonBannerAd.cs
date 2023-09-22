@@ -23,6 +23,11 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
+        public BidonBannerFormat GetFormat()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetPredefinedPosition(BidonBannerPosition position)
         {
             throw new NotImplementedException();
@@ -49,6 +54,11 @@ namespace Bidon.Mediation
         }
 
         public void Show()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsShowing()
         {
             throw new NotImplementedException();
         }
