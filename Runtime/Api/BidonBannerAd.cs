@@ -48,6 +48,8 @@ namespace Bidon.Mediation
 
         public void SetFormat(BidonBannerFormat format) => _bidonBannerAdImpl.SetFormat(format);
 
+        public BidonBannerFormat GetFormat() => _bidonBannerAdImpl.GetFormat();
+
         public void SetPredefinedPosition(BidonBannerPosition position) =>
             _bidonBannerAdImpl.SetPredefinedPosition(position);
 
@@ -63,9 +65,17 @@ namespace Bidon.Mediation
 
         public void Show() => _bidonBannerAdImpl.Show();
 
+        public bool IsShowing() => _bidonBannerAdImpl.IsShowing();
+
         public void Hide() => _bidonBannerAdImpl.Hide();
 
-        public void SetExtraData(string key, object value) => _bidonBannerAdImpl.SetExtraData(key, value);
+        public void SetExtraData(string key, object value)
+        {
+            if (String.IsNullOrEmpty(key)) return;
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+            _bidonBannerAdImpl.SetExtraData(key, value);
+        }
 
         public IDictionary<string, object> GetExtraData() => _bidonBannerAdImpl.GetExtraData();
 

@@ -122,9 +122,6 @@ namespace Bidon.Mediation
         public void SetExtraData(string key, object value)
         {
             if (IsDisposed()) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
             switch (value)
             {
                 case bool valueBool:

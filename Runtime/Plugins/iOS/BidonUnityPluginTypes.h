@@ -10,6 +10,7 @@ typedef struct {
     const char* AuctionId;
     const char* CurrencyCode;
     int         AdType;
+    int         BidType;
     const char* Dsp;
     double      Ecpm;
     const char* NetworkName;

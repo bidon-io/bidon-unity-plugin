@@ -9,9 +9,9 @@ namespace Bidon.Mediation
     {
         public static BidonError GetBidonErrorFromInt(int cause)
         {
-            if (Enum.IsDefined(typeof(BidonError), cause + 1))
+            if (Enum.IsDefined(typeof(BidonError), cause))
             {
-                return (BidonError)(cause + 1);
+                return (BidonError)cause;
             }
 
             return BidonError.Unspecified;

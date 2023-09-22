@@ -67,6 +67,7 @@ public class BidonBannerAdManager : MonoBehaviour
         Debug.Log($"[BidonPlugin] [Banner] Extra Data: {extraData}");
 
         _bannerAd.SetFormat((BidonBannerFormat)bannerFormatDropdown.value);
+        Debug.Log($"[BidonPlugin] [Banner] Format: {_bannerAd.GetFormat()}");
     }
 
     public void LoadAd()
@@ -121,6 +122,7 @@ public class BidonBannerAdManager : MonoBehaviour
             Debug.LogWarning("[BidonPlugin] [Banner] Create new instance first");
             return;
         }
+        Debug.Log($"[BidonPlugin] [Banner] Is Showing: {_bannerAd.IsShowing()}");
         _bannerAd.Hide();
     }
 

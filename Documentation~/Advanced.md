@@ -35,7 +35,13 @@ Note that the value has to be one of the following types: `bool`, `char`, `int`,
 Passing `null` as a value will remove existing `KeyValuePair` from dictionary.
 
 ```c#
-BidonSdk.Instance.SetExtraData("sdk_extra_bool_key", 0.423d);
+BidonSdk.Instance.SetExtraData("sdk_extra_double_key", 0.423d);
+```
+
+You can also read all current extras as shown below:
+
+```c#
+var extras = BidonSdk.Instance.GetExtraData();
 ```
 
 ## Users' Segmentation

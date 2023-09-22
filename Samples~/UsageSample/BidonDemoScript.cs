@@ -35,9 +35,7 @@ public class BidonDemoScript : MonoBehaviour
             Debug.Log($"[BidonPlugin] [SDK] Current Log Level: {BidonSdk.Instance.GetLogLevel().ToString()}");
             Debug.Log($"[BidonPlugin] [SDK] Is Test Mode Enabled: {BidonSdk.Instance.IsTestModeEnabled()}");
             Debug.Log($"[BidonPlugin] [Segment] Id: {BidonSdk.Instance.Segment.Id}");
-#if UNITY_IOS
             Debug.Log($"[BidonPlugin] [SDK] Base URL: {BidonSdk.Instance.GetBaseUrl()}");
-#endif
         };
 
         BidonSdk.Instance.SetLogLevel((BidonLogLevel)logLevelDropdown.value);
@@ -88,6 +86,10 @@ public class BidonDemoScript : MonoBehaviour
         BidonSdk.Instance.SetExtraData("sdk_extra_string_key", "sdk_extra_string_value");
         BidonSdk.Instance.SetExtraData("sdk_extra_unwanted_key", 11);
         BidonSdk.Instance.SetExtraData("sdk_extra_unwanted_key", null);
+        string extraData = String.Join(", ", BidonSdk.Instance.GetExtraData()
+            .Select(kvp => $"{kvp.Key}:({kvp.Value.GetType()}){kvp.Value}")
+            .ToArray());
+        Debug.Log($"[BidonPlugin] [Sdk] Extra Data: {extraData}");
 
 #if UNITY_ANDROID
         BidonSdk.Instance.RegisterAdapter("org.bidon.admob.AdmobAdapter");

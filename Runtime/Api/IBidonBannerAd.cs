@@ -16,12 +16,14 @@ namespace Bidon.Mediation
         event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
         void SetFormat(BidonBannerFormat format);
+        BidonBannerFormat GetFormat();
         void SetPredefinedPosition(BidonBannerPosition position);
         void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle, Vector2 anchorPoint);
         void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle);
         void Load(double priceFloor);
         bool IsReady();
         void Show();
+        bool IsShowing();
         void Hide();
         void SetExtraData(string key, object value);
         IDictionary<string, object> GetExtraData();

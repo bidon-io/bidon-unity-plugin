@@ -47,6 +47,12 @@ namespace Bidon.Mediation
             _bannerAdJavaObject?.Call("setBannerFormat", AndroidBidonJavaHelper.GetBannerFormatJavaObject(format));
         }
 
+        public BidonBannerFormat GetFormat()
+        {
+            if (IsDisposed()) return BidonBannerFormat.Banner;
+            return AndroidBidonJavaHelper.GetBannerFormat(_bannerAdJavaObject?.Call<AndroidJavaObject>("getBannerFormat"));
+        }
+
         public void SetPredefinedPosition(BidonBannerPosition position)
         {
             if (IsDisposed()) return;
@@ -86,6 +92,12 @@ namespace Bidon.Mediation
             _bannerAdJavaObject?.Call("showAd", _activityJavaObject);
         }
 
+        public bool IsShowing()
+        {
+            if (IsDisposed()) return false;
+            return _bannerAdJavaObject?.Call<bool>("isDisplaying") ?? false;
+        }
+
         public void Hide()
         {
             if (IsDisposed()) return;
@@ -95,9 +107,6 @@ namespace Bidon.Mediation
         public void SetExtraData(string key, object value)
         {
             if (IsDisposed()) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
             _bannerAdJavaObject?.Call("addExtra", key,
                 value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
         }

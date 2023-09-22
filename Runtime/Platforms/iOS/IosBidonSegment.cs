@@ -1,4 +1,5 @@
 #if UNITY_IOS || BIDON_DEV_IOS
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -98,6 +99,7 @@ namespace Bidon.Mediation
 
         public void SetCustomAttribute(string name, object value)
         {
+            if (String.IsNullOrEmpty(name)) return;
             if (!(value is bool) && !(value is int) && !(value is long) && !(value is double)
                 && !(value is string) && value != null) return;
 

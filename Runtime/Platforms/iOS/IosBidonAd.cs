@@ -11,6 +11,7 @@ namespace Bidon.Mediation
         public string AuctionId;
         public string CurrencyCode;
         public int AdType;
+        public int BidType;
         public string Dsp;
         public double Ecpm;
         public string NetworkName;
@@ -24,6 +25,7 @@ namespace Bidon.Mediation
                 AuctionId = AuctionId,
                 CurrencyCode = CurrencyCode,
                 AdType = (BidonAdType)AdType,
+                BidType = (BidonBidType)BidType,
                 Dsp = Dsp,
                 Ecpm = Ecpm,
                 NetworkName = NetworkName,

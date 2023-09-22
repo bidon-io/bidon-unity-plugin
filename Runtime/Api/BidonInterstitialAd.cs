@@ -53,7 +53,13 @@ namespace Bidon.Mediation
 
         public void Show() => _bidonInterstitialAdImpl.Show();
 
-        public void SetExtraData(string key, object value) => _bidonInterstitialAdImpl.SetExtraData(key, value);
+        public void SetExtraData(string key, object value)
+        {
+            if (String.IsNullOrEmpty(key)) return;
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+            _bidonInterstitialAdImpl.SetExtraData(key, value);
+        }
 
         public IDictionary<string, object> GetExtraData() => _bidonInterstitialAdImpl.GetExtraData();
 

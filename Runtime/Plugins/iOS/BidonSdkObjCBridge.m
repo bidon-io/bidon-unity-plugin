@@ -61,6 +61,13 @@ void BDNUnityPluginSdkSetExtraDataNull(const char* key) {
     [BDNSdk setExtraValue:nil for:keyNSString];
 }
 
+const char* BDNUnityPluginSdkGetExtraData() {
+    NSError* err;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[BDNSdk extras] options:0 error:&err];
+    NSString* extraDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return strdup([extraDataStr UTF8String]);
+}
+
 void BDNUnityPluginSdkRegisterDefaultAdapters() {
     [BDNSdk registerDefaultAdapters];
 }

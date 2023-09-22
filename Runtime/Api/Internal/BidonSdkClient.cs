@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
@@ -29,69 +30,36 @@ namespace Bidon.Mediation
             Regulation = _bidonSdkImpl.Regulation;
         }
 
-        public void SetLogLevel(BidonLogLevel logLevel)
-        {
-            _bidonSdkImpl.SetLogLevel(logLevel);
-        }
+        public void SetLogLevel(BidonLogLevel logLevel) => _bidonSdkImpl.SetLogLevel(logLevel);
 
-        public void SetTestMode(bool isEnabled)
-        {
-            _bidonSdkImpl.SetTestMode(isEnabled);
-        }
+        public void SetTestMode(bool isEnabled) => _bidonSdkImpl.SetTestMode(isEnabled);
 
-        public bool IsTestModeEnabled()
-        {
-            return _bidonSdkImpl.IsTestModeEnabled();
-        }
+        public bool IsTestModeEnabled() => _bidonSdkImpl.IsTestModeEnabled();
 
-        public void SetBaseUrl(string baseUrl)
-        {
-            _bidonSdkImpl.SetBaseUrl(baseUrl);
-        }
+        public void SetBaseUrl(string baseUrl) => _bidonSdkImpl.SetBaseUrl(baseUrl);
 
         public void SetExtraData(string key, object value)
         {
-            if (String.IsNullOrEmpty(key) || (value is string valueString && String.IsNullOrEmpty(valueString))) return;
-
-            if (value is int || value is long || value is float || value is double || value is bool || value is char || value is string)
-            {
-                _bidonSdkImpl.SetExtraData(key, value);
-            }
+            if (String.IsNullOrEmpty(key)) return;
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+            _bidonSdkImpl.SetExtraData(key, value);
         }
 
-        public void RegisterDefaultAdapters()
-        {
-            _bidonSdkImpl.RegisterDefaultAdapters();
-        }
+        public IDictionary<string, object> GetExtraData() => _bidonSdkImpl.GetExtraData();
 
-        public void RegisterAdapter(string className)
-        {
-            _bidonSdkImpl.RegisterAdapter(className);
-        }
+        public void RegisterDefaultAdapters() => _bidonSdkImpl.RegisterDefaultAdapters();
 
-        public void Initialize(string appKey)
-        {
-            _bidonSdkImpl.Initialize(appKey);
-        }
+        public void RegisterAdapter(string className) => _bidonSdkImpl.RegisterAdapter(className);
 
-        public string GetSdkVersion()
-        {
-            return _bidonSdkImpl.GetSdkVersion();
-        }
+        public void Initialize(string appKey) => _bidonSdkImpl.Initialize(appKey);
 
-        public BidonLogLevel GetLogLevel()
-        {
-            return _bidonSdkImpl.GetLogLevel();
-        }
+        public string GetSdkVersion() => _bidonSdkImpl.GetSdkVersion();
 
-        public string GetBaseUrl()
-        {
-            return _bidonSdkImpl.GetBaseUrl();
-        }
+        public BidonLogLevel GetLogLevel() => _bidonSdkImpl.GetLogLevel();
 
-        public bool IsInitialized()
-        {
-            return _bidonSdkImpl.IsInitialized();
-        }
+        public string GetBaseUrl() => _bidonSdkImpl.GetBaseUrl();
+
+        public bool IsInitialized() => _bidonSdkImpl.IsInitialized();
     }
 }
