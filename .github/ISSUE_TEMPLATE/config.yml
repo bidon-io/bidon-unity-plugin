@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Bidon Unity Plugin Documentation
-    url: https://github.com/bidon-io/bidon-unity-plugin/blob/main/README.md
+    url: https://docs.bidon.org/docs/sdk/unity/get-started
     about: The place to get started with Bidon Unity Plugin.
