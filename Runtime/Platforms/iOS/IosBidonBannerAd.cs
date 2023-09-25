@@ -255,6 +255,7 @@ namespace Bidon.Mediation
 
             if (_bannerAdPtr != IntPtr.Zero)
             {
+                if (BidonBannerAdIsShowing(_bannerAdPtr)) BidonBannerAdHide(_bannerAdPtr);
                 BidonBannerAdDestroy(_bannerAdPtr);
                 _bannerAdPtr = IntPtr.Zero;
             }
