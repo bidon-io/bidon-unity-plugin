@@ -11,7 +11,7 @@ namespace Bidon.Mediation.Editor.TopBarMenu
         [MenuItem("Bidon/Plugin Documentation")]
         public static void OpenDocumentation()
         {
-            Application.OpenURL(EditorConstants.RepositoryReadmeLink);
+            Application.OpenURL(EditorConstants.PluginDocumentationLink);
         }
 
         [MenuItem("Bidon/Remove Plugin")]

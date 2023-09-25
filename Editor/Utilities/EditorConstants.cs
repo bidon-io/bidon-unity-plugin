@@ -17,6 +17,6 @@ namespace Bidon.Mediation.Editor.Utilities
         public const string PackageDepsDirectory = PackageRootDirectory + "/Editor/Dependencies";
         public const string PackageRemoveListFilePath = PackageRootDirectory + "/Editor/PluginRemover/remove_list.xml";
 
-        public const string RepositoryReadmeLink = "https://github.com/bidon-io/bidon-unity-plugin/blob/main/README.md";
+        public const string PluginDocumentationLink = "https://docs.bidon.org/docs/sdk/unity/get-started";
     }
 }

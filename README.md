@@ -41,11 +41,10 @@ To provide control over advertising auctions to Publishers, while making it fair
 -   To let market players and the community contribute to the solution, to add new partners, new integrations, and new
 features which are demanded by the industry.
 
-## Getting started
+## Documentation
 
--   [Integration](/Documentation~/Index.md)
--   [Ad Formats](/Documentation~/ad-formats)
--   [Advanced](/Documentation~/Advanced.md)
+Bidon Unity Plugin documentation is available on the website via this
+[link](https://docs.bidon.org/docs/sdk/unity/get-started).
 
 ## Join us
 
