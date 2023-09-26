@@ -2,6 +2,15 @@
 
 ## Changelog
 
+### v0.4.0 (September 26, 2023)
+
++ Updated Bidon Android SDK to v0.4.18
++ Updated Bidon iOS SDK to v0.4.3
++ Added Banner ad type support
++ Reworked sample project
++ Improved iOS bridge
++ Tuned up GC
+
 ### 0.3.0 (September 14, 2023)
 + Updated Bidon Android SDK to v0.3.2
 + Updated Bidon iOS SDK to v0.3.3
