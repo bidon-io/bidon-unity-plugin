@@ -11,6 +11,7 @@ namespace Bidon.Mediation
         void onAdLoaded(AndroidJavaObject ad);
         void onAdLoadFailed(AndroidJavaObject cause);
         void onAdShown(AndroidJavaObject ad);
+        void onAdShowFailed(AndroidJavaObject cause);
         void onAdClicked(AndroidJavaObject ad);
         void onAdExpired(AndroidJavaObject ad);
     }

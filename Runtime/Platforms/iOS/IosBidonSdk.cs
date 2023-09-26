@@ -1,5 +1,6 @@
 #if UNITY_IOS || BIDON_DEV_IOS
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using AOT;
@@ -28,155 +29,160 @@ namespace Bidon.Mediation
             SetMetadata(Application.unityVersion, BidonSdk.PluginVersion);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetLogLevel")]
-        private static extern void BidonSetLogLevel(int logLevel);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetLogLevel")]
+        private static extern void BidonSdkSetLogLevel(int logLevel);
 
         public void SetLogLevel(BidonLogLevel logLevel)
         {
-            BidonSetLogLevel((int)logLevel);
+            BidonSdkSetLogLevel((int)logLevel);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetTestMode")]
-        private static extern void BidonSetTestMode(bool isEnabled);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetTestMode")]
+        private static extern void BidonSdkSetTestMode(bool isEnabled);
 
         public void SetTestMode(bool isEnabled)
         {
-            BidonSetTestMode(isEnabled);
+            BidonSdkSetTestMode(isEnabled);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginIsTestModeEnabled")]
-        private static extern bool BidonIsTestModeEnabled();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkIsTestModeEnabled")]
+        private static extern bool BidonSdkIsTestModeEnabled();
 
         public bool IsTestModeEnabled()
         {
-            return BidonIsTestModeEnabled();
+            return BidonSdkIsTestModeEnabled();
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetBaseUrl")]
-        private static extern void BidonSetBaseUrl(string baseUrl);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetBaseUrl")]
+        private static extern void BidonSdkSetBaseUrl(string baseUrl);
 
         public void SetBaseUrl(string baseUrl)
         {
-            BidonSetBaseUrl(baseUrl);
+            BidonSdkSetBaseUrl(baseUrl);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataBool")]
-        private static extern void BidonSetExtraDataBool(string key, bool value);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataBool")]
+        private static extern void BidonSdkSetExtraDataBool(string key, bool value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataInt")]
-        private static extern void BidonSetExtraDataInt(string key, int value);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataInt")]
+        private static extern void BidonSdkSetExtraDataInt(string key, int value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataLong")]
-        private static extern void BidonSetExtraDataLong(string key, long value);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataLong")]
+        private static extern void BidonSdkSetExtraDataLong(string key, long value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataFloat")]
-        private static extern void BidonSetExtraDataFloat(string key, float value);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataFloat")]
+        private static extern void BidonSdkSetExtraDataFloat(string key, float value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataDouble")]
-        private static extern void BidonSetExtraDataDouble(string key, double value);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataDouble")]
+        private static extern void BidonSdkSetExtraDataDouble(string key, double value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataString")]
-        private static extern void BidonSetExtraDataString(string key, string value);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataString")]
+        private static extern void BidonSdkSetExtraDataString(string key, string value);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetExtraDataNull")]
-        private static extern void BidonSetExtraDataNull(string key);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetExtraDataNull")]
+        private static extern void BidonSdkSetExtraDataNull(string key);
 
         public void SetExtraData(string key, object value)
         {
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
             switch (value)
             {
                 case bool valueBool:
-                    BidonSetExtraDataBool(key, valueBool);
+                    BidonSdkSetExtraDataBool(key, valueBool);
                     break;
                 case char valueChar:
-                    BidonSetExtraDataString(key, valueChar.ToString());
+                    BidonSdkSetExtraDataString(key, valueChar.ToString());
                     break;
                 case int valueInt:
-                    BidonSetExtraDataInt(key, valueInt);
+                    BidonSdkSetExtraDataInt(key, valueInt);
                     break;
                 case long valueLong:
-                    BidonSetExtraDataLong(key, valueLong);
+                    BidonSdkSetExtraDataLong(key, valueLong);
                     break;
                 case float valueFloat:
-                    BidonSetExtraDataFloat(key, valueFloat);
+                    BidonSdkSetExtraDataFloat(key, valueFloat);
                     break;
                 case double valueDouble:
-                    BidonSetExtraDataDouble(key, valueDouble);
+                    BidonSdkSetExtraDataDouble(key, valueDouble);
                     break;
                 case string valueString:
-                    BidonSetExtraDataString(key, valueString);
+                    BidonSdkSetExtraDataString(key, valueString);
                     break;
                 case null:
-                    BidonSetExtraDataNull(key);
+                    BidonSdkSetExtraDataNull(key);
                     break;
             }
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegisterDefaultAdapters")]
-        private static extern void BidonRegisterDefaultAdapters();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetExtraData")]
+        private static extern string BidonSdkGetExtraData();
+
+        public IDictionary<string, object> GetExtraData()
+        {
+            return IosBidonHelper.GetDictionaryFromJsonString(BidonSdkGetExtraData());
+        }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkRegisterDefaultAdapters")]
+        private static extern void BidonSdkRegisterDefaultAdapters();
 
         public void RegisterDefaultAdapters()
         {
-            BidonRegisterDefaultAdapters();
+            BidonSdkRegisterDefaultAdapters();
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegisterAdapter")]
-        private static extern void BidonRegisterAdapter(string className);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkRegisterAdapter")]
+        private static extern void BidonSdkRegisterAdapter(string className);
 
         public void RegisterAdapter(string className)
         {
-            BidonRegisterAdapter(className);
+            BidonSdkRegisterAdapter(className);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginInitialize")]
-        private static extern void BidonInitialize(string appKey, InitializationFinishedCallback callback);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkInitialize")]
+        private static extern void BidonSdkInitialize(string appKey, InitializationFinishedCallback callback);
 
         public void Initialize(string appKey)
         {
-            BidonInitialize(appKey, InitializationFinished);
+            BidonSdkInitialize(appKey, InitializationFinished);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginGetSdkVersion")]
-        private static extern string BidonGetSdkVersion();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetVersion")]
+        private static extern string BidonSdkGetVersion();
 
         public string GetSdkVersion()
         {
-            return BidonGetSdkVersion();
+            return BidonSdkGetVersion();
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginGetLogLevel")]
-        private static extern BidonLogLevel BidonGetLogLevel();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetLogLevel")]
+        private static extern BidonLogLevel BidonSdkGetLogLevel();
 
         public BidonLogLevel GetLogLevel()
         {
-            return BidonGetLogLevel();
+            return BidonSdkGetLogLevel();
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginGetBaseUrl")]
-        private static extern string BidonGetBaseUrl();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetBaseUrl")]
+        private static extern string BidonSdkGetBaseUrl();
 
         public string GetBaseUrl()
         {
-            return BidonGetBaseUrl();
+            return BidonSdkGetBaseUrl();
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginIsInitialized")]
-        private static extern bool BidonIsInitialized();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkIsInitialized")]
+        private static extern bool BidonSdkIsInitialized();
 
         public bool IsInitialized()
         {
-            return BidonIsInitialized();
+            return BidonSdkIsInitialized();
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSetMetadata")]
-        private static extern void BidonSetMetadata(string frameworkVersion, string pluginVersion);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkSetMetadata")]
+        private static extern void BidonSdkSetMetadata(string frameworkVersion, string pluginVersion);
 
         private void SetMetadata(string frameworkVersion, string pluginVersion)
         {
-            BidonSetMetadata(frameworkVersion, pluginVersion);
+            BidonSdkSetMetadata(frameworkVersion, pluginVersion);
         }
 
         [MonoPInvokeCallback(typeof(InitializationFinishedCallback))]

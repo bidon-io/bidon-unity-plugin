@@ -10,8 +10,10 @@ namespace Bidon.Mediation
     [SuppressMessage("ReSharper", "UnusedType.Global")]
     internal class AndroidBidonRewardedAd : IBidonRewardedAd, IAndroidRewardedListener
     {
-        private readonly AndroidJavaObject _rewardedAdJavaObject;
-        private readonly AndroidJavaObject _activityJavaObject;
+        private AndroidJavaObject _rewardedAdJavaObject;
+        private AndroidJavaObject _activityJavaObject;
+
+        private bool _disposed;
 
         internal AndroidBidonRewardedAd()
         {
@@ -29,6 +31,8 @@ namespace Bidon.Mediation
             _rewardedAdJavaObject.Call("setRewardedListener", new AndroidRewardedListener(this));
         }
 
+        ~AndroidBidonRewardedAd() => Dispose(false);
+
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -41,46 +45,74 @@ namespace Bidon.Mediation
 
         public void Load(double priceFloor)
         {
+            if (IsDisposed()) return;
             _rewardedAdJavaObject?.Call("loadAd", _activityJavaObject, priceFloor);
         }
 
         public bool IsReady()
         {
+            if (IsDisposed()) return false;
             return _rewardedAdJavaObject?.Call<bool>("isReady") ?? false;
         }
 
         public void Show()
         {
+            if (IsDisposed()) return;
             _rewardedAdJavaObject?.Call("showAd", _activityJavaObject);
-        }
-
-        public void Destroy()
-        {
-            _rewardedAdJavaObject?.Call("destroyAd");
         }
 
         public void SetExtraData(string key, object value)
         {
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
+            if (IsDisposed()) return;
             _rewardedAdJavaObject?.Call("addExtra", key,
                 value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public IDictionary<string, object> GetExtraData()
         {
+            if (IsDisposed()) return new Dictionary<string, object>();
             return AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_rewardedAdJavaObject?.Call<AndroidJavaObject>("getExtras"));
         }
 
         public void NotifyLoss(string winnerDemandId, double ecpm)
         {
+            if (IsDisposed()) return;
             _rewardedAdJavaObject?.Call("notifyLoss", winnerDemandId, ecpm);
         }
 
         public void NotifyWin()
         {
+            if (IsDisposed()) return;
             _rewardedAdJavaObject?.Call("notifyWin");
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if(disposing)
+            {
+                _rewardedAdJavaObject?.Call("destroyAd");
+                _rewardedAdJavaObject?.Dispose();
+                _rewardedAdJavaObject = null;
+                _activityJavaObject?.Dispose();
+                _activityJavaObject = null;
+            }
+
+            _disposed = true;
+        }
+
+        private bool IsDisposed()
+        {
+            if (!_disposed) return false;
+            Debug.LogError($"[BidonPlugin] {GetType().FullName} instance is disposed. Calling any methods on this instance is not allowed.");
+            return true;
         }
 
         #region Callbacks

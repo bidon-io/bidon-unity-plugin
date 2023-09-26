@@ -6,95 +6,101 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
+#import <BidonUnityPluginTypes.h>
 
-typedef void (*InitializationFinishedCallback)();
-
-void BDNUnityPluginSetLogLevel(int logLevel) {
+void BDNUnityPluginSdkSetLogLevel(int logLevel) {
     [BDNSdk setLogLevel:(BDNLoggerLevel)logLevel];
 }
 
-void BDNUnityPluginSetTestMode(bool isEnabled) {
+void BDNUnityPluginSdkSetTestMode(bool isEnabled) {
     [BDNSdk setIsTestMode:isEnabled];
 }
 
-bool BDNUnityPluginIsTestModeEnabled() {
+bool BDNUnityPluginSdkIsTestModeEnabled() {
     return [BDNSdk isTestMode];
 }
 
-void BDNUnityPluginSetBaseUrl(const char* baseUrl) {
+void BDNUnityPluginSdkSetBaseUrl(const char* baseUrl) {
     NSString* baseUrlNSString = [NSString stringWithUTF8String:baseUrl];
     [BDNSdk setBaseURL:baseUrlNSString];
 }
 
-void BDNUnityPluginSetExtraDataBool(const char* key, bool value) {
+void BDNUnityPluginSdkSetExtraDataBool(const char* key, bool value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     [BDNSdk setExtraValue:[NSNumber numberWithBool:value] for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataInt(const char* key, int value) {
+void BDNUnityPluginSdkSetExtraDataInt(const char* key, int value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     [BDNSdk setExtraValue:[NSNumber numberWithInt:value] for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataLong(const char* key, long value) {
+void BDNUnityPluginSdkSetExtraDataLong(const char* key, long value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     [BDNSdk setExtraValue:[NSNumber numberWithLong:value] for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataFloat(const char* key, float value) {
+void BDNUnityPluginSdkSetExtraDataFloat(const char* key, float value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     [BDNSdk setExtraValue:[NSNumber numberWithFloat:value] for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataDouble(const char* key, double value) {
+void BDNUnityPluginSdkSetExtraDataDouble(const char* key, double value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     [BDNSdk setExtraValue:[NSNumber numberWithDouble:value] for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataString(const char* key, const char* value) {
+void BDNUnityPluginSdkSetExtraDataString(const char* key, const char* value) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     NSString* valueNSString = [NSString stringWithUTF8String:value];
     [BDNSdk setExtraValue:valueNSString for:keyNSString];
 }
 
-void BDNUnityPluginSetExtraDataNull(const char* key) {
+void BDNUnityPluginSdkSetExtraDataNull(const char* key) {
     NSString* keyNSString = [NSString stringWithUTF8String:key];
     [BDNSdk setExtraValue:nil for:keyNSString];
 }
 
-void BDNUnityPluginRegisterDefaultAdapters() {
+const char* BDNUnityPluginSdkGetExtraData() {
+    NSError* err;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[BDNSdk extras] options:0 error:&err];
+    NSString* extraDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return strdup([extraDataStr UTF8String]);
+}
+
+void BDNUnityPluginSdkRegisterDefaultAdapters() {
     [BDNSdk registerDefaultAdapters];
 }
 
-void BDNUnityPluginRegisterAdapter(const char* className) {
+void BDNUnityPluginSdkRegisterAdapter(const char* className) {
     NSString* classNameNSString = [NSString stringWithUTF8String:className];
     [BDNSdk registerAdapterWithClassName:classNameNSString];
 }
 
-void BDNUnityPluginInitialize(const char* appKey, InitializationFinishedCallback callback) {
+void BDNUnityPluginSdkInitialize(const char* appKey, InitializationFinishedCallback callback) {
     NSString* appKeyNSString = [NSString stringWithUTF8String:appKey];
     [BDNSdk initializeWithAppKey:appKeyNSString completion:^{
         if (callback) callback();
     }];
 }
 
-const char* BDNUnityPluginGetSdkVersion() {
+const char* BDNUnityPluginSdkGetVersion() {
     return strdup([[BDNSdk sdkVersion] UTF8String]);
 }
 
-int BDNUnityPluginGetLogLevel() {
+int BDNUnityPluginSdkGetLogLevel() {
     return (int)[BDNSdk logLevel];
 }
 
-const char* BDNUnityPluginGetBaseUrl() {
+const char* BDNUnityPluginSdkGetBaseUrl() {
     return strdup([[BDNSdk baseURL] UTF8String]);
 }
 
-bool BDNUnityPluginIsInitialized() {
+bool BDNUnityPluginSdkIsInitialized() {
     return [BDNSdk isInitialized];
 }
 
-void BDNUnityPluginSetMetadata(const char* frameworkVersion, const char* pluginVersion) {
+void BDNUnityPluginSdkSetMetadata(const char* frameworkVersion, const char* pluginVersion) {
     NSString* frameworkVersionNSString = [NSString stringWithUTF8String:frameworkVersion];
     NSString* pluginVersionNSString = [NSString stringWithUTF8String:pluginVersion];
     [BDNSdk setFramework:BDNFrameworkUnity version:frameworkVersionNSString];

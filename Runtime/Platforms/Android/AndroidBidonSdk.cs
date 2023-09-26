@@ -1,5 +1,6 @@
 #if UNITY_ANDROID || BIDON_DEV_ANDROID
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -52,8 +53,7 @@ namespace Bidon.Mediation
 
         public bool IsTestModeEnabled()
         {
-            Debug.Log("Method IsTestModeEnabled() is not yet supported on Android Platform");
-            return false;
+            return _bidonSdkJavaClass?.CallStatic<bool>("isTestMode") ?? false;
         }
 
         public void SetBaseUrl(string baseUrl)
@@ -63,11 +63,13 @@ namespace Bidon.Mediation
 
         public void SetExtraData(string key, object value)
         {
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
             _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key,
                 value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
+        }
+
+        public IDictionary<string, object> GetExtraData()
+        {
+            return AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("getExtras"));
         }
 
         public void RegisterDefaultAdapters()
@@ -105,8 +107,7 @@ namespace Bidon.Mediation
 
         public string GetBaseUrl()
         {
-            Debug.Log("Method GetBaseUrl() is not yet supported on Android Platform");
-            return String.Empty;
+            return _bidonSdkJavaClass?.CallStatic<string>("getBaseUrl") ?? String.Empty;
         }
 
         public bool IsInitialized()

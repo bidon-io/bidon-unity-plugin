@@ -1,12 +1,11 @@
 {
   "name": "org.bidon.mediation",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "displayName": "Bidon",
   "description": "Provides control over advertising auctions to Publishers, while making it fair and transparent.",
   "unity": "2020.1",
-  "documentationUrl": "https://github.com/bidon-io/bidon-unity-plugin/blob/main/README.md",
-  "changelogUrl": "https://github.com/bidon-io/bidon-unity-plugin/blob/main/CHANGELOG.md",
-  "licensesUrl": "https://github.com/bidon-io/bidon-unity-plugin/blob/main/LICENSE.md",
+  "documentationUrl": "https://docs.bidon.org/docs/sdk/unity/get-started",
+  "changelogUrl": "https://docs.bidon.org/docs/sdk/unity/changelog",
   "dependencies": {
     "com.google.external-dependency-manager": "1.2.175"
   },

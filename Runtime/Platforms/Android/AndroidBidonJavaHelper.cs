@@ -13,6 +13,7 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass InternalServerSdkErrorJClass;
         private static readonly AndroidJavaClass NetworkErrorJClass;
         private static readonly AndroidJavaClass AuctionInProgressJClass;
+        private static readonly AndroidJavaClass AuctionCancelledJClass;
         private static readonly AndroidJavaClass NoAuctionResultsJClass;
         private static readonly AndroidJavaClass NoRoundResultsJClass;
         private static readonly AndroidJavaClass NoContextFoundJClass;
@@ -21,10 +22,12 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass BidTimedOutJClass;
         private static readonly AndroidJavaClass FillTimedOutJClass;
         private static readonly AndroidJavaClass AdFormatIsNotSupportedJClass;
-        private static readonly AndroidJavaClass FullscreenAdNotReadyJClass;
+        private static readonly AndroidJavaClass AdNotReadyJClass;
         private static readonly AndroidJavaClass NoAppropriateAdUnitIdJClass;
         private static readonly AndroidJavaClass ExpiredJClass;
 
+        private static readonly AndroidJavaClass BannerFormatJClass;
+        private static readonly AndroidJavaClass BannerPositionJClass;
         private static readonly AndroidJavaClass LogLevelJClass;
         private static readonly AndroidJavaClass GenderJClass;
         private static readonly AndroidJavaClass GdprConsentStatusJClass;
@@ -39,6 +42,7 @@ namespace Bidon.Mediation
                 InternalServerSdkErrorJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$InternalServerSdkError");
                 NetworkErrorJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NetworkError");
                 AuctionInProgressJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$AuctionInProgress");
+                AuctionCancelledJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$AuctionCancelled");
                 NoAuctionResultsJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoAuctionResults");
                 NoRoundResultsJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoRoundResults");
                 NoContextFoundJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoContextFound");
@@ -47,10 +51,12 @@ namespace Bidon.Mediation
                 BidTimedOutJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$BidTimedOut");
                 FillTimedOutJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$FillTimedOut");
                 AdFormatIsNotSupportedJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$AdFormatIsNotSupported");
-                FullscreenAdNotReadyJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$FullscreenAdNotReady");
+                AdNotReadyJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$AdNotReady");
                 NoAppropriateAdUnitIdJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoAppropriateAdUnitId");
                 ExpiredJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$Expired");
 
+                BannerFormatJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerFormat");
+                BannerPositionJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerPosition");
                 LogLevelJClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
                 GenderJClass = new AndroidJavaClass("org.bidon.sdk.segment.models.Gender");
                 GdprConsentStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Gdpr");
@@ -84,6 +90,7 @@ namespace Bidon.Mediation
                 AuctionId = ad.Call<string>("getAuctionId"),
                 CurrencyCode = ad.Call<string>("getCurrencyCode"),
                 AdType = GetBidonAdType(ad.Call<AndroidJavaObject>("getDemandAd").Call<AndroidJavaObject>("getAdType")),
+                BidType = GetBidonBidType(ad.Call<AndroidJavaObject>("getBidType")),
                 Dsp = ad.Call<string>("getDsp"),
                 Ecpm = ad.Call<double>("getEcpm"),
                 NetworkName = ad.Call<string>("getNetworkName"),
@@ -131,6 +138,11 @@ namespace Bidon.Mediation
                 return BidonError.AuctionInProgress;
             }
 
+            if (AndroidJNI.IsInstanceOf(cause.GetRawObject(), AuctionCancelledJClass.GetRawClass()))
+            {
+                return BidonError.AuctionCancelled;
+            }
+
             if (AndroidJNI.IsInstanceOf(cause.GetRawObject(), NoAuctionResultsJClass.GetRawClass()))
             {
                 return BidonError.NoAuctionResults;
@@ -171,9 +183,9 @@ namespace Bidon.Mediation
                 return BidonError.AdFormatIsNotSupported;
             }
 
-            if (AndroidJNI.IsInstanceOf(cause.GetRawObject(), FullscreenAdNotReadyJClass.GetRawClass()))
+            if (AndroidJNI.IsInstanceOf(cause.GetRawObject(), AdNotReadyJClass.GetRawClass()))
             {
-                return BidonError.FullscreenAdNotReady;
+                return BidonError.AdNotReady;
             }
 
             if (AndroidJNI.IsInstanceOf(cause.GetRawObject(), NoAppropriateAdUnitIdJClass.GetRawClass()))
@@ -204,6 +216,20 @@ namespace Bidon.Mediation
             };
         }
 
+        private static BidonBidType GetBidonBidType(AndroidJavaObject bidType)
+        {
+            if (bidType == null) throw new ArgumentNullException(nameof(bidType), "param can not be null");
+
+            string javaBidType = bidType.Call<string>("name");
+
+            return javaBidType switch
+            {
+                "CPM" => BidonBidType.Cpm,
+                "RTB" => BidonBidType.Rtb,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaBidType), javaBidType, "value must be assignable to BidonBidType")
+            };
+        }
+
         private static BidonRevenuePrecision GetBidonRevenuePrecision(AndroidJavaObject precision)
         {
             if (precision == null) throw new ArgumentNullException(nameof(precision), "param can not be null");
@@ -215,6 +241,37 @@ namespace Bidon.Mediation
                 "Precise" => BidonRevenuePrecision.Precise,
                 "Estimated" => BidonRevenuePrecision.Estimated,
                 _ => throw new ArgumentOutOfRangeException(nameof(javaPrecision), javaPrecision, "value must be assignable to BidonRevenuePrecision")
+            };
+        }
+
+        public static BidonUserGender GetBidonUserGender(AndroidJavaObject userGender)
+        {
+            if (userGender == null) throw new ArgumentNullException(nameof(userGender), "param can not be null");
+
+            string javaUserGender = userGender.Call<string>("name");
+
+            return javaUserGender switch
+            {
+                "Male" => BidonUserGender.Male,
+                "Female" => BidonUserGender.Female,
+                "Other" => BidonUserGender.Other,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaUserGender), javaUserGender, "value must be assignable to BidonUserGender")
+            };
+        }
+
+        public static BidonBannerFormat GetBannerFormat(AndroidJavaObject format)
+        {
+            if (format == null) throw new ArgumentNullException(nameof(format), "param can not be null");
+
+            string javaFormat = format.Call<string>("name");
+
+            return javaFormat switch
+            {
+                "Banner" => BidonBannerFormat.Banner,
+                "LeaderBoard" => BidonBannerFormat.Leaderboard,
+                "MRec" => BidonBannerFormat.Mrec,
+                "Adaptive" => BidonBannerFormat.Adaptive,
+                _ => throw new ArgumentOutOfRangeException(nameof(javaFormat), javaFormat, "value must be assignable to BidonBannerFormat")
             };
         }
 
@@ -233,6 +290,40 @@ namespace Bidon.Mediation
                 outputDict.Add(jEntry.Call<string>("getKey"), GetCSharpObject(jEntry.Call<AndroidJavaObject>("getValue")));
             }
             return outputDict;
+        }
+
+        public static AndroidJavaObject GetPointJavaObject(Vector2Int vector)
+        {
+            return new AndroidJavaObject("android.graphics.Point", vector.x, vector.y);
+        }
+
+        public static AndroidJavaObject GetPointFJavaObject(Vector2 vector)
+        {
+            return new AndroidJavaObject("android.graphics.PointF", vector.x, vector.y);
+        }
+
+        public static AndroidJavaObject GetBannerFormatJavaObject(BidonBannerFormat format)
+        {
+            return format switch
+            {
+                BidonBannerFormat.Banner => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "Banner"),
+                BidonBannerFormat.Leaderboard => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "LeaderBoard"),
+                BidonBannerFormat.Mrec => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "MRec"),
+                BidonBannerFormat.Adaptive => BannerFormatJClass?.CallStatic<AndroidJavaObject>("valueOf", "Adaptive"),
+                _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
+            };
+        }
+
+        public static AndroidJavaObject GetBannerPositionJavaObject(BidonBannerPosition position)
+        {
+            return position switch
+            {
+                BidonBannerPosition.HorizontalTop => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "HorizontalTop"),
+                BidonBannerPosition.HorizontalBottom => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "HorizontalBottom"),
+                BidonBannerPosition.VerticalLeft => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "VerticalLeft"),
+                BidonBannerPosition.VerticalRight => BannerPositionJClass?.CallStatic<AndroidJavaObject>("valueOf", "VerticalRight"),
+                _ => throw new ArgumentOutOfRangeException(nameof(position), position, null)
+            };
         }
 
         public static AndroidJavaObject GetLogLevelJavaObject(BidonLogLevel logLevel)

@@ -3,7 +3,7 @@ namespace Bidon.Mediation
 {
     public enum BidonError
     {
-        SdkNotInitialized,
+        SdkNotInitialized = 1,
 
         AppKeyIsInvalid,
 
@@ -12,6 +12,8 @@ namespace Bidon.Mediation
         NetworkError,
 
         AuctionInProgress,
+
+        AuctionCancelled,
 
         NoAuctionResults,
 
@@ -31,7 +33,7 @@ namespace Bidon.Mediation
 
         Unspecified,
 
-        FullscreenAdNotReady,
+        AdNotReady,
 
         NoAppropriateAdUnitId,
 

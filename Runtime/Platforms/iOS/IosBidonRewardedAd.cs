@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using AOT;
+using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
@@ -15,6 +16,8 @@ namespace Bidon.Mediation
 
         private IntPtr _rewardedAdPtr;
         private IntPtr _rewardedDelegatePtr;
+
+        private bool _disposed;
 
         private delegate void AdLoadedCallback(IntPtr iosBidonAdPtr);
         private delegate void AdLoadFailedCallback(int cause);
@@ -36,72 +39,63 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewardedDelegate")]
-        private static extern IntPtr BidonCreateRewardedDelegate(AdLoadedCallback onAdLoaded,
-                                                                 AdLoadFailedCallback onAdLoadFailed,
-                                                                 AdShownCallback onAdShown,
-                                                                 AdShowFailedCallback onAdShowFailed,
-                                                                 AdClickedCallback onAdClicked,
-                                                                 AdClosedCallback onAdClosed,
-                                                                 AdExpiredCallback onAdExpired,
-                                                                 AdRevenueReceivedCallback onAdRevenueReceived,
-                                                                 UserRewardedCallback onUserRewarded);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDelegateCreate")]
+        private static extern IntPtr BidonRewardedAdDelegateCreate(AdLoadedCallback onAdLoaded,
+                                                                   AdLoadFailedCallback onAdLoadFailed,
+                                                                   AdShownCallback onAdShown,
+                                                                   AdShowFailedCallback onAdShowFailed,
+                                                                   AdClickedCallback onAdClicked,
+                                                                   AdClosedCallback onAdClosed,
+                                                                   AdExpiredCallback onAdExpired,
+                                                                   AdRevenueReceivedCallback onAdRevenueReceived,
+                                                                   UserRewardedCallback onUserRewarded);
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginCreateRewarded")]
-        private static extern IntPtr BidonCreateRewarded(IntPtr delegatePtr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreate")]
+        private static extern IntPtr BidonRewardedAdCreate(IntPtr delegatePtr);
 
         internal IosBidonRewardedAd()
         {
             _instance = this;
 
-            _rewardedDelegatePtr = BidonCreateRewardedDelegate(AdLoaded,
-                                                               AdLoadFailed,
-                                                               AdShown,
-                                                               AdShowFailed,
-                                                               AdClicked,
-                                                               AdClosed,
-                                                               AdExpired,
-                                                               AdRevenueReceived,
-                                                               UserRewarded);
-            _rewardedAdPtr = BidonCreateRewarded(_rewardedDelegatePtr);
+            _rewardedDelegatePtr = BidonRewardedAdDelegateCreate(AdLoaded,
+                                                                 AdLoadFailed,
+                                                                 AdShown,
+                                                                 AdShowFailed,
+                                                                 AdClicked,
+                                                                 AdClosed,
+                                                                 AdExpired,
+                                                                 AdRevenueReceived,
+                                                                 UserRewarded);
+            _rewardedAdPtr = BidonRewardedAdCreate(_rewardedDelegatePtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginLoadRewarded")]
-        private static extern void BidonLoadRewarded(IntPtr ptr, double priceFloor);
+        ~IosBidonRewardedAd() => Dispose(false);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdLoad")]
+        private static extern void BidonRewardedAdLoad(IntPtr ptr, double priceFloor);
 
         public void Load(double priceFloor)
         {
-            BidonLoadRewarded(_rewardedAdPtr, priceFloor);
+            if (IsDisposed()) return;
+            BidonRewardedAdLoad(_rewardedAdPtr, priceFloor);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginIsRewardedReady")]
-        private static extern bool BidonIsRewardedReady(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdIsReady")]
+        private static extern bool BidonRewardedAdIsReady(IntPtr ptr);
 
         public bool IsReady()
         {
-            return BidonIsRewardedReady(_rewardedAdPtr);
+            if (IsDisposed()) return false;
+            return BidonRewardedAdIsReady(_rewardedAdPtr);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginShowRewarded")]
-        private static extern void BidonShowRewarded(IntPtr ptr);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdShow")]
+        private static extern void BidonRewardedAdShow(IntPtr ptr);
 
         public void Show()
         {
-            BidonShowRewarded(_rewardedAdPtr);
-        }
-
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginDestroyRewarded")]
-        private static extern void BidonDestroyRewarded(IntPtr ptr);
-
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginDestroyRewardedDelegate")]
-        private static extern void BidonDestroyRewardedDelegate(IntPtr delegatePtr);
-
-        public void Destroy()
-        {
-            BidonDestroyRewarded(_rewardedAdPtr);
-            BidonDestroyRewardedDelegate(_rewardedDelegatePtr);
-            _rewardedAdPtr = IntPtr.Zero;
-            _rewardedDelegatePtr = IntPtr.Zero;
+            if (IsDisposed()) return;
+            BidonRewardedAdShow(_rewardedAdPtr);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdSetExtraDataBool")]
@@ -127,9 +121,7 @@ namespace Bidon.Mediation
 
         public void SetExtraData(string key, object value)
         {
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-
+            if (IsDisposed()) return;
             switch (value)
             {
                 case bool valueBool:
@@ -162,19 +154,71 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdGetExtraData")]
         private static extern string BidonRewardedAdGetExtraData(IntPtr ptr);
 
-        public IDictionary<string, object> GetExtraData() =>
-            IosBidonHelper.GetDictionaryFromJsonString(BidonRewardedAdGetExtraData(_rewardedAdPtr));
+        public IDictionary<string, object> GetExtraData()
+        {
+            if (IsDisposed()) return new Dictionary<string, object>();
+            return IosBidonHelper.GetDictionaryFromJsonString(BidonRewardedAdGetExtraData(_rewardedAdPtr));
+        }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdNotifyLoss")]
         private static extern void BidonRewardedAdNotifyLoss(IntPtr ptr, string winnerDemandId, double ecpm);
 
-        public void NotifyLoss(string winnerDemandId, double ecpm) =>
+        public void NotifyLoss(string winnerDemandId, double ecpm)
+        {
+            if (IsDisposed()) return;
             BidonRewardedAdNotifyLoss(_rewardedAdPtr, winnerDemandId, ecpm);
+        }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdNotifyWin")]
         private static extern void BidonRewardedAdNotifyWin(IntPtr ptr);
 
-        public void NotifyWin() => BidonRewardedAdNotifyWin(_rewardedAdPtr);
+        public void NotifyWin()
+        {
+            if (IsDisposed()) return;
+            BidonRewardedAdNotifyWin(_rewardedAdPtr);
+        }
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDestroy")]
+        private static extern void BidonRewardedAdDestroy(IntPtr ptr);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdDelegateDestroy")]
+        private static extern void BidonRewardedAdDelegateDestroy(IntPtr delegatePtr);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                _instance = null;
+            }
+
+            if (_rewardedAdPtr != IntPtr.Zero)
+            {
+                BidonRewardedAdDestroy(_rewardedAdPtr);
+                _rewardedAdPtr = IntPtr.Zero;
+            }
+            if (_rewardedDelegatePtr != IntPtr.Zero)
+            {
+                BidonRewardedAdDelegateDestroy(_rewardedDelegatePtr);
+                _rewardedDelegatePtr = IntPtr.Zero;
+            }
+
+            _disposed = true;
+        }
+
+        private bool IsDisposed()
+        {
+            if (!_disposed) return false;
+            Debug.LogError($"[BidonPlugin] {GetType().FullName} instance is disposed. Calling any methods on this instance is not allowed.");
+            return true;
+        }
 
         [MonoPInvokeCallback(typeof(AdLoadedCallback))]
         private static void AdLoaded(IntPtr iosBidonAdPtr)
@@ -186,14 +230,14 @@ namespace Bidon.Mediation
                 ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdLoaded?.Invoke(_instance, new BidonAdLoadedEventArgs(ad)));
+            SyncContextHelper.Post(state => _instance?.OnAdLoaded?.Invoke(_instance, new BidonAdLoadedEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdLoadFailedCallback))]
         private static void AdLoadFailed(int cause)
         {
             var error = IosBidonHelper.GetBidonErrorFromInt(cause);
-            SyncContextHelper.Post(state => _instance.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(error)));
+            SyncContextHelper.Post(state => _instance?.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(error)));
         }
 
         [MonoPInvokeCallback(typeof(AdShownCallback))]
@@ -206,14 +250,14 @@ namespace Bidon.Mediation
                 ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdShown?.Invoke(_instance, new BidonAdShownEventArgs(ad)));
+            SyncContextHelper.Post(state => _instance?.OnAdShown?.Invoke(_instance, new BidonAdShownEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdShowFailedCallback))]
         private static void AdShowFailed(int cause)
         {
             var error = IosBidonHelper.GetBidonErrorFromInt(cause);
-            SyncContextHelper.Post(state => _instance.OnAdShowFailed?.Invoke(_instance, new BidonAdShowFailedEventArgs(error)));
+            SyncContextHelper.Post(state => _instance?.OnAdShowFailed?.Invoke(_instance, new BidonAdShowFailedEventArgs(error)));
         }
 
         [MonoPInvokeCallback(typeof(AdClickedCallback))]
@@ -226,7 +270,7 @@ namespace Bidon.Mediation
                 ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdClicked?.Invoke(_instance, new BidonAdClickedEventArgs(ad)));
+            SyncContextHelper.Post(state => _instance?.OnAdClicked?.Invoke(_instance, new BidonAdClickedEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdClosedCallback))]
@@ -239,7 +283,7 @@ namespace Bidon.Mediation
                 ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdClosed?.Invoke(_instance, new BidonAdClosedEventArgs(ad)));
+            SyncContextHelper.Post(state => _instance?.OnAdClosed?.Invoke(_instance, new BidonAdClosedEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdExpiredCallback))]
@@ -252,7 +296,7 @@ namespace Bidon.Mediation
                 ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdExpired?.Invoke(_instance, new BidonAdExpiredEventArgs(ad)));
+            SyncContextHelper.Post(state => _instance?.OnAdExpired?.Invoke(_instance, new BidonAdExpiredEventArgs(ad)));
         }
 
         [MonoPInvokeCallback(typeof(AdRevenueReceivedCallback))]
@@ -272,7 +316,7 @@ namespace Bidon.Mediation
                 adValue = iosBidonAdRevenue.ToBidonAdValue();
             }
 
-            SyncContextHelper.Post(state => _instance.OnAdRevenueReceived?.Invoke(_instance, new BidonAdRevenueReceivedEventArgs(ad, adValue)));
+            SyncContextHelper.Post(state => _instance?.OnAdRevenueReceived?.Invoke(_instance, new BidonAdRevenueReceivedEventArgs(ad, adValue)));
         }
 
         [MonoPInvokeCallback(typeof(UserRewardedCallback))]
@@ -292,7 +336,7 @@ namespace Bidon.Mediation
                 reward = iosBidonReward.ToBidonReward();
             }
 
-            SyncContextHelper.Post(state => _instance.OnUserRewarded?.Invoke(_instance, new BidonUserRewardedEventArgs(ad, reward)));
+            SyncContextHelper.Post(state => _instance?.OnUserRewarded?.Invoke(_instance, new BidonUserRewardedEventArgs(ad, reward)));
         }
     }
 }
