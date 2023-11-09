@@ -79,6 +79,9 @@ void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdD
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didDismissAd:(id<BDNAd> _Nonnull)ad {
+    extern bool _didResignActive;
+    if(_didResignActive) return;
+
     if (!self.interstitialDidHideCallback) return;
 
     BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
