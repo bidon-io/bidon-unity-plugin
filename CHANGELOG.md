@@ -2,6 +2,15 @@
 
 ## Changelog
 
+### v0.4.1 (November 9, 2023)
+
++ Updated Bidon Android SDK to v0.4.21
++ Updated Bidon iOS SDK to v0.4.4
++ Added Amazon Adapter
++ Removed `allowBackup` attribute from android manifest
++ Changed gdpr enum values for android bridge
++ Tuned up dismiss callbacks on iOS
+
 ### v0.4.0 (September 26, 2023)
 
 + Updated Bidon Android SDK to v0.4.18
@@ -11,7 +20,8 @@
 + Improved iOS bridge
 + Tuned up GC
 
-### 0.3.0 (September 14, 2023)
+### v0.3.0 (September 14, 2023)
+
 + Updated Bidon Android SDK to v0.3.2
 + Updated Bidon iOS SDK to v0.3.3
 + Implemented `Segments` API
@@ -19,7 +29,7 @@
 + Added `SetTestMode()` & `IsTestModeEnabled()` methods to `BidonSdk` class
 + Added `SetExtraData()`, `GetExtraData()`, `NotifyLoss()`, and `NotifyWin()` methods to `AdObject` classes
 
-### 0.2.1 (June 20, 2023)
+### v0.2.1 (June 20, 2023)
 
 + Updated Bidon Android SDK to v0.2.1
 + Updated Bidon iOS SDK to v0.2.1
@@ -29,7 +39,7 @@
 + Updated iOS bridge (synced callbacks with android platform)
 + Implemented some internal improvements
 
-### 0.1.0 (March 16, 2023)
+### v0.1.0 (March 16, 2023)
 
 + Integrated Bidon Android SDK v0.1.1-Beta
 + Integrated Bidon iOS SDK v0.1.3.1-Beta
