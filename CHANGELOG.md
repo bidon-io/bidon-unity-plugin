@@ -8,7 +8,7 @@
 + Updated Bidon iOS SDK to v0.4.4
 + Added Amazon Adapter
 + Removed `allowBackup` attribute from android manifest
-+ Changed gdpr enum values for android bridge
++ Changed GDPR enum values for android bridge
 + Tuned up dismiss callbacks on iOS
 
 ### v0.4.0 (September 26, 2023)
