@@ -356,8 +356,8 @@ namespace Bidon.Mediation
             return consentStatus switch
             {
                 BidonGdprConsentStatus.Unknown => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
-                BidonGdprConsentStatus.Denied => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Denied"),
-                BidonGdprConsentStatus.Given => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Given"),
+                BidonGdprConsentStatus.Denied => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "DoesNotApply"),
+                BidonGdprConsentStatus.Given => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Applies"),
                 _ => throw new ArgumentOutOfRangeException(nameof(consentStatus), consentStatus, null)
             };
         }

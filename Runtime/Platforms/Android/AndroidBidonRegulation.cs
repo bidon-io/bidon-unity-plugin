@@ -41,8 +41,8 @@ namespace Bidon.Mediation
                 return nativeGdprConsentStatus switch
                 {
                     "Unknown" => BidonGdprConsentStatus.Unknown,
-                    "Denied" => BidonGdprConsentStatus.Denied,
-                    "Given" => BidonGdprConsentStatus.Given,
+                    "DoesNotApply" => BidonGdprConsentStatus.Denied,
+                    "Applies" => BidonGdprConsentStatus.Given,
                     _ => throw new ArgumentOutOfRangeException(nameof(nativeGdprConsentStatus), nativeGdprConsentStatus, null)
                 };
             }
