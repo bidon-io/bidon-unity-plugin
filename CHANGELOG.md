@@ -5,7 +5,7 @@
 ### v0.4.2 (November 14, 2023)
 
 + Updated Bidon Android SDK to v0.4.23
-+ Added Bidon MobileFuse adapter for Android SDK 
++ Added Bidon MobileFuse adapter for Android SDK
 
 ### v0.4.1 (November 9, 2023)
 
