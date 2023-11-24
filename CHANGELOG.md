@@ -4,7 +4,7 @@
 
 ### v0.4.3 (November 24, 2023)
 
-+ Updated Bidon Android SDK to v0.4.25 
++ Updated Bidon Android SDK to v0.4.25
 + Updated Bidon iOS SDK to v0.4.5
 
 ### v0.4.2 (November 14, 2023)
