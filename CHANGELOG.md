@@ -2,6 +2,12 @@
 
 ## Changelog
 
+### v0.4.4 (December 07, 2023) 
+
++ Updated Bidon Android SDK to v0.4.26
++ Updated Bidon iOS SDK to v0.4.6
++ Added Bidon GAM adapter
+
 ### v0.4.3 (November 24, 2023)
 
 + Updated Bidon Android SDK to v0.4.25
