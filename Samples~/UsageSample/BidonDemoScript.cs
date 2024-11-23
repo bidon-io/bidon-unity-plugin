@@ -34,7 +34,7 @@ public class BidonDemoScript : MonoBehaviour
             Debug.Log($"[BidonPlugin] [SDK] Is Initialized: {BidonSdk.Instance.IsInitialized()}");
             Debug.Log($"[BidonPlugin] [SDK] Current Log Level: {BidonSdk.Instance.GetLogLevel().ToString()}");
             Debug.Log($"[BidonPlugin] [SDK] Is Test Mode Enabled: {BidonSdk.Instance.IsTestModeEnabled()}");
-            Debug.Log($"[BidonPlugin] [Segment] Id: {BidonSdk.Instance.Segment.Id}");
+            Debug.Log($"[BidonPlugin] [Segment] Uid: {BidonSdk.Instance.Segment.Uid}");
             Debug.Log($"[BidonPlugin] [SDK] Base URL: {BidonSdk.Instance.GetBaseUrl()}");
         };
 

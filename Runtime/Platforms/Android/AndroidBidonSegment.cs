@@ -17,9 +17,9 @@ namespace Bidon.Mediation
             _bidonSegmentJavaObject = bidonSegmentJavaObject;
         }
 
-        public string Id
+        public string Uid
         {
-            get => _bidonSegmentJavaObject?.Call<string>("getSegmentId") ?? "";
+            get => _bidonSegmentJavaObject?.Call<string>("getSegmentUid") ?? String.Empty;
         }
 
         public int Age

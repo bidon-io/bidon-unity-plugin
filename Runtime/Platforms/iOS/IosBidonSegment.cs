@@ -8,10 +8,10 @@ namespace Bidon.Mediation
 {
     internal class IosBidonSegment : IBidonSegment
     {
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetId")]
-        private static extern string BidonSegmentGetId();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetUid")]
+        private static extern string BidonSegmentGetUid();
 
-        public string Id => BidonSegmentGetId();
+        public string Uid => BidonSegmentGetUid();
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetAge")]
         private static extern int BidonSegmentGetAge();

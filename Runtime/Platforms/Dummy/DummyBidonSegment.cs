@@ -6,7 +6,7 @@ namespace Bidon.Mediation
 {
     internal class DummyBidonSegment : IBidonSegment
     {
-        public string Id { get; }
+        public string Uid { get; }
         public int Age { get; set; }
         public BidonUserGender Gender { get; set; }
         public int Level { get; set; }
