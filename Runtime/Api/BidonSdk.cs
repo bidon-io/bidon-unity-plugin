@@ -34,7 +34,7 @@ namespace Bidon.Mediation
 
         #endregion
 
-        private const string Version = "0.4.5";
+        private const string Version = "0.7.0";
 
         public static string PluginVersion => Version;
     }
