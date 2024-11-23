@@ -7,7 +7,7 @@ namespace Bidon.Mediation
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public interface IBidonSegment
     {
-        string Id { get; }
+        string Uid { get; }
         int Age { get; set; }
         BidonUserGender Gender { get; set; }
         int Level { get; set; }

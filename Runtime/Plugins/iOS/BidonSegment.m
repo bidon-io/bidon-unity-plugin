@@ -7,9 +7,9 @@
 
 #import <Bidon/Bidon-Swift.h>
 
-const char* BDNUnityPluginSegmentGetId() {
-    if ([[BDNSdk segment] id]) {
-        return strdup([[[BDNSdk segment] id] UTF8String]);
+const char* BDNUnityPluginSegmentGetUid() {
+    if ([[BDNSdk segment] uid]) {
+        return strdup([[[BDNSdk segment] uid] UTF8String]);
     }
     return strdup([@"" UTF8String]);
 }
