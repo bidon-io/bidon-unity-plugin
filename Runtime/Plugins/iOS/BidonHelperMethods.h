@@ -10,6 +10,8 @@
 
 extern BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad);
 
+extern BDNUnityPluginAuctionInfo BDNUnityPluginHelperGetAuctionInfo(id<BDNAuctionInfo>auctionInfo);
+
 extern BDNUnityPluginAdRevenue BDNUnityPluginHelperGetAdRevenue(id<BDNAdRevenue>revenue);
 
 extern BDNUnityPluginReward BDNUnityPluginHelperGetReward(id<BDNReward>reward);

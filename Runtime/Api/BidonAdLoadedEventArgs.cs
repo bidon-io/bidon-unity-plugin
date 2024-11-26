@@ -10,9 +10,12 @@ namespace Bidon.Mediation
     {
         public BidonAd Ad { get; }
 
-        public BidonAdLoadedEventArgs(BidonAd ad)
+        public BidonAuctionInfo AuctionInfo { get; }
+
+        public BidonAdLoadedEventArgs(BidonAd ad, BidonAuctionInfo auctionInfo)
         {
             Ad = ad;
+            AuctionInfo = auctionInfo;
         }
     }
 }

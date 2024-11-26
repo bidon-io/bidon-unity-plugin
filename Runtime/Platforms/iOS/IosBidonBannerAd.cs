@@ -19,8 +19,8 @@ namespace Bidon.Mediation
 
         private bool _disposed;
 
-        private delegate void AdLoadedCallback(IntPtr iosBidonAdPtr);
-        private delegate void AdLoadFailedCallback(int cause);
+        private delegate void AdLoadedCallback(IntPtr iosBidonAdPtr, IntPtr iosBidonAuctionInfoPtr);
+        private delegate void AdLoadFailedCallback(IntPtr iosBidonAuctionInfoPtr, int cause);
         private delegate void AdShownCallback(IntPtr iosBidonAdPtr);
         private delegate void AdShowFailedCallback(int cause);
         private delegate void AdClickedCallback(IntPtr iosBidonAdPtr);
@@ -293,7 +293,7 @@ namespace Bidon.Mediation
         }
 
         [MonoPInvokeCallback(typeof(AdLoadedCallback))]
-        private static void AdLoaded(IntPtr iosBidonAdPtr)
+        private static void AdLoaded(IntPtr iosBidonAdPtr, IntPtr iosBidonAuctionInfoPtr)
         {
             BidonAd ad = null;
             if (iosBidonAdPtr != IntPtr.Zero)
@@ -302,14 +302,28 @@ namespace Bidon.Mediation
                 ad = iosBidonAd.ToBidonAd();
             }
 
-            SyncContextHelper.Post(state => _instance?.OnAdLoaded?.Invoke(_instance, new BidonAdLoadedEventArgs(ad)));
+            BidonAuctionInfo auctionInfo = null;
+            if (iosBidonAuctionInfoPtr != IntPtr.Zero)
+            {
+                var iosBidonAuctionInfo = Marshal.PtrToStructure<IosBidonAuctionInfo>(iosBidonAuctionInfoPtr);
+                auctionInfo = iosBidonAuctionInfo.ToBidonAuctionInfo();
+            }
+
+            SyncContextHelper.Post(state => _instance?.OnAdLoaded?.Invoke(_instance, new BidonAdLoadedEventArgs(ad, auctionInfo)));
         }
 
         [MonoPInvokeCallback(typeof(AdLoadFailedCallback))]
-        private static void AdLoadFailed(int cause)
+        private static void AdLoadFailed(IntPtr iosBidonAuctionInfoPtr, int cause)
         {
+            BidonAuctionInfo auctionInfo = null;
+            if (iosBidonAuctionInfoPtr != IntPtr.Zero)
+            {
+                var iosBidonAuctionInfo = Marshal.PtrToStructure<IosBidonAuctionInfo>(iosBidonAuctionInfoPtr);
+                auctionInfo = iosBidonAuctionInfo.ToBidonAuctionInfo();
+            }
+
             var error = IosBidonHelper.GetBidonErrorFromInt(cause);
-            SyncContextHelper.Post(state => _instance?.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(error)));
+            SyncContextHelper.Post(state => _instance?.OnAdLoadFailed?.Invoke(_instance, new BidonAdLoadFailedEventArgs(auctionInfo, error)));
         }
 
         [MonoPInvokeCallback(typeof(AdShownCallback))]

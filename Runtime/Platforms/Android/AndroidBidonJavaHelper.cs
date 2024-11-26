@@ -115,6 +115,59 @@ namespace Bidon.Mediation
             };
         }
 
+        public static BidonAuctionInfo GetBidonAuctionInfo(AndroidJavaObject auctionInfo)
+        {
+            if (auctionInfo == null) return null;
+
+            return new BidonAuctionInfo
+            {
+                AuctionId = auctionInfo.Call<string>("getAuctionId"),
+                AuctionConfigurationId = auctionInfo.Call<AndroidJavaObject>("getAuctionConfigurationId").Call<long>("longValue"),
+                AuctionConfigurationUid = auctionInfo.Call<string>("getAuctionConfigurationUid"),
+                AuctionTimeout = auctionInfo.Call<long>("getAuctionTimeout"),
+                AuctionPriceFloor = auctionInfo.Call<double>("getAuctionPricefloor"),
+                NoBids = GetBidonAdUnitInfoList(auctionInfo.Call<AndroidJavaObject>("getNoBids")),
+                AdUnits = GetBidonAdUnitInfoList(auctionInfo.Call<AndroidJavaObject>("getAdUnits")),
+            };
+        }
+
+        private static List<BidonAdUnitInfo> GetBidonAdUnitInfoList(AndroidJavaObject adUnitInfoList)
+        {
+            var outputList = new List<BidonAdUnitInfo>();
+
+            if (adUnitInfoList == null) return outputList;
+
+            int countOfEntries = adUnitInfoList.Call<int>("size");
+            for (int i = 0; i < countOfEntries; i++)
+            {
+                var jEntry = adUnitInfoList.Call<AndroidJavaObject>("get", i);
+                var adUnitInfo = GetBidonAdUnitInfo(jEntry);
+                if (adUnitInfo != null) outputList.Add(adUnitInfo);
+            }
+
+            return outputList;
+        }
+
+        private static BidonAdUnitInfo GetBidonAdUnitInfo(AndroidJavaObject adUnitInfo)
+        {
+            if (adUnitInfo == null) return null;
+
+            return new BidonAdUnitInfo
+            {
+                DemandId = adUnitInfo.Call<string>("getDemandId"),
+                // Label = adUnitInfo.Call<string>("getLabel"),
+                // Price = adUnitInfo.Call<AndroidJavaObject>("getPrice").Call<double>("doubleValue"),
+                // Uid = adUnitInfo.Call<string>("getUid"),
+                // BidType = adUnitInfo.Call<string>("getBidType"),
+                // FillStartTs = adUnitInfo.Call<AndroidJavaObject>("getFillStartTs").Call<long>("longValue"),
+                // FillFinishTs = adUnitInfo.Call<AndroidJavaObject>("getFillFinishTs").Call<long>("longValue"),
+                // Timeout = adUnitInfo.Call<AndroidJavaObject>("getTimeout").Call<long>("longValue"),
+                // Status = adUnitInfo.Call<string>("getStatus"),
+                // ErrorMessage = adUnitInfo.Call<string>("getErrorMessage"),
+                // Ext = adUnitInfo.Call<string>("getExt"),
+            };
+        }
+
         public static BidonBannerSize GetBannerSize(AndroidJavaObject adSize)
         {
             if (adSize == null) return null;

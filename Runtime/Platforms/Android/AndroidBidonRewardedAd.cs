@@ -117,14 +117,14 @@ namespace Bidon.Mediation
 
         #region Callbacks
 
-        public void onAdLoaded(AndroidJavaObject ad)
+        public void onAdLoaded(AndroidJavaObject ad, AndroidJavaObject auctionInfo)
         {
-            OnAdLoaded?.Invoke(this, new BidonAdLoadedEventArgs(AndroidBidonJavaHelper.GetBidonAd(ad)));
+            OnAdLoaded?.Invoke(this, new BidonAdLoadedEventArgs(AndroidBidonJavaHelper.GetBidonAd(ad), AndroidBidonJavaHelper.GetBidonAuctionInfo(auctionInfo)));
         }
 
-        public void onAdLoadFailed(AndroidJavaObject cause)
+        public void onAdLoadFailed(AndroidJavaObject auctionInfo, AndroidJavaObject cause)
         {
-            OnAdLoadFailed?.Invoke(this, new BidonAdLoadFailedEventArgs(AndroidBidonJavaHelper.GetBidonError(cause)));
+            OnAdLoadFailed?.Invoke(this, new BidonAdLoadFailedEventArgs(AndroidBidonJavaHelper.GetBidonAuctionInfo(auctionInfo), AndroidBidonJavaHelper.GetBidonError(cause)));
         }
 
         public void onAdShown(AndroidJavaObject ad)

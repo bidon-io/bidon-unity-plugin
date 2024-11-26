@@ -43,17 +43,19 @@ void BDNUnityPluginBannerAdDelegateDestroy(CFBDNUnityPluginBannerAdDelegateRef d
 
 @implementation BDNUnityPluginBannerAdDelegate
 
-- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.bannerDidLoadCallback) return;
 
     BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.bannerDidLoadCallback(&unityAd);
+    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.bannerDidLoadCallback(&unityAd, &unityAuctionInfo);
 }
 
-- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.bannerDidFailToLoadCallback) return;
 
-    self.bannerDidFailToLoadCallback((int)error.code);
+    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.bannerDidFailToLoadCallback(&unityAuctionInfo, (int)error.code);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordImpression:(id<BDNAd> _Nonnull)ad {

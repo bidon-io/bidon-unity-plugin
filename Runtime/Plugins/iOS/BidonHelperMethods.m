@@ -29,6 +29,43 @@ BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad) {
     return unityAd;
 }
 
+BDNUnityPluginAdUnitInfo BDNUnityPluginHelperGetAdUnitInfo(id<BDNAdUnitInfo>adUnitInfo) {
+    BDNUnityPluginAdUnitInfo unityAdUnitInfo;
+    unityAdUnitInfo.DemandId = [adUnitInfo.demandId UTF8String];
+    unityAdUnitInfo.Label = [adUnitInfo.label UTF8String];
+    unityAdUnitInfo.Price = [adUnitInfo.price doubleValue];
+    unityAdUnitInfo.Uid = [adUnitInfo.uid UTF8String];
+    unityAdUnitInfo.BidType = [adUnitInfo.bidType UTF8String];
+    unityAdUnitInfo.FillStartTs = [adUnitInfo.fillStartTs longValue];
+    unityAdUnitInfo.FillFinishTs = [adUnitInfo.fillFinishTs longValue];
+    unityAdUnitInfo.Status = [adUnitInfo.status UTF8String];
+    // unityAdUnitInfo.Ext = [adUnitInfo.ext UTF8String];
+    return unityAdUnitInfo;
+}
+
+BDNUnityPluginAdUnitInfoArray BDNUnityPluginHelperGetAdUnitInfoArray(NSArray<id<BDNAdUnitInfo>>* adUnitInfoArray) {
+    BDNUnityPluginAdUnitInfoArray unityAdUnitInfoArray;
+    unityAdUnitInfoArray.values = malloc(sizeof(BDNUnityPluginAdUnitInfo) * adUnitInfoArray.count);
+    for (int i = 0; i < adUnitInfoArray.count; i++) {
+        unityAdUnitInfoArray.values[i] = BDNUnityPluginHelperGetAdUnitInfo(adUnitInfoArray[i]);
+    }
+    unityAdUnitInfoArray.length = (int)adUnitInfoArray.count;
+    return unityAdUnitInfoArray;
+}
+
+BDNUnityPluginAuctionInfo BDNUnityPluginHelperGetAuctionInfo(id<BDNAuctionInfo>auctionInfo) {
+    BDNUnityPluginAuctionInfo unityAuctionInfo;
+    unityAuctionInfo.AuctionId = [auctionInfo.auctionId UTF8String];
+    unityAuctionInfo.AuctionConfigurationId = [auctionInfo.auctionConfigurationId UTF8String];
+    unityAuctionInfo.AuctionConfigurationUid = [auctionInfo.auctionConfigurationUid UTF8String];
+    unityAuctionInfo.AuctionPriceFloor = [auctionInfo.auctionPricefloor doubleValue];
+    unityAuctionInfo.NoBids = BDNUnityPluginHelperGetAdUnitInfoArray(auctionInfo.noBids);
+    unityAuctionInfo.AdUnits = BDNUnityPluginHelperGetAdUnitInfoArray(auctionInfo.adUnits);
+    unityAuctionInfo.Timeout = [auctionInfo.timeout longValue];
+    unityAuctionInfo.Description = [auctionInfo.description UTF8String];
+    return unityAuctionInfo;
+}
+
 BDNUnityPluginAdRevenue BDNUnityPluginHelperGetAdRevenue(id<BDNAdRevenue>revenue) {
     BDNUnityPluginAdRevenue unityAdRevenue;
     unityAdRevenue.Revenue = revenue.revenue;

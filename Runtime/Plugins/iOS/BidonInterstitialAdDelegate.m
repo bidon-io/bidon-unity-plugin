@@ -45,17 +45,19 @@ void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdD
 
 @implementation BDNUnityPluginInterstitialAdDelegate
 
-- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.interstitialDidLoadCallback) return;
 
     BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.interstitialDidLoadCallback(&unityAd);
+    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.interstitialDidLoadCallback(&unityAd, &unityAuctionInfo);
 }
 
-- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.interstitialDidFailToLoadCallback) return;
 
-    self.interstitialDidFailToLoadCallback((int)error.code);
+    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.interstitialDidFailToLoadCallback(&unityAuctionInfo, (int)error.code);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
