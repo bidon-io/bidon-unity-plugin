@@ -81,6 +81,23 @@ namespace Bidon.Mediation
             return BidonBannerAdGetFormat(_bannerAdPtr);
         }
 
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdGetSize")]
+        private static extern IntPtr BidonBannerAdGetSize(IntPtr ptr);
+
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdFreeSizeStruct")]
+        private static extern void BidonBannerAdFreeSizeStruct(IntPtr bannerSizeStructPtr);
+
+        public BidonBannerSize GetSize()
+        {
+            var bannerSize = new BidonBannerSize();
+            if (IsDisposed()) return bannerSize;
+            var iosBidonBannerSizePtr = BidonBannerAdGetSize(_bannerAdPtr);
+            if (iosBidonBannerSizePtr == IntPtr.Zero) return bannerSize;
+            bannerSize = Marshal.PtrToStructure<IosBidonBannerSize>(iosBidonBannerSizePtr).ToBidonBannerSize();
+            BidonBannerAdFreeSizeStruct(iosBidonBannerSizePtr);
+            return bannerSize;
+        }
+
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdSetPredefinedPosition")]
         private static extern void BidonBannerAdSetPredefinedPosition(IntPtr ptr, BidonBannerPosition position);
 

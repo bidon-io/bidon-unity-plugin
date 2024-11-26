@@ -184,6 +184,7 @@ public class BidonBannerAdManager : MonoBehaviour
     private void OnBannerAdLoaded(object sender, BidonAdLoadedEventArgs args)
     {
         Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoaded raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Banner] Size: {_bannerAd?.GetSize()?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnBannerAdLoadFailed(object sender, BidonAdLoadFailedEventArgs args)

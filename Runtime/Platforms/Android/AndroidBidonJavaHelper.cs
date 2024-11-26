@@ -113,6 +113,17 @@ namespace Bidon.Mediation
             };
         }
 
+        public static BidonBannerSize GetBannerSize(AndroidJavaObject adSize)
+        {
+            if (adSize == null) return null;
+
+            return new BidonBannerSize
+            {
+                Width = adSize.Call<int>("getWidthDp"),
+                Height = adSize.Call<int>("getHeightDp")
+            };
+        }
+
         public static BidonReward GetBidonReward(AndroidJavaObject reward)
         {
             if (reward == null) return null;

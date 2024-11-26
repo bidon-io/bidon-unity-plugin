@@ -50,6 +50,8 @@ namespace Bidon.Mediation
 
         public BidonBannerFormat GetFormat() => _bidonBannerAdImpl.GetFormat();
 
+        public BidonBannerSize GetSize() => _bidonBannerAdImpl.GetSize();
+
         public void SetPredefinedPosition(BidonBannerPosition position) =>
             _bidonBannerAdImpl.SetPredefinedPosition(position);
 
