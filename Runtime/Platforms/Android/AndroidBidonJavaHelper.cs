@@ -25,6 +25,7 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass AdNotReadyJClass;
         private static readonly AndroidJavaClass NoAppropriateAdUnitIdJClass;
         private static readonly AndroidJavaClass ExpiredJClass;
+        private static readonly AndroidJavaClass IncorrectAdUnitJClass;
 
         private static readonly AndroidJavaClass BannerFormatJClass;
         private static readonly AndroidJavaClass BannerPositionJClass;
@@ -54,6 +55,7 @@ namespace Bidon.Mediation
                 AdNotReadyJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$AdNotReady");
                 NoAppropriateAdUnitIdJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$NoAppropriateAdUnitId");
                 ExpiredJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$Expired");
+                IncorrectAdUnitJClass = new AndroidJavaClass("org.bidon.sdk.config.BidonError$IncorrectAdUnit");
 
                 BannerFormatJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerFormat");
                 BannerPositionJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerPosition");
@@ -224,6 +226,11 @@ namespace Bidon.Mediation
                 return BidonError.Expired;
             }
 
+            if (AndroidJNI.IsInstanceOf(cause.GetRawObject(), IncorrectAdUnitJClass.GetRawClass()))
+            {
+                return BidonError.IncorrectAdUnit;
+            }
+
             return BidonError.Unspecified;
         }
 
@@ -310,7 +317,7 @@ namespace Bidon.Mediation
             using var jList = new AndroidJavaObject("java.util.ArrayList", jMap.Call<AndroidJavaObject>("entrySet"));
 
             int countOfEntries = jList.Call<int>("size");
-            for(int i = 0; i < countOfEntries; i++)
+            for (int i = 0; i < countOfEntries; i++)
             {
                 var jEntry = jList.Call<AndroidJavaObject>("get", i);
                 outputDict.Add(jEntry.Call<string>("getKey"), GetCSharpObject(jEntry.Call<AndroidJavaObject>("getValue")));

@@ -38,5 +38,7 @@ namespace Bidon.Mediation
         NoAppropriateAdUnitId,
 
         Expired,
+
+        IncorrectAdUnit,
     }
 }
