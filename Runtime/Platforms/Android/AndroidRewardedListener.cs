@@ -16,14 +16,14 @@ namespace Bidon.Mediation
             _listener = listener;
         }
 
-        public void onAdLoaded(AndroidJavaObject ad)
+        public void onAdLoaded(AndroidJavaObject ad, AndroidJavaObject auctionInfo)
         {
-            SyncContextHelper.Post(obj => _listener?.onAdLoaded(ad));
+            SyncContextHelper.Post(obj => _listener?.onAdLoaded(ad, auctionInfo));
         }
 
-        public void onAdLoadFailed(AndroidJavaObject cause)
+        public void onAdLoadFailed(AndroidJavaObject auctionInfo, AndroidJavaObject cause)
         {
-            SyncContextHelper.Post(obj => _listener?.onAdLoadFailed(cause));
+            SyncContextHelper.Post(obj => _listener?.onAdLoadFailed(auctionInfo, cause));
         }
 
         public void onAdShown(AndroidJavaObject ad)

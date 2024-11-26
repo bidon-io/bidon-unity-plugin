@@ -24,6 +24,34 @@ typedef struct {
 } BDNUnityPluginAd;
 
 typedef struct {
+    const char* DemandId;
+    const char* Label;
+    double      Price;
+    const char* Uid;
+    const char* BidType;
+    long        FillStartTs;
+    long        FillFinishTs;
+    const char* Status;
+    const char* Ext;
+} BDNUnityPluginAdUnitInfo;
+
+typedef struct {
+    BDNUnityPluginAdUnitInfo* values;
+    int                       length;
+} BDNUnityPluginAdUnitInfoArray;
+
+typedef struct {
+    const char*                   AuctionId;
+    const char*                   AuctionConfigurationId;
+    const char*                   AuctionConfigurationUid;
+    double                        AuctionPriceFloor;
+    BDNUnityPluginAdUnitInfoArray NoBids;
+    BDNUnityPluginAdUnitInfoArray AdUnits;
+    long                          Timeout;
+    const char*                   Description;
+} BDNUnityPluginAuctionInfo;
+
+typedef struct {
     double      Revenue;
     int         RevenuePrecision;
     const char* Currency;
@@ -50,8 +78,8 @@ typedef const void* CFBDNUnityPluginRewardedAdDelegateRef;
 
 typedef void (*InitializationFinishedCallback)();
 
-typedef void (*DidLoad)(BDNUnityPluginAd* ad);
-typedef void (*DidFailToLoad)(int error);
+typedef void (*DidLoad)(BDNUnityPluginAd* ad, BDNUnityPluginAuctionInfo* auctionInfo);
+typedef void (*DidFailToLoad)(BDNUnityPluginAuctionInfo* auctionInfo, int error);
 typedef void (*DidFailToPresent)(int error);
 typedef void (*DidClick)(BDNUnityPluginAd* ad);
 typedef void (*DidExpire)(BDNUnityPluginAd* ad);

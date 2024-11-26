@@ -8,10 +8,13 @@ namespace Bidon.Mediation
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
     public class BidonAdLoadFailedEventArgs : EventArgs
     {
+        public BidonAuctionInfo AuctionInfo { get; }
+
         public BidonError Cause { get; }
 
-        public BidonAdLoadFailedEventArgs(BidonError cause)
+        public BidonAdLoadFailedEventArgs(BidonAuctionInfo auctionInfo, BidonError cause)
         {
+            AuctionInfo = auctionInfo;
             Cause = cause;
         }
     }

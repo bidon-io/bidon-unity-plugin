@@ -48,17 +48,19 @@ void BDNUnityPluginRewardedAdDelegateDestroy(CFBDNUnityPluginRewardedAdDelegateR
 
 @implementation BDNUnityPluginRewardedAdDelegate
 
-- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.rewardedDidLoadCallback) return;
 
     BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.rewardedDidLoadCallback(&unityAd);
+    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.rewardedDidLoadCallback(&unityAd, &unityAuctionInfo);
 }
 
-- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error {
+- (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.rewardedDidFailToLoadCallback) return;
 
-    self.rewardedDidFailToLoadCallback((int)error.code);
+    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.rewardedDidFailToLoadCallback(&unityAuctionInfo, (int)error.code);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
