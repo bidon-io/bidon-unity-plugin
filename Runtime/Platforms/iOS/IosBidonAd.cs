@@ -7,29 +7,26 @@ namespace Bidon.Mediation
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct IosBidonAd
     {
-        public string AdUnitId;
+        [MarshalAs(UnmanagedType.Struct)]
+        public IosBidonAdUnit AdUnit;
         public string AuctionId;
         public string CurrencyCode;
         public int AdType;
-        public int BidType;
-        public string Dsp;
         public double Ecpm;
         public string NetworkName;
-        public string RoundId;
 
         public BidonAd ToBidonAd()
         {
             return new BidonAd
             {
-                AdUnitId = AdUnitId,
+                AdUnit = AdUnit.ToBidonAdUnit(),
                 AuctionId = AuctionId,
                 CurrencyCode = CurrencyCode,
                 AdType = (BidonAdType)AdType,
-                BidType = (BidonBidType)BidType,
-                Dsp = Dsp,
+                BidType = BidonBidType.Cpm, // TODO: replace with actual value / remove after sync between native platforms
+                Dsp = "", // TODO: replace with actual value / remove after sync between native platforms
                 Ecpm = Ecpm,
                 NetworkName = NetworkName,
-                RoundId = RoundId,
             };
         }
     }

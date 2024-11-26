@@ -8,23 +8,22 @@ namespace Bidon.Mediation
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     [SuppressMessage("ReSharper", "NotAccessedField.Global")]
-    public class BidonAd
+    public class BidonAdUnit
     {
-        public BidonAdUnit AdUnit;
+        public string DemandId;
 
-        public string AuctionId;
+        public string Label;
 
-        public string CurrencyCode;
+        public double PriceFloor;
 
-        public BidonAdType AdType;
+        public string Uid;
 
         public BidonBidType BidType;
 
-        public string Dsp;
+        public long Timeout;
 
-        public double Ecpm;
-
-        public string NetworkName;
+        [NonSerialized]
+        public string ExtJson;
 
         public string ToJsonString(bool isPretty = false) => UnityEngine.JsonUtility.ToJson(this, isPretty);
     }

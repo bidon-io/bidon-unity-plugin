@@ -6,15 +6,21 @@
 //
 
 typedef struct {
-    const char* AdUnitId;
-    const char* AuctionId;
-    const char* CurrencyCode;
-    int         AdType;
+    const char* Uid;
+    const char* DemandId;
+    const char* Label;
+    double      PriceFloor;
     int         BidType;
-    const char* Dsp;
-    double      Ecpm;
-    const char* NetworkName;
-    const char* RoundId;
+    const char* Extras;
+} BDNUnityPluginAdUnit;
+
+typedef struct {
+    BDNUnityPluginAdUnit AdUnit;
+    const char*          AuctionId;
+    const char*          CurrencyCode;
+    int                  AdType;
+    double               Ecpm;
+    const char*          NetworkName;
 } BDNUnityPluginAd;
 
 typedef struct {
