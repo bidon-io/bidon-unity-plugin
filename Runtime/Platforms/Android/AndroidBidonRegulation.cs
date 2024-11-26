@@ -30,23 +30,23 @@ namespace Bidon.Mediation
                 AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
-        public BidonGdprConsentStatus GdprConsentStatus
+        public BidonGdprApplicabilityStatus GdprApplicabilityStatus
         {
             get
             {
-                string nativeGdprConsentStatus = _bidonRegulationJavaObject?.
+                string nativeGdprApplicabilityStatus = _bidonRegulationJavaObject?.
                     Call<AndroidJavaObject>("getGdpr").
                     Call<string>("name");
 
-                return nativeGdprConsentStatus switch
+                return nativeGdprApplicabilityStatus switch
                 {
-                    "Unknown" => BidonGdprConsentStatus.Unknown,
-                    "DoesNotApply" => BidonGdprConsentStatus.Denied,
-                    "Applies" => BidonGdprConsentStatus.Given,
-                    _ => throw new ArgumentOutOfRangeException(nameof(nativeGdprConsentStatus), nativeGdprConsentStatus, null)
+                    "Unknown" => BidonGdprApplicabilityStatus.Unknown,
+                    "DoesNotApply" => BidonGdprApplicabilityStatus.DoesNotApply,
+                    "Applies" => BidonGdprApplicabilityStatus.Applies,
+                    _ => throw new ArgumentOutOfRangeException(nameof(nativeGdprApplicabilityStatus), nativeGdprApplicabilityStatus, null)
                 };
             }
-            set => _bidonRegulationJavaObject?.Call("setGdpr", AndroidBidonJavaHelper.GetGdprConsentStatusJavaObject(value));
+            set => _bidonRegulationJavaObject?.Call("setGdpr", AndroidBidonJavaHelper.GetGdprApplicabilityStatusJavaObject(value));
         }
 
         public BidonCoppaApplicabilityStatus CoppaApplicabilityStatus
