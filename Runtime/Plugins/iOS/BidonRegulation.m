@@ -29,11 +29,11 @@ void BDNUnityPluginRegulationSetUsPrivacyString(const char* usPrivacy) {
     [[BDNSdk regulations] setUsPrivacyString:[NSString stringWithUTF8String:usPrivacy]];
 }
 
-int BDNUnityPluginRegulationGetGdprConsentStatus() {
+int BDNUnityPluginRegulationGetGdprApplicabilityStatus() {
     return (int)[[BDNSdk regulations] gdrpConsent];
 }
 
-void BDNUnityPluginRegulationSetGdprConsentStatus(int gdprStatus) {
+void BDNUnityPluginRegulationSetGdprApplicabilityStatus(int gdprStatus) {
     [[BDNSdk regulations] setGdrpConsent:(BDNGDPRConsentStatus)gdprStatus];
 }
 

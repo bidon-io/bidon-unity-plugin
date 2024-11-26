@@ -30,7 +30,7 @@ namespace Bidon.Mediation
         private static readonly AndroidJavaClass BannerPositionJClass;
         private static readonly AndroidJavaClass LogLevelJClass;
         private static readonly AndroidJavaClass GenderJClass;
-        private static readonly AndroidJavaClass GdprConsentStatusJClass;
+        private static readonly AndroidJavaClass GdprApplicabilityStatusJClass;
         private static readonly AndroidJavaClass CoppaApplicabilityStatusJClass;
 
         static AndroidBidonJavaHelper()
@@ -59,7 +59,7 @@ namespace Bidon.Mediation
                 BannerPositionJClass = new AndroidJavaClass("org.bidon.sdk.ads.banner.BannerPosition");
                 LogLevelJClass = new AndroidJavaClass("org.bidon.sdk.logs.logging.Logger$Level");
                 GenderJClass = new AndroidJavaClass("org.bidon.sdk.segment.models.Gender");
-                GdprConsentStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Gdpr");
+                GdprApplicabilityStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Gdpr");
                 CoppaApplicabilityStatusJClass = new AndroidJavaClass("org.bidon.sdk.regulation.Coppa");
             }
             catch (Exception e)
@@ -366,14 +366,14 @@ namespace Bidon.Mediation
             };
         }
 
-        public static AndroidJavaObject GetGdprConsentStatusJavaObject(BidonGdprConsentStatus consentStatus)
+        public static AndroidJavaObject GetGdprApplicabilityStatusJavaObject(BidonGdprApplicabilityStatus applicabilityStatus)
         {
-            return consentStatus switch
+            return applicabilityStatus switch
             {
-                BidonGdprConsentStatus.Unknown => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
-                BidonGdprConsentStatus.Denied => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "DoesNotApply"),
-                BidonGdprConsentStatus.Given => GdprConsentStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Applies"),
-                _ => throw new ArgumentOutOfRangeException(nameof(consentStatus), consentStatus, null)
+                BidonGdprApplicabilityStatus.Unknown => GdprApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Unknown"),
+                BidonGdprApplicabilityStatus.DoesNotApply => GdprApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "DoesNotApply"),
+                BidonGdprApplicabilityStatus.Applies => GdprApplicabilityStatusJClass?.CallStatic<AndroidJavaObject>("valueOf", "Applies"),
+                _ => throw new ArgumentOutOfRangeException(nameof(applicabilityStatus), applicabilityStatus, null)
             };
         }
 

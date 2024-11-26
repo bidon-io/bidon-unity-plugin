@@ -1,10 +1,10 @@
 // ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
-    public enum BidonGdprConsentStatus
+    public enum BidonGdprApplicabilityStatus
     {
         Unknown = -1,
-        Denied = 0,
-        Given = 1,
+        DoesNotApply = 0,
+        Applies = 1,
     }
 }

@@ -45,11 +45,11 @@ public class BidonDemoScript : MonoBehaviour
 
         BidonSdk.Instance.Regulation.GdprConsentString = "gdpr_consent_string";
         BidonSdk.Instance.Regulation.UsPrivacyString = "us_privacy_string";
-        BidonSdk.Instance.Regulation.GdprConsentStatus = BidonGdprConsentStatus.Given;
+        BidonSdk.Instance.Regulation.GdprApplicabilityStatus = BidonGdprApplicabilityStatus.Applies;
         BidonSdk.Instance.Regulation.CoppaApplicabilityStatus = BidonCoppaApplicabilityStatus.Yes;
         Debug.Log($"[BidonPlugin] [Regulation] Gdpr Consent String: {BidonSdk.Instance.Regulation.GdprConsentString}");
         Debug.Log($"[BidonPlugin] [Regulation] Us Privacy String: {BidonSdk.Instance.Regulation.UsPrivacyString}");
-        Debug.Log($"[BidonPlugin] [Regulation] Gdpr Consent Status: {BidonSdk.Instance.Regulation.GdprConsentStatus}");
+        Debug.Log($"[BidonPlugin] [Regulation] Gdpr Applicability Status: {BidonSdk.Instance.Regulation.GdprApplicabilityStatus}");
         Debug.Log($"[BidonPlugin] [Regulation] Coppa Applicability Status: {BidonSdk.Instance.Regulation.CoppaApplicabilityStatus}");
 
         BidonSdk.Instance.Segment.Age = 42;

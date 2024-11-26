@@ -30,16 +30,16 @@ namespace Bidon.Mediation
             set => BidonRegulationSetUsPrivacyString(value);
         }
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegulationGetGdprConsentStatus")]
-        private static extern BidonGdprConsentStatus BidonRegulationGetGdprConsentStatus();
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegulationGetGdprApplicabilityStatus")]
+        private static extern BidonGdprApplicabilityStatus BidonRegulationGetGdprApplicabilityStatus();
 
-        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegulationSetGdprConsentStatus")]
-        private static extern void BidonRegulationSetGdprConsentStatus(BidonGdprConsentStatus gdprConsentStatus);
+        [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegulationSetGdprApplicabilityStatus")]
+        private static extern void BidonRegulationSetGdprApplicabilityStatus(BidonGdprApplicabilityStatus gdprApplicabilityStatus);
 
-        public BidonGdprConsentStatus GdprConsentStatus
+        public BidonGdprApplicabilityStatus GdprApplicabilityStatus
         {
-            get => BidonRegulationGetGdprConsentStatus();
-            set => BidonRegulationSetGdprConsentStatus(value);
+            get => BidonRegulationGetGdprApplicabilityStatus();
+            set => BidonRegulationSetGdprApplicabilityStatus(value);
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRegulationGetCoppaApplicabilityStatus")]
