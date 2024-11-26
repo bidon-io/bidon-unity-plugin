@@ -15,11 +15,11 @@ namespace Bidon.Mediation
 
         private bool _disposed;
 
-        internal AndroidBidonBannerAd()
+        internal AndroidBidonBannerAd(string auctionKey)
         {
             try
             {
-                _bannerAdJavaObject = new AndroidJavaObject("org.bidon.sdk.ads.banner.BannerManager");
+                _bannerAdJavaObject = new AndroidJavaObject("org.bidon.sdk.ads.banner.BannerManager", auctionKey);
                 _activityJavaObject = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
             }
             catch (Exception e)

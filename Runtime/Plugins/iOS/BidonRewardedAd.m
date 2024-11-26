@@ -9,8 +9,9 @@
 #import <UnityAppController.h>
 #import <BidonRewardedAdDelegate.h>
 
-CFBDNUnityPluginRewardedAdRef BDNUnityPluginRewardedAdCreate(CFBDNUnityPluginRewardedAdDelegateRef delegatePtr) {
-    BDNRewardedAd* ad = [[BDNRewardedAd alloc] initWithPlacement:@"default"];
+CFBDNUnityPluginRewardedAdRef BDNUnityPluginRewardedAdCreate(const char* auctionKey, CFBDNUnityPluginRewardedAdDelegateRef delegatePtr) {
+    NSString* auctionKeyNSString = auctionKey ? [NSString stringWithUTF8String:auctionKey] : nil;
+    BDNRewardedAd* ad = [[BDNRewardedAd alloc] initWithAuctionKey:auctionKeyNSString placement:@"default"];
     ad.delegate = (__bridge BDNUnityPluginRewardedAdDelegate*)delegatePtr;
     return (__bridge_retained CFBDNUnityPluginRewardedAdRef)ad;
 }

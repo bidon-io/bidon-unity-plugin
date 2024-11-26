@@ -16,7 +16,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
-        internal EditorBidonBannerAd() { }
+        internal EditorBidonBannerAd(string auctionKey) { }
 
         public void SetFormat(BidonBannerFormat format)
         {

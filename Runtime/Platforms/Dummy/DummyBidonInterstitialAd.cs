@@ -16,7 +16,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
-        internal DummyBidonInterstitialAd() { }
+        internal DummyBidonInterstitialAd(string auctionKey) { }
 
         public void Load(double priceFloor)
         {
