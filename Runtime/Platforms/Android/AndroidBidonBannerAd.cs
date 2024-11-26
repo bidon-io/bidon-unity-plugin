@@ -53,6 +53,12 @@ namespace Bidon.Mediation
             return AndroidBidonJavaHelper.GetBannerFormat(_bannerAdJavaObject?.Call<AndroidJavaObject>("getBannerFormat"));
         }
 
+        public BidonBannerSize GetSize()
+        {
+            if (IsDisposed()) return new BidonBannerSize();
+            return AndroidBidonJavaHelper.GetBannerSize(_bannerAdJavaObject?.Call<AndroidJavaObject>("getAdSize"));
+        }
+
         public void SetPredefinedPosition(BidonBannerPosition position)
         {
             if (IsDisposed()) return;

@@ -34,6 +34,11 @@ typedef struct {
     double      amount;
 } BDNUnityPluginReward;
 
+typedef struct {
+    int Width;
+    int Height;
+} BDNUnityPluginBannerSize;
+
 typedef const void* CFBDNUnityPluginBannerAdRef;
 typedef const void* CFBDNUnityPluginBannerAdDelegateRef;
 

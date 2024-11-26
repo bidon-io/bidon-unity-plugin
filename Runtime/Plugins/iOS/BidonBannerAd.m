@@ -26,6 +26,19 @@ int BDNUnityPluginBannerAdGetFormat(CFBDNUnityPluginBannerAdRef ptr) {
     return (int)[(__bridge BDNBannerProvider*)ptr format];
 }
 
+BDNUnityPluginBannerSize* BDNUnityPluginBannerAdGetSize(CFBDNUnityPluginBannerAdRef ptr) {
+    if (!ptr) return NULL;
+    BDNUnityPluginBannerSize* bannerSize = malloc(sizeof(BDNUnityPluginBannerSize));
+    bannerSize->Width = (int)[(__bridge BDNBannerProvider*)ptr adSize].width;
+    bannerSize->Height = (int)[(__bridge BDNBannerProvider*)ptr adSize].height;
+    return bannerSize;
+}
+
+void BDNUnityPluginBannerAdFreeSizeStruct(BDNUnityPluginBannerSize* bannerSizeStructPtr)
+{
+    if (bannerSizeStructPtr) free(bannerSizeStructPtr);
+}
+
 void BDNUnityPluginBannerAdSetPredefinedPosition(CFBDNUnityPluginBannerAdRef ptr, int position) {
     if (!ptr) return;
     [(__bridge BDNBannerProvider*)ptr setFixedPosition:(BDNBannerPosition)position];

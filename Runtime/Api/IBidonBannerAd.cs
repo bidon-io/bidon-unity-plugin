@@ -17,6 +17,7 @@ namespace Bidon.Mediation
 
         void SetFormat(BidonBannerFormat format);
         BidonBannerFormat GetFormat();
+        BidonBannerSize GetSize();
         void SetPredefinedPosition(BidonBannerPosition position);
         void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle, Vector2 anchorPoint);
         void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle);

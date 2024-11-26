@@ -28,6 +28,11 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
+        public BidonBannerSize GetSize()
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetPredefinedPosition(BidonBannerPosition position)
         {
             throw new NotImplementedException();
