@@ -10,8 +10,9 @@
 #import <UnityAppController.h>
 #import <BidonBannerAdDelegate.h>
 
-CFBDNUnityPluginBannerAdRef BDNUnityPluginBannerAdCreate(CFBDNUnityPluginBannerAdDelegateRef delegatePtr) {
-    BDNBannerProvider* ad = [[BDNBannerProvider alloc] init];
+CFBDNUnityPluginBannerAdRef BDNUnityPluginBannerAdCreate(const char* auctionKey, CFBDNUnityPluginBannerAdDelegateRef delegatePtr) {
+    NSString* auctionKeyNSString = auctionKey ? [NSString stringWithUTF8String:auctionKey] : nil;
+    BDNBannerProvider* ad = [[BDNBannerProvider alloc] initWithAuctionKey:auctionKeyNSString];
     ad.delegate = (__bridge BDNUnityPluginBannerAdDelegate*)delegatePtr;
     return (__bridge_retained CFBDNUnityPluginBannerAdRef)ad;
 }

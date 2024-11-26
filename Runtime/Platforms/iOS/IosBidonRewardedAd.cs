@@ -51,9 +51,9 @@ namespace Bidon.Mediation
                                                                    UserRewardedCallback onUserRewarded);
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginRewardedAdCreate")]
-        private static extern IntPtr BidonRewardedAdCreate(IntPtr delegatePtr);
+        private static extern IntPtr BidonRewardedAdCreate(string auctionKey, IntPtr delegatePtr);
 
-        internal IosBidonRewardedAd()
+        internal IosBidonRewardedAd(string auctionKey)
         {
             _instance = this;
 
@@ -66,7 +66,7 @@ namespace Bidon.Mediation
                                                                  AdExpired,
                                                                  AdRevenueReceived,
                                                                  UserRewarded);
-            _rewardedAdPtr = BidonRewardedAdCreate(_rewardedDelegatePtr);
+            _rewardedAdPtr = BidonRewardedAdCreate(auctionKey, _rewardedDelegatePtr);
         }
 
         ~IosBidonRewardedAd() => Dispose(false);

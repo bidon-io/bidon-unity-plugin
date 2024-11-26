@@ -17,7 +17,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
 
-        internal EditorBidonRewardedAd() { }
+        internal EditorBidonRewardedAd(string auctionKey) { }
 
         public void Load(double priceFloor)
         {

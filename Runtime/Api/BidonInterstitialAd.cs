@@ -21,16 +21,16 @@ namespace Bidon.Mediation
 
         private readonly IBidonInterstitialAd _bidonInterstitialAdImpl;
 
-        public BidonInterstitialAd()
+        public BidonInterstitialAd(string auctionKey = null)
         {
 #if UNITY_EDITOR
-            _bidonInterstitialAdImpl = new EditorBidonInterstitialAd();
+            _bidonInterstitialAdImpl = new EditorBidonInterstitialAd(auctionKey);
 #elif UNITY_ANDROID
-            _bidonInterstitialAdImpl = new AndroidBidonInterstitialAd();
+            _bidonInterstitialAdImpl = new AndroidBidonInterstitialAd(auctionKey);
 #elif UNITY_IOS
-            _bidonInterstitialAdImpl = new IosBidonInterstitialAd();
+            _bidonInterstitialAdImpl = new IosBidonInterstitialAd(auctionKey);
 #else
-            _bidonInterstitialAdImpl = new DummyBidonInterstitialAd();
+            _bidonInterstitialAdImpl = new DummyBidonInterstitialAd(auctionKey);
 #endif
             InitializeCallbacks();
         }

@@ -45,9 +45,9 @@ namespace Bidon.Mediation
                                                                  AdRevenueReceivedCallback onAdRevenueReceived);
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginBannerAdCreate")]
-        private static extern IntPtr BidonBannerAdCreate(IntPtr delegatePtr);
+        private static extern IntPtr BidonBannerAdCreate(string auctionKey, IntPtr delegatePtr);
 
-        internal IosBidonBannerAd()
+        internal IosBidonBannerAd(string auctionKey)
         {
             _instance = this;
 
@@ -58,7 +58,7 @@ namespace Bidon.Mediation
                                                              AdClicked,
                                                              AdExpired,
                                                              AdRevenueReceived);
-            _bannerAdPtr = BidonBannerAdCreate(_bannerDelegatePtr);
+            _bannerAdPtr = BidonBannerAdCreate(auctionKey, _bannerDelegatePtr);
         }
 
         ~IosBidonBannerAd() => Dispose(false);

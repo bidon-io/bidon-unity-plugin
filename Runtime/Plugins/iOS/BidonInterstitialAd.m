@@ -9,8 +9,9 @@
 #import <UnityAppController.h>
 #import <BidonInterstitialAdDelegate.h>
 
-CFBDNUnityPluginInterstitialAdRef BDNUnityPluginInterstitialAdCreate(CFBDNUnityPluginInterstitialAdDelegateRef delegatePtr) {
-    BDNInterstitial* ad = [[BDNInterstitial alloc] initWithPlacement:@"default"];
+CFBDNUnityPluginInterstitialAdRef BDNUnityPluginInterstitialAdCreate(const char* auctionKey, CFBDNUnityPluginInterstitialAdDelegateRef delegatePtr) {
+    NSString* auctionKeyNSString = auctionKey ? [NSString stringWithUTF8String:auctionKey] : nil;
+    BDNInterstitial* ad = [[BDNInterstitial alloc] initWithAuctionKey:auctionKeyNSString placement:@"default"];
     ad.delegate = (__bridge BDNUnityPluginInterstitialAdDelegate*)delegatePtr;
     return (__bridge_retained CFBDNUnityPluginInterstitialAdRef)ad;
 }
