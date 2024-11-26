@@ -7,17 +7,25 @@
 
 #import <BidonHelperMethods.h>
 
+BDNUnityPluginAdUnit BDNUnityPluginHelperGetAdUnit(id<BDNAdNetworkUnit>adUnit) {
+    BDNUnityPluginAdUnit unityAdUnit;
+    unityAdUnit.Uid = adUnit.uid ? [adUnit.uid UTF8String] : nil;
+    unityAdUnit.DemandId = adUnit.demandId ? [adUnit.demandId UTF8String] : nil;
+    unityAdUnit.Label = adUnit.label ? [adUnit.label UTF8String] : nil;
+    unityAdUnit.PriceFloor = adUnit.pricefloor;
+    unityAdUnit.BidType = (int)adUnit.bidType;
+    // unityAdUnit.Extras = adUnit.extras ? [adUnit.extras UTF8String] : nil; // TODO: Convert to Json object and return as a string
+    return unityAdUnit;
+}
+
 BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad) {
     BDNUnityPluginAd unityAd;
-    unityAd.AdUnitId = ad.adUnitId ? [ad.adUnitId UTF8String] : nil;
+    unityAd.AdUnit = BDNUnityPluginHelperGetAdUnit(ad.adUnit);
     unityAd.AuctionId = ad.auctionId ? [ad.auctionId UTF8String] : nil;
     unityAd.CurrencyCode = ad.currencyCode ? [ad.currencyCode UTF8String] : nil;
     unityAd.AdType = (int)ad.adType;
-    unityAd.BidType = (int)ad.bidType;
-    unityAd.Dsp = ad.dsp ? [ad.dsp UTF8String] : nil;
-    unityAd.Ecpm = ad.eCPM;
+    unityAd.Ecpm = ad.price;
     unityAd.NetworkName = [ad.networkName UTF8String];
-    unityAd.RoundId = ad.roundId ? [ad.roundId UTF8String] : nil;
     return unityAd;
 }
 
