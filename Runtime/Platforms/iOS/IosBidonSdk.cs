@@ -1,13 +1,17 @@
-#if UNITY_IOS || BIDON_DEV_IOS
+#if UNITY_IOS || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using UnityEngine;
 using AOT;
+using UnityEngine;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
     internal class IosBidonSdk : IBidonSdk
     {
         private static IosBidonSdk _instance;
@@ -154,11 +158,11 @@ namespace Bidon.Mediation
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetLogLevel")]
-        private static extern BidonLogLevel BidonSdkGetLogLevel();
+        private static extern int BidonSdkGetLogLevel();
 
-        public BidonLogLevel GetLogLevel()
+        public BidonLogLevel? GetLogLevel()
         {
-            return BidonSdkGetLogLevel();
+            return BidonSdkGetLogLevel().ToNullableEnum<BidonLogLevel>();
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSdkGetBaseUrl")]

@@ -7,40 +7,60 @@
 
 #import <Bidon/Bidon-Swift.h>
 
-const char* BDNUnityPluginRegulationGetGdprConsentString() {
-    if ([[BDNSdk regulations] gdprConsentString]) {
-        return strdup([[[BDNSdk regulations] gdprConsentString] UTF8String]);
-    }
-    return strdup([@"" UTF8String]);
-}
-
-void BDNUnityPluginRegulationSetGdprConsentString(const char* gdprConsent) {
-    [[BDNSdk regulations] setGdprConsentString:[NSString stringWithUTF8String:gdprConsent]];
-}
-
-const char* BDNUnityPluginRegulationGetUsPrivacyString() {
-    if ([[BDNSdk regulations] usPrivacyString]) {
-        return strdup([[[BDNSdk regulations] usPrivacyString] UTF8String]);
-    }
-    return strdup([@"" UTF8String]);
-}
-
-void BDNUnityPluginRegulationSetUsPrivacyString(const char* usPrivacy) {
-    [[BDNSdk regulations] setUsPrivacyString:[NSString stringWithUTF8String:usPrivacy]];
-}
+#import <BidonUtilities.h>
 
 int BDNUnityPluginRegulationGetGdprApplicabilityStatus() {
-    return (int)[[BDNSdk regulations] gdrpConsent];
+    return (int)[[BDNSdk regulations] gdpr];
 }
 
 void BDNUnityPluginRegulationSetGdprApplicabilityStatus(int gdprStatus) {
-    [[BDNSdk regulations] setGdrpConsent:(BDNGDPRConsentStatus)gdprStatus];
+    [[BDNSdk regulations] setGdpr:(BDNGDPRAppliesStatus)gdprStatus];
+}
+
+const char* BDNUnityPluginRegulationGetGdprConsentString() {
+    NSString* consentString = [[BDNSdk regulations] gdprConsentString];
+    return CreateCString(consentString);
+}
+
+void BDNUnityPluginRegulationSetGdprConsentString(const char* gdprConsent) {
+    NSString* gdprConsentNSString = CreateNSString(gdprConsent);
+    [[BDNSdk regulations] setGdprConsentString:gdprConsentNSString];
+}
+
+bool BDNUnityPluginRegulationGetIsGdprApplied() {
+    return [[BDNSdk regulations] gdprApplies];
+}
+
+bool BDNUnityPluginRegulationGetHasGdprConsent() {
+    return [[BDNSdk regulations] hasGdprConsent];
+}
+
+const char* BDNUnityPluginRegulationGetUsPrivacyString() {
+    NSString* privacyString = [[BDNSdk regulations] usPrivacyString];
+    return CreateCString(privacyString);
+}
+
+void BDNUnityPluginRegulationSetUsPrivacyString(const char* usPrivacy) {
+    NSString* usPrivacyNSString = CreateNSString(usPrivacy);
+    [[BDNSdk regulations] setUsPrivacyString:usPrivacyNSString];
+}
+
+bool BDNUnityPluginRegulationGetIsCcpaApplied() {
+    return [[BDNSdk regulations] ccpaApplies];
+}
+
+bool BDNUnityPluginRegulationGetHasCcpaConsent() {
+    return [[BDNSdk regulations] hasCcpaConsent];
 }
 
 int BDNUnityPluginRegulationGetCoppaApplicabilityStatus() {
-    return (int)[[BDNSdk regulations] coppaApplies];
+    return (int)[[BDNSdk regulations] coppa];
 }
 
 void BDNUnityPluginRegulationSetCoppaApplicabilityStatus(int coppaStatus) {
-    [[BDNSdk regulations] setCoppaApplies:(BDNCOPPAAppliesStatus)coppaStatus];
+    [[BDNSdk regulations] setCoppa:(BDNCOPPAAppliesStatus)coppaStatus];
+}
+
+bool BDNUnityPluginRegulationGetIsCoppaApplied() {
+    return [[BDNSdk regulations] coppaApplies];
 }

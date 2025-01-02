@@ -7,11 +7,10 @@
 
 #import <Bidon/Bidon-Swift.h>
 
+#import <BidonUtilities.h>
+
 const char* BDNUnityPluginSegmentGetUid() {
-    if ([[BDNSdk segment] uid]) {
-        return strdup([[[BDNSdk segment] uid] UTF8String]);
-    }
-    return strdup([@"" UTF8String]);
+    return CreateCString([[BDNSdk segment] uid]);
 }
 
 int BDNUnityPluginSegmentGetAge() {
@@ -55,32 +54,51 @@ void BDNUnityPluginSegmentSetIsPaying(bool isPaying) {
 }
 
 const char* BDNUnityPluginSegmentGetCustomAttributes() {
-    NSError* err;
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[[BDNSdk segment] customAttributes] options:0 error:&err];
-    NSString* attributesStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return strdup([attributesStr UTF8String]);
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[[BDNSdk segment] customAttributes] options:0 error:&error];
+    if (jsonData) {
+        NSString* attributesStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        return CreateCString(attributesStr);
+    } else {
+        NSLog(@"[BidonPlugin] Failed to serialize NSDictionary to JSON: %@", error.localizedDescription);
+        return NULL;
+    }
 }
 
 void BDNUnityPluginSegmentSetCustomAttributeBool(const char* name, bool value) {
-    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithBool:value] for:[NSString stringWithUTF8String:name]];
+    NSString* nameNSString = CreateNSString(name);
+    if (!nameNSString) return;
+    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithBool:value] for:nameNSString];
 }
 
 void BDNUnityPluginSegmentSetCustomAttributeInt(const char* name, int value) {
-    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithInt:value] for:[NSString stringWithUTF8String:name]];
+    NSString* nameNSString = CreateNSString(name);
+    if (!nameNSString) return;
+    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithInt:value] for:nameNSString];
 }
 
 void BDNUnityPluginSegmentSetCustomAttributeLong(const char* name, long value) {
-    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithLong:value] for:[NSString stringWithUTF8String:name]];
+    NSString* nameNSString = CreateNSString(name);
+    if (!nameNSString) return;
+    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithLong:value] for:nameNSString];
 }
 
 void BDNUnityPluginSegmentSetCustomAttributeDouble(const char* name, double value) {
-    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithDouble:value] for:[NSString stringWithUTF8String:name]];
+    NSString* nameNSString = CreateNSString(name);
+    if (!nameNSString) return;
+    [[BDNSdk segment] setCustomAttribute:[NSNumber numberWithDouble:value] for:nameNSString];
 }
 
 void BDNUnityPluginSegmentSetCustomAttributeString(const char* name, const char* value) {
-    [[BDNSdk segment] setCustomAttribute:[NSString stringWithUTF8String:value] for:[NSString stringWithUTF8String:name]];
+    NSString* nameNSString = CreateNSString(name);
+    if (!nameNSString) return;
+    NSString* valueNSString = CreateNSString(value);
+    if (!valueNSString) return;
+    [[BDNSdk segment] setCustomAttribute:valueNSString for:nameNSString];
 }
 
 void BDNUnityPluginSegmentSetCustomAttributeNull(const char* name) {
-    [[BDNSdk segment] setCustomAttribute:nil for:[NSString stringWithUTF8String:name]];
+    NSString* nameNSString = CreateNSString(name);
+    if (!nameNSString) return;
+    [[BDNSdk segment] setCustomAttribute:nil for:nameNSString];
 }

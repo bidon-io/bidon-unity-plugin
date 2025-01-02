@@ -5,13 +5,12 @@
 //  Created by Dmitrii Feshchenko on 15/09/2023.
 //
 
-#import <UIKit/UIKit.h>
-#import <Bidon/Bidon-Swift.h>
-#import <UnityAppController.h>
 #import <BidonBannerAdDelegate.h>
+#import <BidonHelperMethods.h>
+#import <BidonUtilities.h>
 
 CFBDNUnityPluginBannerAdRef BDNUnityPluginBannerAdCreate(const char* auctionKey, CFBDNUnityPluginBannerAdDelegateRef delegatePtr) {
-    NSString* auctionKeyNSString = auctionKey ? [NSString stringWithUTF8String:auctionKey] : nil;
+    NSString* auctionKeyNSString = CreateNSString(auctionKey);
     BDNBannerProvider* ad = [[BDNBannerProvider alloc] initWithAuctionKey:auctionKeyNSString];
     ad.delegate = (__bridge BDNUnityPluginBannerAdDelegate*)delegatePtr;
     return (__bridge_retained CFBDNUnityPluginBannerAdRef)ad;
@@ -29,15 +28,7 @@ int BDNUnityPluginBannerAdGetFormat(CFBDNUnityPluginBannerAdRef ptr) {
 
 BDNUnityPluginBannerSize* BDNUnityPluginBannerAdGetSize(CFBDNUnityPluginBannerAdRef ptr) {
     if (!ptr) return NULL;
-    BDNUnityPluginBannerSize* bannerSize = malloc(sizeof(BDNUnityPluginBannerSize));
-    bannerSize->Width = (int)[(__bridge BDNBannerProvider*)ptr adSize].width;
-    bannerSize->Height = (int)[(__bridge BDNBannerProvider*)ptr adSize].height;
-    return bannerSize;
-}
-
-void BDNUnityPluginBannerAdFreeSizeStruct(BDNUnityPluginBannerSize* bannerSizeStructPtr)
-{
-    if (bannerSizeStructPtr) free(bannerSizeStructPtr);
+    return BDNUnityPluginHelperGetBannerSize([(__bridge BDNBannerProvider*)ptr adSize]);
 }
 
 void BDNUnityPluginBannerAdSetPredefinedPosition(CFBDNUnityPluginBannerAdRef ptr, int position) {
@@ -96,50 +87,73 @@ void BDNUnityPluginBannerAdDestroy(CFBDNUnityPluginBannerAdRef ptr) {
 
 void BDNUnityPluginBannerAdSetExtraDataBool(CFBDNUnityPluginBannerAdRef ptr, const char* key, bool value) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithBool:value] for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithBool:value] for:keyNSString];
 }
 
 void BDNUnityPluginBannerAdSetExtraDataInt(CFBDNUnityPluginBannerAdRef ptr, const char* key, int value) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithInt:value] for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithInt:value] for:keyNSString];
 }
 
 void BDNUnityPluginBannerAdSetExtraDataLong(CFBDNUnityPluginBannerAdRef ptr, const char* key, long value) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithLong:value] for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithLong:value] for:keyNSString];
 }
 
 void BDNUnityPluginBannerAdSetExtraDataFloat(CFBDNUnityPluginBannerAdRef ptr, const char* key, float value) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithFloat:value] for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithFloat:value] for:keyNSString];
 }
 
 void BDNUnityPluginBannerAdSetExtraDataDouble(CFBDNUnityPluginBannerAdRef ptr, const char* key, double value) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithDouble:value] for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSNumber numberWithDouble:value] for:keyNSString];
 }
 
 void BDNUnityPluginBannerAdSetExtraDataString(CFBDNUnityPluginBannerAdRef ptr, const char* key, const char* value) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:[NSString stringWithUTF8String:value] for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    NSString* valueNSString = CreateNSString(value);
+    if (!valueNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:valueNSString for:keyNSString];
 }
 
 void BDNUnityPluginBannerAdSetExtraDataNull(CFBDNUnityPluginBannerAdRef ptr, const char* key) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr setExtraValue:nil for:[NSString stringWithUTF8String:key]];
+    NSString* keyNSString = CreateNSString(key);
+    if (!keyNSString) return;
+    [(__bridge BDNBannerProvider*)ptr setExtraValue:nil for:keyNSString];
 }
 
 const char* BDNUnityPluginBannerAdGetExtraData(CFBDNUnityPluginBannerAdRef ptr) {
-    if (!ptr) return strdup([@"" UTF8String]);
-    NSError* err;
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[(__bridge BDNBannerProvider*)ptr extras] options:0 error:&err];
-    NSString* extraDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return strdup([extraDataStr UTF8String]);
+    if (!ptr) return NULL;
+    NSError* error = nil;
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:[(__bridge BDNBannerProvider*)ptr extras] options:0 error:&error];
+    if (jsonData) {
+        NSString* extraDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        return CreateCString(extraDataStr);
+    } else {
+        NSLog(@"[BidonPlugin] Failed to serialize NSDictionary to JSON: %@", error.localizedDescription);
+        return NULL;
+    }
 }
 
-void BDNUnityPluginBannerAdNotifyLoss(CFBDNUnityPluginBannerAdRef ptr, const char* winnerDemandId, double ecpm) {
+void BDNUnityPluginBannerAdNotifyLoss(CFBDNUnityPluginBannerAdRef ptr, const char* winnerDemandId, double price) {
     if (!ptr) return;
-    [(__bridge BDNBannerProvider*)ptr notifyLossWithExternalDemandId:[NSString stringWithUTF8String:winnerDemandId] eCPM:ecpm];
+    NSString* winnerNSString = CreateNSString(winnerDemandId);
+    if (!winnerNSString) return;
+    [(__bridge BDNBannerProvider*)ptr notifyLossWithExternalDemandId:winnerNSString price:price];
 }
 
 void BDNUnityPluginBannerAdNotifyWin(CFBDNUnityPluginBannerAdRef ptr) {

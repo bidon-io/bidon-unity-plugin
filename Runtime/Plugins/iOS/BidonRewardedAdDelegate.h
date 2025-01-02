@@ -6,18 +6,19 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-#import <BidonHelperMethods.h>
+
+#import <BidonUnityPluginTypes.h>
 
 @interface BDNUnityPluginRewardedAdDelegate : NSObject <BDNRewardedAdDelegate>
 
-@property (assign) DidLoad              rewardedDidLoadCallback;
-@property (assign) DidFailToLoad        rewardedDidFailToLoadCallback;
-@property (assign) WillPresent          rewardedWillPresentCallback;
-@property (assign) DidFailToPresent     rewardedDidFailToPresentCallback;
-@property (assign) DidClick             rewardedDidClickCallback;
-@property (assign) DidHide              rewardedDidHideCallback;
-@property (assign) DidExpire            rewardedDidExpireCallback;
-@property (assign) DidPayRevenue        rewardedDidPayRevenueCallback;
-@property (assign) DidReceiveReward     rewardedDidReceiveRewardCallback;
+@property (nonatomic, assign) DidLoad              rewardedDidLoadCallback;
+@property (nonatomic, assign) DidFailToLoad        rewardedDidFailToLoadCallback;
+@property (nonatomic, assign) WillPresent          rewardedWillPresentCallback;
+@property (nonatomic, assign) DidFailToPresent     rewardedDidFailToPresentCallback;
+@property (nonatomic, assign) DidClick             rewardedDidClickCallback;
+@property (nonatomic, assign) DidHide              rewardedDidHideCallback;
+@property (nonatomic, assign) DidExpire            rewardedDidExpireCallback;
+@property (nonatomic, assign) DidPayRevenue        rewardedDidPayRevenueCallback;
+@property (nonatomic, assign) DidReceiveReward     rewardedDidReceiveRewardCallback;
 
 @end

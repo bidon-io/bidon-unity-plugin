@@ -6,16 +6,17 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
+
 #import <BidonUnityPluginTypes.h>
 
 @interface BDNUnityPluginBannerAdDelegate : NSObject <BDNAdObjectDelegate>
 
-@property (assign) DidLoad              bannerDidLoadCallback;
-@property (assign) DidFailToLoad        bannerDidFailToLoadCallback;
-@property (assign) DidRecordImpression  bannerDidRecordImpressionCallback;
-@property (assign) DidFailToPresent     bannerDidFailToPresentCallback;
-@property (assign) DidClick             bannerDidClickCallback;
-@property (assign) DidExpire            bannerDidExpireCallback;
-@property (assign) DidPayRevenue        bannerDidPayRevenueCallback;
+@property (nonatomic, assign) DidLoad              bannerDidLoadCallback;
+@property (nonatomic, assign) DidFailToLoad        bannerDidFailToLoadCallback;
+@property (nonatomic, assign) DidRecordImpression  bannerDidRecordImpressionCallback;
+@property (nonatomic, assign) DidFailToPresent     bannerDidFailToPresentCallback;
+@property (nonatomic, assign) DidClick             bannerDidClickCallback;
+@property (nonatomic, assign) DidExpire            bannerDidExpireCallback;
+@property (nonatomic, assign) DidPayRevenue        bannerDidPayRevenueCallback;
 
 @end

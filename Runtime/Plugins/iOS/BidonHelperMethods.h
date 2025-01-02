@@ -6,12 +6,15 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
+
 #import <BidonUnityPluginTypes.h>
 
-extern BDNUnityPluginAd BDNUnityPluginHelperGetAd(id<BDNAd>ad);
+extern BDNUnityPluginAd* BDNUnityPluginHelperGetAd(id<BDNAd>ad);
 
-extern BDNUnityPluginAuctionInfo BDNUnityPluginHelperGetAuctionInfo(id<BDNAuctionInfo>auctionInfo);
+extern BDNUnityPluginAuctionInfo* BDNUnityPluginHelperGetAuctionInfo(id<BDNAuctionInfo>auctionInfo);
 
-extern BDNUnityPluginAdRevenue BDNUnityPluginHelperGetAdRevenue(id<BDNAdRevenue>revenue);
+extern BDNUnityPluginAdRevenue* BDNUnityPluginHelperGetAdRevenue(id<BDNAdRevenue>adRevenue);
 
-extern BDNUnityPluginReward BDNUnityPluginHelperGetReward(id<BDNReward>reward);
+extern BDNUnityPluginReward* BDNUnityPluginHelperGetReward(id<BDNReward>reward);
+
+extern BDNUnityPluginBannerSize* BDNUnityPluginHelperGetBannerSize(CGSize adSize);

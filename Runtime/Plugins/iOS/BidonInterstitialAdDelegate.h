@@ -6,17 +6,18 @@
 //
 
 #import <Bidon/Bidon-Swift.h>
-#import <BidonHelperMethods.h>
+
+#import <BidonUnityPluginTypes.h>
 
 @interface BDNUnityPluginInterstitialAdDelegate : NSObject <BDNFullscreenAdDelegate>
 
-@property (assign) DidLoad              interstitialDidLoadCallback;
-@property (assign) DidFailToLoad        interstitialDidFailToLoadCallback;
-@property (assign) WillPresent          interstitialWillPresentCallback;
-@property (assign) DidFailToPresent     interstitialDidFailToPresentCallback;
-@property (assign) DidClick             interstitialDidClickCallback;
-@property (assign) DidHide              interstitialDidHideCallback;
-@property (assign) DidExpire            interstitialDidExpireCallback;
-@property (assign) DidPayRevenue        interstitialDidPayRevenueCallback;
+@property (nonatomic, assign) DidLoad              interstitialDidLoadCallback;
+@property (nonatomic, assign) DidFailToLoad        interstitialDidFailToLoadCallback;
+@property (nonatomic, assign) WillPresent          interstitialWillPresentCallback;
+@property (nonatomic, assign) DidFailToPresent     interstitialDidFailToPresentCallback;
+@property (nonatomic, assign) DidClick             interstitialDidClickCallback;
+@property (nonatomic, assign) DidHide              interstitialDidHideCallback;
+@property (nonatomic, assign) DidExpire            interstitialDidExpireCallback;
+@property (nonatomic, assign) DidPayRevenue        interstitialDidPayRevenueCallback;
 
 @end
