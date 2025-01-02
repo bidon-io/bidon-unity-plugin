@@ -1,9 +1,11 @@
-#if UNITY_IOS || BIDON_DEV_IOS
+#if UNITY_IOS || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     internal class IosBidonSegment : IBidonSegment
@@ -11,7 +13,10 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetUid")]
         private static extern string BidonSegmentGetUid();
 
-        public string Uid => BidonSegmentGetUid();
+        public string Uid
+        {
+            get => BidonSegmentGetUid();
+        }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetAge")]
         private static extern int BidonSegmentGetAge();
@@ -19,22 +24,30 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetAge")]
         private static extern void BidonSegmentSetAge(int age);
 
-        public int Age
+        public int? Age
         {
             get => BidonSegmentGetAge();
-            set => BidonSegmentSetAge(value);
+            set
+            {
+                if (value == null) return;
+                BidonSegmentSetAge(value.Value);
+            }
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetGender")]
-        private static extern BidonUserGender BidonSegmentGetGender();
+        private static extern int BidonSegmentGetGender();
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetGender")]
         private static extern void BidonSegmentSetGender(BidonUserGender gender);
 
-        public BidonUserGender Gender
+        public BidonUserGender? Gender
         {
-            get => BidonSegmentGetGender();
-            set => BidonSegmentSetGender(value);
+            get => BidonSegmentGetGender().ToNullableEnum<BidonUserGender>();
+            set
+            {
+                if (value == null) return;
+                BidonSegmentSetGender(value.Value);
+            }
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetLevel")]
@@ -43,10 +56,14 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetLevel")]
         private static extern void BidonSegmentSetLevel(int level);
 
-        public int Level
+        public int? Level
         {
             get => BidonSegmentGetLevel();
-            set => BidonSegmentSetLevel(value);
+            set
+            {
+                if (value == null) return;
+                BidonSegmentSetLevel(value.Value);
+            }
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetTotalInAppsAmount")]
@@ -55,10 +72,14 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetTotalInAppsAmount")]
         private static extern void BidonSegmentSetTotalInAppsAmount(double inAppsAmount);
 
-        public double TotalInAppsAmount
+        public double? TotalInAppsAmount
         {
             get => BidonSegmentGetTotalInAppsAmount();
-            set => BidonSegmentSetTotalInAppsAmount(value);
+            set
+            {
+                if (value == null) return;
+                BidonSegmentSetTotalInAppsAmount(value.Value);
+            }
         }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetIsPaying")]
@@ -76,8 +97,10 @@ namespace Bidon.Mediation
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentGetCustomAttributes")]
         private static extern string BidonSegmentGetCustomAttributes();
 
-        public IDictionary<string, object> CustomAttributes =>
-            IosBidonHelper.GetDictionaryFromJsonString(BidonSegmentGetCustomAttributes());
+        public IDictionary<string, object> CustomAttributes
+        {
+            get => IosBidonHelper.GetDictionaryFromJsonString(BidonSegmentGetCustomAttributes());
+        }
 
         [DllImport("__Internal", EntryPoint = "BDNUnityPluginSegmentSetCustomAttributeBool")]
         private static extern void BidonSegmentSetCustomAttributeBool(string name, bool value);

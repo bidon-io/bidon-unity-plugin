@@ -1,21 +1,22 @@
-#if UNITY_ANDROID || UNITY_IOS || BIDON_DEV_ANDROID || BIDON_DEV_IOS
+#if UNITY_ANDROID || UNITY_IOS || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Scripting;
 
-// ReSharper Disable CheckNamespace
 namespace Bidon.Mediation
 {
     public static class SyncContextHelper
     {
         private static SynchronizationContext _unitySynchronizationContext;
 
+        [Preserve]
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void GetContext() => _unitySynchronizationContext = SynchronizationContext.Current;
 
-        public static void Post(SendOrPostCallback d, object state = null)
-        {
-            _unitySynchronizationContext.Post(d, state);
-        }
+        public static void Post(SendOrPostCallback d, object state = null) => _unitySynchronizationContext?.Post(d, state);
     }
 }
 #endif

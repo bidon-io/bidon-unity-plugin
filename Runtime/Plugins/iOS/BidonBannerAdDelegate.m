@@ -32,13 +32,13 @@ void BDNUnityPluginBannerAdDelegateDestroy(CFBDNUnityPluginBannerAdDelegateRef d
 
     BDNUnityPluginBannerAdDelegate* delegate = (__bridge_transfer BDNUnityPluginBannerAdDelegate*)delegatePtr;
 
-    delegate.bannerDidLoadCallback = nil;
-    delegate.bannerDidFailToLoadCallback = nil;
-    delegate.bannerDidRecordImpressionCallback = nil;
-    delegate.bannerDidFailToPresentCallback = nil;
-    delegate.bannerDidClickCallback = nil;
-    delegate.bannerDidExpireCallback = nil;
-    delegate.bannerDidPayRevenueCallback = nil;
+    delegate.bannerDidLoadCallback = NULL;
+    delegate.bannerDidFailToLoadCallback = NULL;
+    delegate.bannerDidRecordImpressionCallback = NULL;
+    delegate.bannerDidFailToPresentCallback = NULL;
+    delegate.bannerDidClickCallback = NULL;
+    delegate.bannerDidExpireCallback = NULL;
+    delegate.bannerDidPayRevenueCallback = NULL;
 }
 
 @implementation BDNUnityPluginBannerAdDelegate
@@ -46,23 +46,23 @@ void BDNUnityPluginBannerAdDelegateDestroy(CFBDNUnityPluginBannerAdDelegateRef d
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.bannerDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
-    self.bannerDidLoadCallback(&unityAd, &unityAuctionInfo);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAuctionInfo* unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.bannerDidLoadCallback(unityAd, unityAuctionInfo);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.bannerDidFailToLoadCallback) return;
 
-    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
-    self.bannerDidFailToLoadCallback(&unityAuctionInfo, (int)error.code);
+    BDNUnityPluginAuctionInfo* unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.bannerDidFailToLoadCallback(unityAuctionInfo, (int)error.code);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordImpression:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidRecordImpressionCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.bannerDidRecordImpressionCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.bannerDidRecordImpressionCallback(unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToPresentAd:(NSError * _Nonnull)error {
@@ -74,23 +74,23 @@ void BDNUnityPluginBannerAdDelegateDestroy(CFBDNUnityPluginBannerAdDelegateRef d
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidClickCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.bannerDidClickCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.bannerDidClickCallback(unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject>)adObject didExpireAd:(id<BDNAd>)ad {
     if (!self.bannerDidExpireCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.bannerDidExpireCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.bannerDidExpireCallback(unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.bannerDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    BDNUnityPluginAdRevenue unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
-    self.bannerDidPayRevenueCallback(&unityAd, &unityAdRevenue);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAdRevenue* unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
+    self.bannerDidPayRevenueCallback(unityAd, unityAdRevenue);
 }
 
 @end

@@ -2,7 +2,7 @@
 //  BidonUnityPluginTypes.h
 //  Bidon Unity Plugin
 //
-//  Created by Dmitrii Feshchenko on 20/09/20233.
+//  Created by Dmitrii Feshchenko on 20/09/2023.
 //
 
 typedef struct {
@@ -15,40 +15,40 @@ typedef struct {
 } BDNUnityPluginAdUnit;
 
 typedef struct {
-    BDNUnityPluginAdUnit AdUnit;
-    const char*          AuctionId;
-    const char*          CurrencyCode;
-    int                  AdType;
-    double               Ecpm;
-    const char*          NetworkName;
+    BDNUnityPluginAdUnit* AdUnit;
+    const char*           AuctionId;
+    const char*           CurrencyCode;
+    int                   AdType;
+    const char*           Dsp;
+    double                Price;
+    const char*           NetworkName;
 } BDNUnityPluginAd;
 
 typedef struct {
     const char* DemandId;
     const char* Label;
-    double      Price;
+    const char* Price; // double or NULL
     const char* Uid;
     const char* BidType;
-    long        FillStartTs;
-    long        FillFinishTs;
+    const char* FillStartTs; // long or NULL
+    const char* FillFinishTs; // long or NULL
     const char* Status;
     const char* Ext;
 } BDNUnityPluginAdUnitInfo;
 
 typedef struct {
-    BDNUnityPluginAdUnitInfo* values;
-    int                       length;
+    BDNUnityPluginAdUnitInfo** Values;
+    int                        Length;
 } BDNUnityPluginAdUnitInfoArray;
 
 typedef struct {
-    const char*                   AuctionId;
-    const char*                   AuctionConfigurationId;
-    const char*                   AuctionConfigurationUid;
-    double                        AuctionPriceFloor;
-    BDNUnityPluginAdUnitInfoArray NoBids;
-    BDNUnityPluginAdUnitInfoArray AdUnits;
-    long                          Timeout;
-    const char*                   Description;
+    const char*                    AuctionId;
+    const char*                    AuctionConfigurationId; // long or NULL
+    const char*                    AuctionConfigurationUid;
+    long                           AuctionTimeout;
+    double                         AuctionPriceFloor;
+    BDNUnityPluginAdUnitInfoArray* NoBids;
+    BDNUnityPluginAdUnitInfoArray* AdUnits;
 } BDNUnityPluginAuctionInfo;
 
 typedef struct {
@@ -58,8 +58,8 @@ typedef struct {
 } BDNUnityPluginAdRevenue;
 
 typedef struct {
-    const char* label;
-    double      amount;
+    const char* Label;
+    double      Amount;
 } BDNUnityPluginReward;
 
 typedef struct {
@@ -83,7 +83,7 @@ typedef void (*DidFailToLoad)(BDNUnityPluginAuctionInfo* auctionInfo, int error)
 typedef void (*DidFailToPresent)(int error);
 typedef void (*DidClick)(BDNUnityPluginAd* ad);
 typedef void (*DidExpire)(BDNUnityPluginAd* ad);
-typedef void (*DidPayRevenue)(BDNUnityPluginAd* ad, BDNUnityPluginAdRevenue* revenue);
+typedef void (*DidPayRevenue)(BDNUnityPluginAd* ad, BDNUnityPluginAdRevenue* adRevenue);
 
 typedef void (*DidRecordImpression)(BDNUnityPluginAd* ad);
 

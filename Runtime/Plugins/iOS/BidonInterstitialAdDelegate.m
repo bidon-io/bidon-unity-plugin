@@ -5,6 +5,7 @@
 //  Created by Dmitrii Feshchenko on 02/03/2023.
 //
 
+#import "BidonHelperMethods.h"
 #import "BidonInterstitialAdDelegate.h"
 
 CFBDNUnityPluginInterstitialAdDelegateRef BDNUnityPluginInterstitialAdDelegateCreate(DidLoad didLoadCallback,
@@ -33,14 +34,14 @@ void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdD
 
     BDNUnityPluginInterstitialAdDelegate* delegate = (__bridge_transfer BDNUnityPluginInterstitialAdDelegate*)delegatePtr;
 
-    delegate.interstitialDidLoadCallback = nil;
-    delegate.interstitialDidFailToLoadCallback = nil;
-    delegate.interstitialWillPresentCallback = nil;
-    delegate.interstitialDidFailToPresentCallback = nil;
-    delegate.interstitialDidClickCallback = nil;
-    delegate.interstitialDidHideCallback = nil;
-    delegate.interstitialDidExpireCallback = nil;
-    delegate.interstitialDidPayRevenueCallback = nil;
+    delegate.interstitialDidLoadCallback = NULL;
+    delegate.interstitialDidFailToLoadCallback = NULL;
+    delegate.interstitialWillPresentCallback = NULL;
+    delegate.interstitialDidFailToPresentCallback = NULL;
+    delegate.interstitialDidClickCallback = NULL;
+    delegate.interstitialDidHideCallback = NULL;
+    delegate.interstitialDidExpireCallback = NULL;
+    delegate.interstitialDidPayRevenueCallback = NULL;
 }
 
 @implementation BDNUnityPluginInterstitialAdDelegate
@@ -48,23 +49,23 @@ void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdD
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didLoadAd:(id<BDNAd> _Nonnull)ad auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.interstitialDidLoadCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
-    self.interstitialDidLoadCallback(&unityAd, &unityAuctionInfo);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAuctionInfo* unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.interstitialDidLoadCallback(unityAd, unityAuctionInfo);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didFailToLoadAd:(NSError * _Nonnull)error auctionInfo:(id<BDNAuctionInfo> _Nonnull)auctionInfo {
     if (!self.interstitialDidFailToLoadCallback) return;
 
-    BDNUnityPluginAuctionInfo unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
-    self.interstitialDidFailToLoadCallback(&unityAuctionInfo, (int)error.code);
+    BDNUnityPluginAuctionInfo* unityAuctionInfo = BDNUnityPluginHelperGetAuctionInfo(auctionInfo);
+    self.interstitialDidFailToLoadCallback(unityAuctionInfo, (int)error.code);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd willPresentAd:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialWillPresentCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.interstitialWillPresentCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.interstitialWillPresentCallback(unityAd);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didFailToPresentAd:(NSError * _Nonnull)error {
@@ -76,8 +77,8 @@ void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdD
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didRecordClick:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidClickCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.interstitialDidClickCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.interstitialDidClickCallback(unityAd);
 }
 
 - (void)fullscreenAd:(id<BDNFullscreenAd> _Nonnull)fullscreenAd didDismissAd:(id<BDNAd> _Nonnull)ad {
@@ -86,23 +87,23 @@ void BDNUnityPluginInterstitialAdDelegateDestroy(CFBDNUnityPluginInterstitialAdD
 
     if (!self.interstitialDidHideCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.interstitialDidHideCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.interstitialDidHideCallback(unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject>)adObject didExpireAd:(id<BDNAd>)ad {
     if (!self.interstitialDidExpireCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    self.interstitialDidExpireCallback(&unityAd);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    self.interstitialDidExpireCallback(unityAd);
 }
 
 - (void)adObject:(id<BDNAdObject> _Nonnull)adObject didPay:(id<BDNAdRevenue> _Nonnull)revenue ad:(id<BDNAd> _Nonnull)ad {
     if (!self.interstitialDidPayRevenueCallback) return;
 
-    BDNUnityPluginAd unityAd = BDNUnityPluginHelperGetAd(ad);
-    BDNUnityPluginAdRevenue unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
-    self.interstitialDidPayRevenueCallback(&unityAd, &unityAdRevenue);
+    BDNUnityPluginAd* unityAd = BDNUnityPluginHelperGetAd(ad);
+    BDNUnityPluginAdRevenue* unityAdRevenue = BDNUnityPluginHelperGetAdRevenue(revenue);
+    self.interstitialDidPayRevenueCallback(unityAd, unityAdRevenue);
 }
 
 @end
