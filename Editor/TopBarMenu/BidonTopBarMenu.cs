@@ -1,10 +1,11 @@
+// ReSharper disable CheckNamespace
+
 using UnityEditor;
 using UnityEngine;
-using Bidon.Mediation.Editor.Utilities;
-using Bidon.Mediation.Editor.PluginRemover;
+using Bidon.Mediation.PluginRemover.Editor;
+using Bidon.Mediation.Utilities.Editor;
 
-// ReSharper Disable CheckNamespace
-namespace Bidon.Mediation.Editor.TopBarMenu
+namespace Bidon.Mediation.TopBarMenu.Editor
 {
     internal class BidonTopBarMenu : ScriptableObject
     {

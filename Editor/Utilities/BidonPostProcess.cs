@@ -1,12 +1,14 @@
-#if UNITY_IOS
+#if UNITY_IOS || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
+using UnityEngine;
 
-// ReSharper Disable CheckNamespace
-namespace Bidon.Mediation.Editor.Utilities
+namespace Bidon.Mediation.Utilities.Editor
 {
     internal class BidonPostProcess : MonoBehaviour
     {
@@ -62,7 +64,7 @@ namespace Bidon.Mediation.Editor.Utilities
 
         private static void PrepareProject(string buildPath)
         {
-            Debug.Log("Preparing your Xcode project for Bidon");
+            Debug.Log("[BidonPlugin] Preparing your Xcode project...");
 
             string projectPath = PBXProject.GetPBXProjectPath(buildPath);
             var project = new PBXProject();
@@ -91,7 +93,7 @@ namespace Bidon.Mediation.Editor.Utilities
 
         private static void AddProjectFrameworks(IEnumerable<string> frameworks, PBXProject project, string target, bool weak)
         {
-            foreach (var framework in frameworks)
+            foreach (string framework in frameworks)
             {
                 if (!project.ContainsFramework(target, framework))
                 {
