@@ -1,11 +1,12 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using Bidon.Mediation;
 
-// ReSharper disable once CheckNamespace
 public class BidonInterstitialAdManager : MonoBehaviour
 {
     private BidonInterstitialAd _interstitialAd;
@@ -21,13 +22,13 @@ public class BidonInterstitialAdManager : MonoBehaviour
     {
         if (!BidonSdk.Instance.IsInitialized())
         {
-            Debug.LogWarning($"[BidonPlugin] [Interstitial] Initialize Bidon SDK first");
+            Debug.LogWarning("[BidonPlugin] [Interstitial] Initialize Bidon SDK first");
             return;
         }
 
         if (_interstitialAd != null)
         {
-            Debug.LogWarning($"[BidonPlugin] [Interstitial] Destroy previous instance first");
+            Debug.LogWarning("[BidonPlugin] [Interstitial] Destroy previous instance first");
             return;
         }
 
@@ -140,42 +141,48 @@ public class BidonInterstitialAdManager : MonoBehaviour
     #region Interstitial Ad Callbacks
     private void OnInterstitialAdLoaded(object sender, BidonAdLoadedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdLoaded raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nAuctionInfo: {args.AuctionInfo?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdLoaded raised.\n{eventArgs}");
     }
 
     private void OnInterstitialAdLoadFailed(object sender, BidonAdLoadFailedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdLoadFailed raised. Reason: {args.Cause.ToString()}");
+        string eventArgs = $"Reason: {args.Cause.ToString()}";
+        eventArgs += $"\nAuctionInfo: {args.AuctionInfo?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdLoadFailed raised.\n{eventArgs}");
     }
 
     private void OnInterstitialAdShown(object sender, BidonAdShownEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdShown raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdShown raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnInterstitialAdShowFailed(object sender, BidonAdShowFailedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdShowFailed raised. Reason: {args.Cause.ToString()}");
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdShowFailed raised.\nReason: {args.Cause.ToString()}");
     }
 
     private void OnInterstitialAdClicked(object sender, BidonAdClickedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdClicked raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdClicked raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnInterstitialAdClosed(object sender, BidonAdClosedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdClosed raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdClosed raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnInterstitialAdExpired(object sender, BidonAdExpiredEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdExpired raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdExpired raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnInterstitialAdRevenueReceived(object sender, BidonAdRevenueReceivedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdRevenueReceived raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}, AdValue: {args.AdValue?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nAdValue: {args.AdValue?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Interstitial] OnAdRevenueReceived raised.\n{eventArgs}");
     }
     #endregion
 }

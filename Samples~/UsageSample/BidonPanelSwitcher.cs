@@ -1,10 +1,11 @@
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Assertions;
+// ReSharper disable CheckNamespace
 
-// ReSharper disable once CheckNamespace
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.UI;
+
 public class BidonPanelSwitcher : MonoBehaviour
 {
     [SerializeField] private List<GameObject>   panels;

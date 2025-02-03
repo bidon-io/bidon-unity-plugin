@@ -1,11 +1,12 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using Bidon.Mediation;
 
-// ReSharper disable once CheckNamespace
 public class BidonRewardedAdManager : MonoBehaviour
 {
     private BidonRewardedAd _rewardedAd;
@@ -21,13 +22,13 @@ public class BidonRewardedAdManager : MonoBehaviour
     {
         if (!BidonSdk.Instance.IsInitialized())
         {
-            Debug.LogWarning($"[BidonPlugin] [Rewarded] Initialize Bidon SDK first");
+            Debug.LogWarning("[BidonPlugin] [Rewarded] Initialize Bidon SDK first");
             return;
         }
 
         if (_rewardedAd != null)
         {
-            Debug.LogWarning($"[BidonPlugin] [Rewarded] Destroy previous instance first");
+            Debug.LogWarning("[BidonPlugin] [Rewarded] Destroy previous instance first");
             return;
         }
 
@@ -123,7 +124,7 @@ public class BidonRewardedAdManager : MonoBehaviour
         _rewardedAd.OnAdClosed += OnRewardedAdClosed;
         _rewardedAd.OnAdExpired += OnRewardedAdExpired;
         _rewardedAd.OnAdRevenueReceived += OnRewardedAdRevenueReceived;
-        _rewardedAd.OnUserRewarded += OnRewardedUserRewarded;
+        _rewardedAd.OnUserRewarded += OnRewardedAdUserRewarded;
     }
 
     private void UnsubscribeFromRewardedEvents()
@@ -136,53 +137,61 @@ public class BidonRewardedAdManager : MonoBehaviour
         _rewardedAd.OnAdClosed -= OnRewardedAdClosed;
         _rewardedAd.OnAdExpired -= OnRewardedAdExpired;
         _rewardedAd.OnAdRevenueReceived -= OnRewardedAdRevenueReceived;
-        _rewardedAd.OnUserRewarded -= OnRewardedUserRewarded;
+        _rewardedAd.OnUserRewarded -= OnRewardedAdUserRewarded;
     }
 
     #region Rewarded Ad Callbacks
     private void OnRewardedAdLoaded(object sender, BidonAdLoadedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdLoaded raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nAuctionInfo: {args.AuctionInfo?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdLoaded raised.\n{eventArgs}");
     }
 
     private void OnRewardedAdLoadFailed(object sender, BidonAdLoadFailedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdLoadFailed raised. Reason: {args.Cause.ToString()}");
+        string eventArgs = $"Reason: {args.Cause.ToString()}";
+        eventArgs += $"\nAuctionInfo: {args.AuctionInfo?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdLoadFailed raised.\n{eventArgs}");
     }
 
     private void OnRewardedAdShown(object sender, BidonAdShownEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdShown raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdShown raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnRewardedAdShowFailed(object sender, BidonAdShowFailedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdShowFailed raised. Reason: {args.Cause.ToString()}");
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdShowFailed raised.\nReason: {args.Cause.ToString()}");
     }
 
     private void OnRewardedAdClicked(object sender, BidonAdClickedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdClicked raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdClicked raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnRewardedAdClosed(object sender, BidonAdClosedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdClosed raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdClosed raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnRewardedAdExpired(object sender, BidonAdExpiredEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdExpired raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdExpired raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnRewardedAdRevenueReceived(object sender, BidonAdRevenueReceivedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdRevenueReceived raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}, AdValue: {args.AdValue?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nAdValue: {args.AdValue?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnAdRevenueReceived raised.\n{eventArgs}");
     }
 
-    private void OnRewardedUserRewarded(object sender, BidonUserRewardedEventArgs args)
+    private void OnRewardedAdUserRewarded(object sender, BidonUserRewardedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnUserRewarded raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}, Reward: {args.Reward?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nReward: {args.Reward?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Rewarded] OnUserRewarded raised.\n{eventArgs}");
     }
     #endregion
 }
