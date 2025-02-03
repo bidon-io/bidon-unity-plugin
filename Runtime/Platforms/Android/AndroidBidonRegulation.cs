@@ -1,9 +1,10 @@
-#if UNITY_ANDROID || BIDON_DEV_ANDROID
-using System;
+#if UNITY_ANDROID || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
@@ -16,56 +17,53 @@ namespace Bidon.Mediation
             _bidonRegulationJavaObject = bidonRegulationJavaObject;
         }
 
+        public BidonGdprApplicabilityStatus GdprApplicabilityStatus
+        {
+            get => _bidonRegulationJavaObject.SafeCall<AndroidJavaObject>("getGdpr").ToBidonGdprApplicabilityStatus();
+            set => _bidonRegulationJavaObject.SafeCall("setGdpr", value.ToJavaObject());
+        }
+
         public string GdprConsentString
         {
-            get => _bidonRegulationJavaObject?.Call<string>("getGdprConsentString") ?? "";
-            set => _bidonRegulationJavaObject?.Call("setGdprConsentString",
-                AndroidBidonJavaHelper.GetJavaObject(value));
+            get => _bidonRegulationJavaObject.SafeCall<string>("getGdprConsentString");
+            set => _bidonRegulationJavaObject.SafeCall("setGdprConsentString", AndroidBidonJavaHelper.GetJavaObject(value));
+        }
+
+        public bool IsGdprApplied
+        {
+            get => _bidonRegulationJavaObject.SafeCall<bool>("getGdprApplies");
+        }
+
+        public bool HasGdprConsent
+        {
+            get => _bidonRegulationJavaObject.SafeCall<bool>("getHasGdprConsent");
         }
 
         public string UsPrivacyString
         {
-            get => _bidonRegulationJavaObject?.Call<string>("getUsPrivacyString") ?? "";
-            set => _bidonRegulationJavaObject?.Call("setUsPrivacyString",
-                AndroidBidonJavaHelper.GetJavaObject(value));
+            get => _bidonRegulationJavaObject.SafeCall<string>("getUsPrivacyString");
+            set => _bidonRegulationJavaObject.SafeCall("setUsPrivacyString", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
-        public BidonGdprApplicabilityStatus GdprApplicabilityStatus
+        public bool IsCcpaApplied
         {
-            get
-            {
-                string nativeGdprApplicabilityStatus = _bidonRegulationJavaObject?.
-                    Call<AndroidJavaObject>("getGdpr").
-                    Call<string>("name");
+            get => _bidonRegulationJavaObject.SafeCall<bool>("getCcpaApplies");
+        }
 
-                return nativeGdprApplicabilityStatus switch
-                {
-                    "Unknown" => BidonGdprApplicabilityStatus.Unknown,
-                    "DoesNotApply" => BidonGdprApplicabilityStatus.DoesNotApply,
-                    "Applies" => BidonGdprApplicabilityStatus.Applies,
-                    _ => throw new ArgumentOutOfRangeException(nameof(nativeGdprApplicabilityStatus), nativeGdprApplicabilityStatus, null)
-                };
-            }
-            set => _bidonRegulationJavaObject?.Call("setGdpr", AndroidBidonJavaHelper.GetGdprApplicabilityStatusJavaObject(value));
+        public bool HasCcpaConsent
+        {
+            get => _bidonRegulationJavaObject.SafeCall<bool>("getHasCcpaConsent");
         }
 
         public BidonCoppaApplicabilityStatus CoppaApplicabilityStatus
         {
-            get
-            {
-                string nativeCoppaApplicabilityStatus = _bidonRegulationJavaObject?.
-                    Call<AndroidJavaObject>("getCoppa").
-                    Call<string>("name");
+            get => _bidonRegulationJavaObject.SafeCall<AndroidJavaObject>("getCoppa").ToBidonCoppaApplicabilityStatus();
+            set => _bidonRegulationJavaObject.SafeCall("setCoppa", value.ToJavaObject());
+        }
 
-                return nativeCoppaApplicabilityStatus switch
-                {
-                    "Unknown" => BidonCoppaApplicabilityStatus.Unknown,
-                    "No" => BidonCoppaApplicabilityStatus.No,
-                    "Yes" => BidonCoppaApplicabilityStatus.Yes,
-                    _ => throw new ArgumentOutOfRangeException(nameof(nativeCoppaApplicabilityStatus), nativeCoppaApplicabilityStatus, null)
-                };
-            }
-            set => _bidonRegulationJavaObject?.Call("setCoppa", AndroidBidonJavaHelper.GetCoppaApplicabilityStatusJavaObject(value));
+        public bool IsCoppaApplied
+        {
+            get => _bidonRegulationJavaObject.SafeCall<bool>("getCoppaApplies");
         }
     }
 }

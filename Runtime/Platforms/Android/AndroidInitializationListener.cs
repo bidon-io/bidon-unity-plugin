@@ -1,12 +1,12 @@
-#if UNITY_ANDROID || BIDON_DEV_ANDROID
-using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
+#if UNITY_ANDROID || BIDON_DEV
 
-// ReSharper Disable CheckNamespace
+// ReSharper disable CheckNamespace
+
+using UnityEngine;
+using UnityEngine.Scripting;
+
 namespace Bidon.Mediation
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public class AndroidInitializationListener : AndroidJavaProxy, IAndroidInInitializationListener
     {
         private readonly IAndroidInInitializationListener _listener;
@@ -16,6 +16,7 @@ namespace Bidon.Mediation
             _listener = listener;
         }
 
+        [Preserve]
         public void onFinished()
         {
             SyncContextHelper.Post(obj => _listener?.onFinished());
