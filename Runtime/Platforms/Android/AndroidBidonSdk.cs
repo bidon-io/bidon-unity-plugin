@@ -1,16 +1,17 @@
-#if UNITY_ANDROID || BIDON_DEV_ANDROID
+#if UNITY_ANDROID || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
+using UnityEngine.Scripting;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
     internal class AndroidBidonSdk : IBidonSdk, IAndroidInInitializationListener
     {
-        private readonly AndroidJavaObject _bidonSdkJavaClass;
+        private readonly AndroidJavaClass _bidonSdkJavaClass;
         private readonly AndroidJavaObject _activityJavaObject;
 
         public IBidonSegment Segment { get; }
@@ -20,109 +21,95 @@ namespace Bidon.Mediation
 
         internal AndroidBidonSdk()
         {
-            try
-            {
-                _bidonSdkJavaClass = new AndroidJavaClass("org.bidon.sdk.BidonSdk");
-                _activityJavaObject = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"BidonSdk operation is not possible due to incorrect integration: {e.Message}");
-                return;
-            }
+            _bidonSdkJavaClass = AndroidBidonFactory.SafeCreateJavaClass("org.bidon.sdk.BidonSdk");
+            _activityJavaObject = AndroidBidonFactory.SafeGetCurrentActivityJavaObject();
 
-            Segment = new AndroidBidonSegment(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getSegment"));
-            Regulation = new AndroidBidonRegulation(_bidonSdkJavaClass.CallStatic<AndroidJavaObject>("getRegulation"));
+            if (_bidonSdkJavaClass == null || _activityJavaObject == null) return;
 
-            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFramework", "unity");
-            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setFrameworkVersion", Application.unityVersion);
-            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setPluginVersion", BidonSdk.PluginVersion);
+            Segment = new AndroidBidonSegment(_bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("getSegment"));
+            Regulation = new AndroidBidonRegulation(_bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("getRegulation"));
 
-            _bidonSdkJavaClass.CallStatic<AndroidJavaObject>("setInitializationCallback", new AndroidInitializationListener(this));
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setFramework", "unity");
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setFrameworkVersion", Application.unityVersion);
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setPluginVersion", BidonSdk.PluginVersion);
+
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setInitializationCallback", new AndroidInitializationListener(this));
         }
 
         public void SetLogLevel(BidonLogLevel logLevel)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setLoggerLevel", AndroidBidonJavaHelper.GetLogLevelJavaObject(logLevel));
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setLoggerLevel", logLevel.ToJavaObject());
         }
 
         public void SetTestMode(bool isEnabled)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setTestMode", isEnabled);
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setTestMode", isEnabled);
         }
 
         public bool IsTestModeEnabled()
         {
-            return _bidonSdkJavaClass?.CallStatic<bool>("isTestMode") ?? false;
+            return _bidonSdkJavaClass.SafeCallStatic<bool>("isTestMode");
         }
 
         public void SetBaseUrl(string baseUrl)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("setBaseUrl", baseUrl);
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("setBaseUrl", baseUrl);
         }
 
         public void SetExtraData(string key, object value)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("addExtra", key,
-                value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
+            if (String.IsNullOrEmpty(key)) return;
+            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
+                && !(value is double) && !(value is string) && value != null) return;
+
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("addExtra", key, AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public IDictionary<string, object> GetExtraData()
         {
-            return AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("getExtras"));
+            return AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("getExtras"));
         }
 
         public void RegisterDefaultAdapters()
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("registerDefaultAdapters");
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("registerDefaultAdapters");
         }
 
         public void RegisterAdapter(string className)
         {
-            _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("registerAdapter", className);
+            _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("registerAdapter", className);
         }
 
         public void Initialize(string appKey)
         {
-            _bidonSdkJavaClass?.CallStatic("initialize", _activityJavaObject, appKey);
+            _bidonSdkJavaClass.SafeCallStatic("initialize", _activityJavaObject, appKey);
         }
 
         public string GetSdkVersion()
         {
-            return _bidonSdkJavaClass?.GetStatic<string>("SdkVersion") ?? String.Empty;
+            return _bidonSdkJavaClass.SafeGetStatic<string>("SdkVersion");
         }
 
-        public BidonLogLevel GetLogLevel()
+        public BidonLogLevel? GetLogLevel()
         {
-            string nativeLogLevel = _bidonSdkJavaClass?.CallStatic<AndroidJavaObject>("getLoggerLevel").Call<string>("name");
-
-            return nativeLogLevel switch
-            {
-                "Off" => BidonLogLevel.Off,
-                "Error" => BidonLogLevel.Error,
-                "Verbose" => BidonLogLevel.Verbose,
-                _ => throw new ArgumentOutOfRangeException(nameof(nativeLogLevel), nativeLogLevel, null)
-            };
+            return _bidonSdkJavaClass.SafeCallStatic<AndroidJavaObject>("getLoggerLevel").ToBidonLogLevel();
         }
 
         public string GetBaseUrl()
         {
-            return _bidonSdkJavaClass?.CallStatic<string>("getBaseUrl") ?? String.Empty;
+            return _bidonSdkJavaClass.SafeCallStatic<string>("getBaseUrl");
         }
 
         public bool IsInitialized()
         {
-            return _bidonSdkJavaClass?.CallStatic<bool>("isInitialized") ?? false;
+            return _bidonSdkJavaClass.SafeCallStatic<bool>("isInitialized");
         }
 
-        #region Callbacks
-
+        [Preserve]
         public void onFinished()
         {
             OnInitializationFinished?.Invoke(this, new BidonInitializationEventArgs());
         }
-
-        #endregion
     }
 }
 #endif

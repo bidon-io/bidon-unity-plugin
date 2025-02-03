@@ -3,13 +3,14 @@
 // ReSharper disable CheckNamespace
 
 using System.Diagnostics.CodeAnalysis;
+using UnityEngine;
 
 namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    internal interface IAndroidInInitializationListener
+    internal interface IAndroidAdRevenueListener
     {
-        void onFinished();
+        void onRevenuePaid(AndroidJavaObject ad, AndroidJavaObject adValue);
     }
 }
 #endif

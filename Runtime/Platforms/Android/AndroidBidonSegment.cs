@@ -1,13 +1,13 @@
-#if UNITY_ANDROID || BIDON_DEV_ANDROID
+#if UNITY_ANDROID || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
-    [SuppressMessage("ReSharper", "UnusedType.Global")]
     internal class AndroidBidonSegment : IBidonSegment
     {
         private readonly AndroidJavaObject _bidonSegmentJavaObject;
@@ -19,40 +19,43 @@ namespace Bidon.Mediation
 
         public string Uid
         {
-            get => _bidonSegmentJavaObject?.Call<string>("getSegmentUid") ?? String.Empty;
+            get => _bidonSegmentJavaObject.SafeCall<string>("getSegmentUid");
         }
 
-        public int Age
+        public int? Age
         {
-            get => _bidonSegmentJavaObject?.Call<AndroidJavaObject>("getAge").Call<int>("intValue") ?? -1;
-            set => _bidonSegmentJavaObject?.Call("setAge", AndroidBidonJavaHelper.GetJavaObject(value));
+            get => _bidonSegmentJavaObject.SafeCall<AndroidJavaObject>("getAge")?.SafeCall<int>("intValue");
+            set => _bidonSegmentJavaObject.SafeCall("setAge", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
-        public BidonUserGender Gender
+        public BidonUserGender? Gender
         {
-            get => AndroidBidonJavaHelper.GetBidonUserGender(_bidonSegmentJavaObject?.Call<AndroidJavaObject>("getGender"));
-            set => _bidonSegmentJavaObject?.Call("setGender", AndroidBidonJavaHelper.GetGenderJavaObject(value));
+            get => _bidonSegmentJavaObject.SafeCall<AndroidJavaObject>("getGender").ToBidonUserGender();
+            set => _bidonSegmentJavaObject.SafeCall("setGender", value.ToJavaObject());
         }
 
-        public int Level
+        public int? Level
         {
-            get => _bidonSegmentJavaObject?.Call<AndroidJavaObject>("getLevel").Call<int>("intValue") ?? -1;
-            set => _bidonSegmentJavaObject?.Call("setLevel", AndroidBidonJavaHelper.GetJavaObject(value));
+            get => _bidonSegmentJavaObject.SafeCall<AndroidJavaObject>("getLevel")?.SafeCall<int>("intValue");
+            set => _bidonSegmentJavaObject.SafeCall("setLevel", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
-        public double TotalInAppsAmount
+        public double? TotalInAppsAmount
         {
-            get => _bidonSegmentJavaObject?.Call<AndroidJavaObject>("getTotalInAppAmount").Call<double>("doubleValue") ?? -1d;
-            set => _bidonSegmentJavaObject?.Call("setTotalInAppAmount", AndroidBidonJavaHelper.GetJavaObject(value));
+            get => _bidonSegmentJavaObject.SafeCall<AndroidJavaObject>("getTotalInAppAmount")?.SafeCall<double>("doubleValue");
+            set => _bidonSegmentJavaObject.SafeCall("setTotalInAppAmount", AndroidBidonJavaHelper.GetJavaObject(value));
         }
 
         public bool IsPaying
         {
-            get => _bidonSegmentJavaObject?.Call<bool>("isPaying") ?? false;
-            set => _bidonSegmentJavaObject?.Call("setPaying", value);
+            get => _bidonSegmentJavaObject.SafeCall<bool>("isPaying");
+            set => _bidonSegmentJavaObject.SafeCall("setPaying", value);
         }
 
-        public IDictionary<string, object> CustomAttributes => new Dictionary<string, object>();
+        public IDictionary<string, object> CustomAttributes
+        {
+            get => AndroidBidonJavaHelper.GetDictionaryFromJavaMap(_bidonSegmentJavaObject.SafeCall<AndroidJavaObject>("getCustomAttributes"));
+        }
 
         public void SetCustomAttribute(string name, object value)
         {
@@ -60,9 +63,7 @@ namespace Bidon.Mediation
             if (!(value is bool) && !(value is int) && !(value is long) && !(value is double)
                 && !(value is string) && value != null) return;
 
-            _bidonSegmentJavaObject?.Call("putCustomAttribute",
-                AndroidBidonJavaHelper.GetJavaObject(name),
-                value == null ? null : AndroidBidonJavaHelper.GetJavaObject(value));
+            _bidonSegmentJavaObject.SafeCall("putCustomAttribute", name, AndroidBidonJavaHelper.GetJavaObject(value));
         }
     }
 }
