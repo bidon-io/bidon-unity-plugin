@@ -1,11 +1,12 @@
-﻿using System;
+﻿// ReSharper disable CheckNamespace
+
+using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using Bidon.Mediation;
 
-// ReSharper disable once CheckNamespace
 public class BidonDemoScript : MonoBehaviour
 {
     [SerializeField] private Button initButton;
@@ -19,6 +20,7 @@ public class BidonDemoScript : MonoBehaviour
         Assert.IsNotNull(versionText);
         Assert.IsNotNull(logLevelDropdown);
         Assert.IsNotNull(testModeToggle);
+
         logLevelDropdown.ClearOptions();
         logLevelDropdown.AddOptions(Enum.GetNames(typeof(BidonLogLevel)).ToList());
         versionText.text = $"plugin v{BidonSdk.PluginVersion}";
@@ -26,16 +28,18 @@ public class BidonDemoScript : MonoBehaviour
 
     public void InitBidonSdk()
     {
-        BidonSdk.Instance.OnInitializationFinished += (sender, args) =>
+        BidonSdk.Instance.OnInitializationFinished += (_, _) =>
         {
             versionText.text = $"plugin v{BidonSdk.PluginVersion} & sdk v{BidonSdk.Instance.GetSdkVersion()}";
 
             Debug.Log("[BidonPlugin] [Event] [SDK] OnInitializationFinished raised");
+
             Debug.Log($"[BidonPlugin] [SDK] Is Initialized: {BidonSdk.Instance.IsInitialized()}");
-            Debug.Log($"[BidonPlugin] [SDK] Current Log Level: {BidonSdk.Instance.GetLogLevel().ToString()}");
             Debug.Log($"[BidonPlugin] [SDK] Is Test Mode Enabled: {BidonSdk.Instance.IsTestModeEnabled()}");
-            Debug.Log($"[BidonPlugin] [Segment] Uid: {BidonSdk.Instance.Segment.Uid}");
+            Debug.Log($"[BidonPlugin] [SDK] Current Log Level: {BidonSdk.Instance.GetLogLevel()?.ToString() ?? "null"}");
             Debug.Log($"[BidonPlugin] [SDK] Base URL: {BidonSdk.Instance.GetBaseUrl()}");
+
+            Debug.Log($"[BidonPlugin] [Segment] Uid: {BidonSdk.Instance.Segment.Uid ?? "null"}");
         };
 
         BidonSdk.Instance.SetLogLevel((BidonLogLevel)logLevelDropdown.value);
@@ -43,39 +47,8 @@ public class BidonDemoScript : MonoBehaviour
 
         BidonSdk.Instance.SetBaseUrl("https://b.appbaqend.com");
 
-        BidonSdk.Instance.Regulation.GdprConsentString = "gdpr_consent_string";
-        BidonSdk.Instance.Regulation.UsPrivacyString = "us_privacy_string";
-        BidonSdk.Instance.Regulation.GdprApplicabilityStatus = BidonGdprApplicabilityStatus.Applies;
-        BidonSdk.Instance.Regulation.CoppaApplicabilityStatus = BidonCoppaApplicabilityStatus.Yes;
-        Debug.Log($"[BidonPlugin] [Regulation] Gdpr Consent String: {BidonSdk.Instance.Regulation.GdprConsentString}");
-        Debug.Log($"[BidonPlugin] [Regulation] Us Privacy String: {BidonSdk.Instance.Regulation.UsPrivacyString}");
-        Debug.Log($"[BidonPlugin] [Regulation] Gdpr Applicability Status: {BidonSdk.Instance.Regulation.GdprApplicabilityStatus}");
-        Debug.Log($"[BidonPlugin] [Regulation] Coppa Applicability Status: {BidonSdk.Instance.Regulation.CoppaApplicabilityStatus}");
-
-        BidonSdk.Instance.Segment.Age = 42;
-        BidonSdk.Instance.Segment.Gender = BidonUserGender.Male;
-        BidonSdk.Instance.Segment.Level = 11;
-        BidonSdk.Instance.Segment.TotalInAppsAmount = Double.MaxValue;
-        BidonSdk.Instance.Segment.IsPaying = true;
-        Debug.Log($"[BidonPlugin] [Segment] Age: {BidonSdk.Instance.Segment.Age}");
-        Debug.Log($"[BidonPlugin] [Segment] Gender: {BidonSdk.Instance.Segment.Gender}");
-        Debug.Log($"[BidonPlugin] [Segment] Level: {BidonSdk.Instance.Segment.Level}");
-        Debug.Log($"[BidonPlugin] [Segment] In-Apps Amount: {BidonSdk.Instance.Segment.TotalInAppsAmount}");
-        Debug.Log($"[BidonPlugin] [Segment] Is Paying: {BidonSdk.Instance.Segment.IsPaying}");
-
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_bool_attr", true);
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_int_attr", Int32.MinValue);
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_long_attr", Int64.MaxValue);
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_double_attr", Double.MinValue);
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_string_attr", "segment_string_value");
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unsupported_attr", 'u');
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unwanted_attr", false);
-        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unwanted_attr", null);
-        string attributes = String.Join(", ",
-            BidonSdk.Instance.Segment.CustomAttributes
-                .Select(attr => $"{attr.Key}:({attr.Value.GetType()}){attr.Value}")
-                .ToArray());
-        Debug.Log($"[BidonPlugin] [Segment] Custom Attributes: {attributes}");
+        CheckSegment();
+        CheckRegulations();
 
         BidonSdk.Instance.SetExtraData("sdk_extra_bool_key", false);
         BidonSdk.Instance.SetExtraData("sdk_extra_char_key", 'v');
@@ -92,9 +65,9 @@ public class BidonDemoScript : MonoBehaviour
         Debug.Log($"[BidonPlugin] [Sdk] Extra Data: {extraData}");
 
 #if UNITY_ANDROID
-        BidonSdk.Instance.RegisterAdapter("org.bidon.admob.AdmobAdapter");
+        BidonSdk.Instance.RegisterAdapter(BidonConstants.AdapterNames.GoogleMobileAds);
 #elif UNITY_IOS
-        BidonSdk.Instance.RegisterAdapter("BidonAdapterAppLovin.AppLovinDemandSourceAdapter");
+        BidonSdk.Instance.RegisterAdapter(BidonConstants.AdapterNames.AppLovin);
 #endif
 
         BidonSdk.Instance.RegisterDefaultAdapters();
@@ -110,5 +83,80 @@ public class BidonDemoScript : MonoBehaviour
 #endif
 
         initButton.interactable = false;
+    }
+
+    private static void CheckSegment()
+    {
+        Debug.Log($"[BidonPlugin] [Segment] Age (1/2): {BidonSdk.Instance.Segment.Age?.ToString() ?? "null"}");
+        BidonSdk.Instance.Segment.Age = 42;
+        Debug.Log($"[BidonPlugin] [Segment] Age (2/2): {BidonSdk.Instance.Segment.Age?.ToString() ?? "null"}");
+
+        Debug.Log($"[BidonPlugin] [Segment] Gender (1/2): {BidonSdk.Instance.Segment.Gender?.ToString() ?? "null"}");
+        BidonSdk.Instance.Segment.Gender = BidonUserGender.Male;
+        Debug.Log($"[BidonPlugin] [Segment] Gender (2/2): {BidonSdk.Instance.Segment.Gender?.ToString() ?? "null"}");
+
+        Debug.Log($"[BidonPlugin] [Segment] Level (1/2): {BidonSdk.Instance.Segment.Level?.ToString() ?? "null"}");
+        BidonSdk.Instance.Segment.Level = 11;
+        Debug.Log($"[BidonPlugin] [Segment] Level (2/2): {BidonSdk.Instance.Segment.Level?.ToString() ?? "null"}");
+
+        Debug.Log($"[BidonPlugin] [Segment] In-Apps Amount (1/2): {BidonSdk.Instance.Segment.TotalInAppsAmount?.ToString() ?? "null"}");
+        BidonSdk.Instance.Segment.TotalInAppsAmount = Double.MaxValue;
+        Debug.Log($"[BidonPlugin] [Segment] In-Apps Amount (2/2): {BidonSdk.Instance.Segment.TotalInAppsAmount?.ToString() ?? "null"}");
+
+        Debug.Log($"[BidonPlugin] [Segment] Is Paying (1/2): {BidonSdk.Instance.Segment.IsPaying}");
+        BidonSdk.Instance.Segment.IsPaying = true;
+        Debug.Log($"[BidonPlugin] [Segment] Is Paying (2/2): {BidonSdk.Instance.Segment.IsPaying}");
+
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_bool_attr", true);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_int_attr", Int32.MinValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_long_attr", Int64.MaxValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_double_attr", Double.MinValue);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_string_attr", "segment_string_value");
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unsupported_attr", 'u');
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unwanted_attr", false);
+        BidonSdk.Instance.Segment.SetCustomAttribute("segment_unwanted_attr", null);
+        string attributes = String.Join(", ",
+            BidonSdk.Instance.Segment.CustomAttributes
+                .Select(attr => $"{attr.Key}:({attr.Value.GetType()}){attr.Value}")
+                .ToArray());
+        Debug.Log($"[BidonPlugin] [Segment] Custom Attributes: {attributes}");
+    }
+
+    private static void CheckRegulations()
+    {
+        // GDPR
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Is Applied (1/2): {BidonSdk.Instance.Regulation.IsGdprApplied}");
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Has Consent (1/2): {BidonSdk.Instance.Regulation.HasGdprConsent}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Applicability Status (1/2): {BidonSdk.Instance.Regulation.GdprApplicabilityStatus}");
+        BidonSdk.Instance.Regulation.GdprApplicabilityStatus = BidonGdprApplicabilityStatus.Applies;
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Applicability Status (2/2): {BidonSdk.Instance.Regulation.GdprApplicabilityStatus}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Consent String (1/2): {BidonSdk.Instance.Regulation.GdprConsentString ?? "null"}");
+        BidonSdk.Instance.Regulation.GdprConsentString = "gdpr_consent_string";
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Consent String (2/2): {BidonSdk.Instance.Regulation.GdprConsentString ?? "null"}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Is Applied (2/2): {BidonSdk.Instance.Regulation.IsGdprApplied}");
+        Debug.Log($"[BidonPlugin] [Regulation] [Gdpr] Has Consent (2/2): {BidonSdk.Instance.Regulation.HasGdprConsent}");
+
+        // CCPA
+        Debug.Log($"[BidonPlugin] [Regulation] [Ccpa] Is Applied (1/2): {BidonSdk.Instance.Regulation.IsCcpaApplied}");
+        Debug.Log($"[BidonPlugin] [Regulation] [Ccpa] Has Consent (1/2): {BidonSdk.Instance.Regulation.HasCcpaConsent}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Ccpa] Us Privacy String (1/2): {BidonSdk.Instance.Regulation.UsPrivacyString ?? "null"}");
+        BidonSdk.Instance.Regulation.UsPrivacyString = "us_privacy_string";
+        Debug.Log($"[BidonPlugin] [Regulation] [Ccpa] Us Privacy String (2/2): {BidonSdk.Instance.Regulation.UsPrivacyString ?? "null"}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Ccpa] Is Applied (2/2): {BidonSdk.Instance.Regulation.IsCcpaApplied}");
+        Debug.Log($"[BidonPlugin] [Regulation] [Ccpa] Has Consent (2/2): {BidonSdk.Instance.Regulation.HasCcpaConsent}");
+
+        // COPPA
+        Debug.Log($"[BidonPlugin] [Regulation] [Coppa] Is Applied (1/2): {BidonSdk.Instance.Regulation.IsCoppaApplied}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Coppa] Applicability Status (1/2): {BidonSdk.Instance.Regulation.CoppaApplicabilityStatus}");
+        BidonSdk.Instance.Regulation.CoppaApplicabilityStatus = BidonCoppaApplicabilityStatus.Yes;
+        Debug.Log($"[BidonPlugin] [Regulation] [Coppa] Applicability Status (2/2): {BidonSdk.Instance.Regulation.CoppaApplicabilityStatus}");
+
+        Debug.Log($"[BidonPlugin] [Regulation] [Coppa] Is Applied (2/2): {BidonSdk.Instance.Regulation.IsCoppaApplied}");
     }
 }

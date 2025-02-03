@@ -1,11 +1,12 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using Bidon.Mediation;
 
-// ReSharper disable once CheckNamespace
 public class BidonBannerAdManager : MonoBehaviour
 {
     private BidonBannerAd _bannerAd;
@@ -38,13 +39,13 @@ public class BidonBannerAdManager : MonoBehaviour
     {
         if (!BidonSdk.Instance.IsInitialized())
         {
-            Debug.LogWarning($"[BidonPlugin] [Banner] Initialize Bidon SDK first");
+            Debug.LogWarning("[BidonPlugin] [Banner] Initialize Bidon SDK first");
             return;
         }
 
         if (_bannerAd != null)
         {
-            Debug.LogWarning($"[BidonPlugin] [Banner] Destroy previous instance first");
+            Debug.LogWarning("[BidonPlugin] [Banner] Destroy previous instance first");
             return;
         }
 
@@ -67,7 +68,7 @@ public class BidonBannerAdManager : MonoBehaviour
         Debug.Log($"[BidonPlugin] [Banner] Extra Data: {extraData}");
 
         _bannerAd.SetFormat((BidonBannerFormat)bannerFormatDropdown.value);
-        Debug.Log($"[BidonPlugin] [Banner] Format: {_bannerAd.GetFormat()}");
+        Debug.Log($"[BidonPlugin] [Banner] Format: {_bannerAd.GetFormat()?.ToString() ?? "null"}");
     }
 
     public void LoadAd()
@@ -183,38 +184,45 @@ public class BidonBannerAdManager : MonoBehaviour
     #region Banner Ad Callbacks
     private void OnBannerAdLoaded(object sender, BidonAdLoadedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoaded raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nAuctionInfo: {args.AuctionInfo?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoaded raised.\n{eventArgs}");
+
         Debug.Log($"[BidonPlugin] [Banner] Size: {_bannerAd?.GetSize()?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnBannerAdLoadFailed(object sender, BidonAdLoadFailedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoadFailed raised. Reason: {args.Cause.ToString()}");
+        string eventArgs = $"Reason: {args.Cause.ToString()}";
+        eventArgs += $"\nAuctionInfo: {args.AuctionInfo?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdLoadFailed raised.\n{eventArgs}");
     }
 
     private void OnBannerAdShown(object sender, BidonAdShownEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdShown raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdShown raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnBannerAdShowFailed(object sender, BidonAdShowFailedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdShowFailed raised. Reason: {args.Cause.ToString()}");
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdShowFailed raised.\nReason: {args.Cause.ToString()}");
     }
 
     private void OnBannerAdClicked(object sender, BidonAdClickedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdClicked raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdClicked raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnBannerAdExpired(object sender, BidonAdExpiredEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdExpired raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}");
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdExpired raised.\nAd: {args.Ad?.ToJsonString(true) ?? "null"}");
     }
 
     private void OnBannerAdRevenueReceived(object sender, BidonAdRevenueReceivedEventArgs args)
     {
-        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdRevenueReceived raised. Ad: {args.Ad?.ToJsonString(true) ?? "null"}, AdValue: {args.AdValue?.ToJsonString(true) ?? "null"}");
+        string eventArgs = $"Ad: {args.Ad?.ToJsonString(true) ?? "null"}";
+        eventArgs += $"\nAdValue: {args.AdValue?.ToJsonString(true) ?? "null"}";
+        Debug.Log($"[BidonPlugin] [Event] [Banner] OnAdRevenueReceived raised.\n{eventArgs}");
     }
     #endregion
 }
