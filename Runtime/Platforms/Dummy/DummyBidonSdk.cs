@@ -1,8 +1,10 @@
-#if (!UNITY_ANDROID && !UNITY_EDITOR && !UNITY_IOS) || BIDON_DEV_DUMMY
+#if (!UNITY_ANDROID && !UNITY_IOS) || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     internal class DummyBidonSdk : IBidonSdk
@@ -10,7 +12,9 @@ namespace Bidon.Mediation
         public IBidonSegment Segment { get; }
         public IBidonRegulation Regulation { get; }
 
+#pragma warning disable CS0067
         public event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
+#pragma warning restore CS0067
 
         internal DummyBidonSdk()
         {
@@ -68,7 +72,7 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
-        public BidonLogLevel GetLogLevel()
+        public BidonLogLevel? GetLogLevel()
         {
             throw new NotImplementedException();
         }

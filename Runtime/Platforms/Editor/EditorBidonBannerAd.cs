@@ -1,13 +1,20 @@
 #if UNITY_EDITOR
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
+    [SuppressMessage("ReSharper", "UnusedType.Global")]
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     internal class EditorBidonBannerAd : IBidonBannerAd
     {
+#pragma warning disable CS0067
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -15,88 +22,41 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdClickedEventArgs> OnAdClicked;
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
+#pragma warning restore CS0067
 
         internal EditorBidonBannerAd(string auctionKey) { }
 
-        public void SetFormat(BidonBannerFormat format)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetFormat(BidonBannerFormat format) { }
 
-        public BidonBannerFormat GetFormat()
-        {
-            throw new NotImplementedException();
-        }
+        public BidonBannerFormat? GetFormat() => null;
 
-        public BidonBannerSize GetSize()
-        {
-            throw new NotImplementedException();
-        }
+        public BidonBannerSize GetSize() => null;
 
-        public void SetPredefinedPosition(BidonBannerPosition position)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetPredefinedPosition(BidonBannerPosition position) { }
 
-        public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle, Vector2 anchorPoint)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle, Vector2 anchorPoint) { }
 
-        public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle) { }
 
-        public void Load(double priceFloor)
-        {
-            throw new NotImplementedException();
-        }
+        public void Load(double priceFloor) { }
 
-        public bool IsReady()
-        {
-            throw new NotImplementedException();
-        }
+        public bool IsReady() => false;
 
-        public void Show()
-        {
-            throw new NotImplementedException();
-        }
+        public void Show() { }
 
-        public bool IsShowing()
-        {
-            throw new NotImplementedException();
-        }
+        public bool IsShowing() => false;
 
-        public void Hide()
-        {
-            throw new NotImplementedException();
-        }
+        public void Hide() { }
 
-        public void SetExtraData(string key, object value)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetExtraData(string key, object value) { }
 
-        public IDictionary<string, object> GetExtraData()
-        {
-            throw new NotImplementedException();
-        }
+        public IDictionary<string, object> GetExtraData() => new Dictionary<string, object>();
 
-        public void NotifyLoss(string winnerDemandId, double ecpm)
-        {
-            throw new NotImplementedException();
-        }
+        public void NotifyLoss(string winnerDemandId, double price) { }
 
-        public void NotifyWin()
-        {
-            throw new NotImplementedException();
-        }
+        public void NotifyWin() { }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        public void Dispose() { }
     }
 }
 #endif

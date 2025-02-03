@@ -1,12 +1,13 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public sealed class BidonInterstitialAd : IBidonInterstitialAd
     {
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
@@ -21,9 +22,9 @@ namespace Bidon.Mediation
 
         private readonly IBidonInterstitialAd _bidonInterstitialAdImpl;
 
-        public BidonInterstitialAd(string auctionKey = null)
+        public BidonInterstitialAd(string auctionKey = BidonConstants.DefaultAuctionKey)
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
             _bidonInterstitialAdImpl = new EditorBidonInterstitialAd(auctionKey);
 #elif UNITY_ANDROID
             _bidonInterstitialAdImpl = new AndroidBidonInterstitialAd(auctionKey);
@@ -47,23 +48,17 @@ namespace Bidon.Mediation
             _bidonInterstitialAdImpl.OnAdRevenueReceived += (sender, args) => OnAdRevenueReceived?.Invoke(this, args);
         }
 
-        public void Load(double priceFloor) => _bidonInterstitialAdImpl.Load(priceFloor);
+        public void Load(double priceFloor = BidonConstants.DefaultPriceFloor) => _bidonInterstitialAdImpl.Load(priceFloor);
 
         public bool IsReady() => _bidonInterstitialAdImpl.IsReady();
 
         public void Show() => _bidonInterstitialAdImpl.Show();
 
-        public void SetExtraData(string key, object value)
-        {
-            if (String.IsNullOrEmpty(key)) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-            _bidonInterstitialAdImpl.SetExtraData(key, value);
-        }
+        public void SetExtraData(string key, object value) => _bidonInterstitialAdImpl.SetExtraData(key, value);
 
         public IDictionary<string, object> GetExtraData() => _bidonInterstitialAdImpl.GetExtraData();
 
-        public void NotifyLoss(string winnerDemandId, double ecpm) => _bidonInterstitialAdImpl.NotifyLoss(winnerDemandId, ecpm);
+        public void NotifyLoss(string winnerDemandId, double price) => _bidonInterstitialAdImpl.NotifyLoss(winnerDemandId, price);
 
         public void NotifyWin() => _bidonInterstitialAdImpl.NotifyWin();
 

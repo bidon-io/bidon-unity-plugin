@@ -1,7 +1,8 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [Serializable]
@@ -14,21 +15,17 @@ namespace Bidon.Mediation
 
         public string Label;
 
-        public double Price;
+        public double? Price;
 
         public string Uid;
 
         public string BidType;
 
-        public long FillStartTs;
+        public long? FillStartTs;
 
-        public long FillFinishTs;
-
-        public long Timeout;
+        public long? FillFinishTs;
 
         public string Status;
-
-        public string ErrorMessage;
 
         [NonSerialized]
         public string Ext;

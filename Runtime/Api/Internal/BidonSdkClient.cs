@@ -1,7 +1,8 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     internal class BidonSdkClient : IBidonSdk
@@ -15,7 +16,7 @@ namespace Bidon.Mediation
 
         internal BidonSdkClient()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
             _bidonSdkImpl = new EditorBidonSdk();
 #elif UNITY_ANDROID
             _bidonSdkImpl = new AndroidBidonSdk();
@@ -38,13 +39,7 @@ namespace Bidon.Mediation
 
         public void SetBaseUrl(string baseUrl) => _bidonSdkImpl.SetBaseUrl(baseUrl);
 
-        public void SetExtraData(string key, object value)
-        {
-            if (String.IsNullOrEmpty(key)) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-            _bidonSdkImpl.SetExtraData(key, value);
-        }
+        public void SetExtraData(string key, object value) => _bidonSdkImpl.SetExtraData(key, value);
 
         public IDictionary<string, object> GetExtraData() => _bidonSdkImpl.GetExtraData();
 
@@ -56,7 +51,7 @@ namespace Bidon.Mediation
 
         public string GetSdkVersion() => _bidonSdkImpl.GetSdkVersion();
 
-        public BidonLogLevel GetLogLevel() => _bidonSdkImpl.GetLogLevel();
+        public BidonLogLevel? GetLogLevel() => _bidonSdkImpl.GetLogLevel();
 
         public string GetBaseUrl() => _bidonSdkImpl.GetBaseUrl();
 

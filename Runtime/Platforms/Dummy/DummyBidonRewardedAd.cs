@@ -1,12 +1,17 @@
-#if (!UNITY_ANDROID && !UNITY_EDITOR && !UNITY_IOS) || BIDON_DEV_DUMMY
+#if (!UNITY_ANDROID && !UNITY_IOS) || BIDON_DEV
+
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     internal class DummyBidonRewardedAd : IBidonRewardedAd
     {
+#pragma warning disable CS0067
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
         public event EventHandler<BidonAdLoadFailedEventArgs> OnAdLoadFailed;
         public event EventHandler<BidonAdShownEventArgs> OnAdShown;
@@ -16,6 +21,7 @@ namespace Bidon.Mediation
         public event EventHandler<BidonAdExpiredEventArgs> OnAdExpired;
         public event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
         public event EventHandler<BidonUserRewardedEventArgs> OnUserRewarded;
+#pragma warning restore CS0067
 
         internal DummyBidonRewardedAd(string auctionKey) { }
 
@@ -44,7 +50,7 @@ namespace Bidon.Mediation
             throw new NotImplementedException();
         }
 
-        public void NotifyLoss(string winnerDemandId, double ecpm)
+        public void NotifyLoss(string winnerDemandId, double price)
         {
             throw new NotImplementedException();
         }

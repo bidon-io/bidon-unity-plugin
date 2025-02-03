@@ -1,7 +1,8 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [Serializable]
@@ -14,7 +15,7 @@ namespace Bidon.Mediation
 
         public string CurrencyCode;
 
-        public BidonRevenuePrecision RevenuePrecision;
+        public BidonRevenuePrecision? RevenuePrecision;
 
         public string ToJsonString(bool isPretty = false) => UnityEngine.JsonUtility.ToJson(this, isPretty);
     }

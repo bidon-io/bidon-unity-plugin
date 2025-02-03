@@ -1,6 +1,7 @@
+// ReSharper disable CheckNamespace
+
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
@@ -34,8 +35,6 @@ namespace Bidon.Mediation
 
         #endregion
 
-        private const string Version = "0.7.0";
-
-        public static string PluginVersion => Version;
+        public static string PluginVersion => BidonConstants.PluginVersion;
     }
 }
