@@ -1,7 +1,12 @@
-// ReSharper Disable CheckNamespace
-namespace Bidon.Mediation.Editor.PluginRemover
+// ReSharper disable CheckNamespace
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Bidon.Mediation.PluginRemover.Editor
 {
-    [System.Serializable]
+    [Serializable]
+    [SuppressMessage("ReSharper", "NotAccessedField.Global")]
     internal class ItemToRemove
     {
         public string name;

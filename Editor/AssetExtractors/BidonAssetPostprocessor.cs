@@ -1,10 +1,13 @@
-using System.IO;
-using UnityEditor;
-using Bidon.Mediation.Editor.Utilities;
-using Bidon.Mediation.Editor.DataContainers;
+// ReSharper disable CheckNamespace
+// ReSharper disable HeuristicUnreachableCode
 
-// ReSharper Disable CheckNamespace
-namespace Bidon.Mediation.Editor.AssetExtractors
+#pragma warning disable CS0162
+
+using System.Linq;
+using UnityEditor;
+using Bidon.Mediation.Utilities.Editor;
+
+namespace Bidon.Mediation.AssetExtractors.Editor
 {
     internal class BidonAssetPostprocessor : AssetPostprocessor
     {
@@ -14,16 +17,16 @@ namespace Bidon.Mediation.Editor.AssetExtractors
 #else
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-            string prefsPath = $"{EditorConstants.PluginEditorDirectory}/{EditorConstants.PluginPrefsFileName}";
-            if (File.Exists(prefsPath) && AssetDatabase.LoadAssetAtPath<PluginPreferences>(prefsPath) == null) return;
 #endif
-            if (BidonAndroidLibExtractor.ExtractAndroidLibrary() | BidonDependenciesExtractor.ExtractDependencies())
+#if UNITY_STANDALONE && BIDON_DEV
+            return;
+#endif
+            if (deletedAssets.Any(asset => asset.Contains(EditorConstants.PackageRootDirectory))) return;
+
+            if (BidonAndroidLibraryInstaller.Deploy() | BidonDependenciesInstaller.Deploy())
             {
                 AssetDatabase.Refresh();
             }
-#if UNITY_2020_3_16_OR_NEWER
-            AssetDatabase.SaveAssetIfDirty(PluginPreferences.Instance);
-#endif
         }
     }
 }

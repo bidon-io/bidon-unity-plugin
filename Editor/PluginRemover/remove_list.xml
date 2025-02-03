@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <items>
     <item>
-        <name>Bidon Plugin Preferences File</name>
-        <path>Bidon/Editor</path>
-        <filter>(PluginPreferences\.asset)</filter>
-        <is_confirmation_required>false</is_confirmation_required>
-    </item>
-    <item>
         <name>Bidon Dependencies Directory</name>
         <path>Bidon/Editor/Dependencies</path>
         <is_confirmation_required>false</is_confirmation_required>
@@ -25,7 +19,7 @@
         <check_if_empty>true</check_if_empty>
     </item>
     <item>
-        <name>Bidon Andoid Library Directory</name>
+        <name>Bidon Android Library Directory</name>
         <path>Plugins/Android/bidon.androidlib</path>
         <is_confirmation_required>false</is_confirmation_required>
         <check_if_empty>false</check_if_empty>
