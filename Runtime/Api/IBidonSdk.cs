@@ -1,9 +1,12 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public interface IBidonSdk
     {
         event EventHandler<BidonInitializationEventArgs> OnInitializationFinished;
@@ -19,7 +22,7 @@ namespace Bidon.Mediation
         void RegisterAdapter(string className);
         void Initialize(string appKey);
         string GetSdkVersion();
-        BidonLogLevel GetLogLevel();
+        BidonLogLevel? GetLogLevel();
         string GetBaseUrl();
         bool IsInitialized();
     }

@@ -1,10 +1,13 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
+    [SuppressMessage("ReSharper", "UnusedParameter.Global")]
     public interface IBidonBannerAd : IDisposable
     {
         event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
@@ -16,7 +19,7 @@ namespace Bidon.Mediation
         event EventHandler<BidonAdRevenueReceivedEventArgs> OnAdRevenueReceived;
 
         void SetFormat(BidonBannerFormat format);
-        BidonBannerFormat GetFormat();
+        BidonBannerFormat? GetFormat();
         BidonBannerSize GetSize();
         void SetPredefinedPosition(BidonBannerPosition position);
         void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle, Vector2 anchorPoint);
@@ -28,7 +31,7 @@ namespace Bidon.Mediation
         void Hide();
         void SetExtraData(string key, object value);
         IDictionary<string, object> GetExtraData();
-        void NotifyLoss(string winnerDemandId, double ecpm);
+        void NotifyLoss(string winnerDemandId, double price);
         void NotifyWin();
     }
 }

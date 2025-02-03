@@ -1,7 +1,8 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [Serializable]
@@ -18,9 +19,7 @@ namespace Bidon.Mediation
 
         public string Uid;
 
-        public BidonBidType BidType;
-
-        public long Timeout;
+        public BidonBidType? BidType;
 
         [NonSerialized]
         public string ExtJson;

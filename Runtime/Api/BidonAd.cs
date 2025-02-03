@@ -1,7 +1,8 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [Serializable]
@@ -16,13 +17,11 @@ namespace Bidon.Mediation
 
         public string CurrencyCode;
 
-        public BidonAdType AdType;
-
-        public BidonBidType BidType;
+        public BidonAdType? AdType;
 
         public string Dsp;
 
-        public double Ecpm;
+        public double Price;
 
         public string NetworkName;
 

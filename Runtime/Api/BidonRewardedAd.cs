@@ -1,12 +1,13 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public sealed class BidonRewardedAd : IBidonRewardedAd
     {
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
@@ -21,9 +22,9 @@ namespace Bidon.Mediation
 
         private readonly IBidonRewardedAd _bidonRewardedAdImpl;
 
-        public BidonRewardedAd(string auctionKey = null)
+        public BidonRewardedAd(string auctionKey = BidonConstants.DefaultAuctionKey)
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
             _bidonRewardedAdImpl = new EditorBidonRewardedAd(auctionKey);
 #elif UNITY_ANDROID
             _bidonRewardedAdImpl = new AndroidBidonRewardedAd(auctionKey);
@@ -48,23 +49,17 @@ namespace Bidon.Mediation
             _bidonRewardedAdImpl.OnUserRewarded += (sender, args) => OnUserRewarded?.Invoke(this, args);
         }
 
-        public void Load(double priceFloor) => _bidonRewardedAdImpl.Load(priceFloor);
+        public void Load(double priceFloor = BidonConstants.DefaultPriceFloor) => _bidonRewardedAdImpl.Load(priceFloor);
 
         public bool IsReady() => _bidonRewardedAdImpl.IsReady();
 
         public void Show() => _bidonRewardedAdImpl.Show();
 
-        public void SetExtraData(string key, object value)
-        {
-            if (String.IsNullOrEmpty(key)) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-            _bidonRewardedAdImpl.SetExtraData(key, value);
-        }
+        public void SetExtraData(string key, object value) => _bidonRewardedAdImpl.SetExtraData(key, value);
 
         public IDictionary<string, object> GetExtraData() => _bidonRewardedAdImpl.GetExtraData();
 
-        public void NotifyLoss(string winnerDemandId, double ecpm) => _bidonRewardedAdImpl.NotifyLoss(winnerDemandId, ecpm);
+        public void NotifyLoss(string winnerDemandId, double price) => _bidonRewardedAdImpl.NotifyLoss(winnerDemandId, price);
 
         public void NotifyWin() => _bidonRewardedAdImpl.NotifyWin();
 

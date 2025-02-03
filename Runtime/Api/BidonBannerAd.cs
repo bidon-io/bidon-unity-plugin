@@ -1,13 +1,14 @@
+// ReSharper disable CheckNamespace
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-// ReSharper disable once CheckNamespace
 namespace Bidon.Mediation
 {
     [SuppressMessage("ReSharper", "UnusedType.Global")]
-    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public sealed class BidonBannerAd : IBidonBannerAd
     {
         public event EventHandler<BidonAdLoadedEventArgs> OnAdLoaded;
@@ -21,9 +22,9 @@ namespace Bidon.Mediation
 
         private readonly IBidonBannerAd _bidonBannerAdImpl;
 
-        public BidonBannerAd(string auctionKey = null)
+        public BidonBannerAd(string auctionKey = BidonConstants.DefaultAuctionKey)
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
             _bidonBannerAdImpl = new EditorBidonBannerAd(auctionKey);
 #elif UNITY_ANDROID
             _bidonBannerAdImpl = new AndroidBidonBannerAd(auctionKey);
@@ -48,7 +49,7 @@ namespace Bidon.Mediation
 
         public void SetFormat(BidonBannerFormat format) => _bidonBannerAdImpl.SetFormat(format);
 
-        public BidonBannerFormat GetFormat() => _bidonBannerAdImpl.GetFormat();
+        public BidonBannerFormat? GetFormat() => _bidonBannerAdImpl.GetFormat();
 
         public BidonBannerSize GetSize() => _bidonBannerAdImpl.GetSize();
 
@@ -61,7 +62,7 @@ namespace Bidon.Mediation
         public void SetCustomPositionAndRotation(Vector2Int positionOffset, int rotationAngle = 0) =>
             _bidonBannerAdImpl.SetCustomPositionAndRotation(positionOffset, rotationAngle);
 
-        public void Load(double priceFloor) => _bidonBannerAdImpl.Load(priceFloor);
+        public void Load(double priceFloor = BidonConstants.DefaultPriceFloor) => _bidonBannerAdImpl.Load(priceFloor);
 
         public bool IsReady() => _bidonBannerAdImpl.IsReady();
 
@@ -71,17 +72,11 @@ namespace Bidon.Mediation
 
         public void Hide() => _bidonBannerAdImpl.Hide();
 
-        public void SetExtraData(string key, object value)
-        {
-            if (String.IsNullOrEmpty(key)) return;
-            if (!(value is bool) && !(value is char) && !(value is int) && !(value is long) && !(value is float)
-                && !(value is double) && !(value is string) && value != null) return;
-            _bidonBannerAdImpl.SetExtraData(key, value);
-        }
+        public void SetExtraData(string key, object value) => _bidonBannerAdImpl.SetExtraData(key, value);
 
         public IDictionary<string, object> GetExtraData() => _bidonBannerAdImpl.GetExtraData();
 
-        public void NotifyLoss(string winnerDemandId, double ecpm) => _bidonBannerAdImpl.NotifyLoss(winnerDemandId, ecpm);
+        public void NotifyLoss(string winnerDemandId, double price) => _bidonBannerAdImpl.NotifyLoss(winnerDemandId, price);
 
         public void NotifyWin() => _bidonBannerAdImpl.NotifyWin();
 
