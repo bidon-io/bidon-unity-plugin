@@ -2,6 +2,23 @@
 
 ## Changelog
 
+### v0.7.0 (March 19, 2025) 
+
++ Updated Bidon Android SDK to v0.7.6
++ Updated Bidon iOS SDK to v0.7.12
++ Replaced `BidonSegment.Id` field with `BidonSegment.Uid`
++ Changed `BidonAd` dto class fields
++ Renamed `BidonGdprConsentStatus` enum to `BidonGdprApplicabilityStatus`
++ Implemented `GetSize` method for `BidonBannerAd` class
++ Added `IncorrectAdUnit` status to `BidonError` enum
++ Added optional `auctionKey` param to `BidonAd` constructors
++ Implemented `AuctionInfo` param support for `OnAdLoaded` and `OnAdLoadFailed` callbacks
++ Added `BidonConstants.AdapterNames` constants
++ Made `priceFloor` parameter optional in `Load` methods for all ad types
++ Refactored Android & iOS SDK bridges
++ Refactored Editor scripts
++ Added other minor improvements
+
 ### v0.4.5 (January 16, 2024)
 
 + Updated Bidon Android SDK to v0.4.28
