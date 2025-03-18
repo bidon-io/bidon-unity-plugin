@@ -29,6 +29,7 @@ namespace Bidon.Mediation
                 { "org.bidon.sdk.config.BidonError$BidTimedOut", BidonError.BidTimedOut },
                 { "org.bidon.sdk.config.BidonError$FillTimedOut", BidonError.FillTimedOut },
                 { "org.bidon.sdk.config.BidonError$AdFormatIsNotSupported", BidonError.AdFormatIsNotSupported },
+                { "org.bidon.sdk.config.BidonError$Unspecified", BidonError.Unspecified },
                 { "org.bidon.sdk.config.BidonError$AdNotReady", BidonError.AdNotReady },
                 { "org.bidon.sdk.config.BidonError$NoAppropriateAdUnitId", BidonError.NoAppropriateAdUnitId },
                 { "org.bidon.sdk.config.BidonError$Expired", BidonError.Expired },
