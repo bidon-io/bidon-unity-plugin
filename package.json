@@ -1,6 +1,6 @@
 {
   "name": "org.bidon.mediation",
-  "version": "0.7.0",
+  "version": "0.11.0",
   "displayName": "Bidon",
   "description": "Provides control over advertising auctions to Publishers, while making it fair and transparent.",
   "unity": "2020.1",
