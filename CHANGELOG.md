@@ -2,6 +2,11 @@
 
 ## Changelog
 
+### v0.11.0 (September 16, 2025)
+
++ Updated Bidon Android SDK to v0.11.0
++ Updated Bidon iOS SDK to v0.11.0
+
 ### v0.7.0 (March 19, 2025)
 
 + Updated Bidon Android SDK to v0.7.6
