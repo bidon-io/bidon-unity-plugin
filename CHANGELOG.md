@@ -2,6 +2,13 @@
 
 ## Changelog
 
+### v0.12.0 (November 28, 2025)
+
++ Updated Bidon Android SDK to v0.12.0
++ Updated Bidon iOS SDK to v0.12.0
++ Changed minimum supported Unity version to v2021.3
++ Added some minor development and distribution improvements
+
 ### v0.11.0 (September 16, 2025)
 
 + Updated Bidon Android SDK to v0.11.0
