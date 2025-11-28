@@ -3,7 +3,7 @@
   "version": "0.11.0",
   "displayName": "Bidon",
   "description": "Provides control over advertising auctions to Publishers, while making it fair and transparent.",
-  "unity": "2020.1",
+  "unity": "2021.3",
   "documentationUrl": "https://docs.bidon.org/docs/sdk/unity/get-started",
   "changelogUrl": "https://docs.bidon.org/docs/sdk/unity/changelog",
   "dependencies": {
