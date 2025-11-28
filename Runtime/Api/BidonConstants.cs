@@ -4,7 +4,7 @@ namespace Bidon.Mediation
 {
     public static partial class BidonConstants
     {
-        public const string PluginVersion = "0.11.0";
+        public const string PluginVersion = "0.12.0";
 
         public const double DefaultPriceFloor = 0d;
         public const string DefaultAuctionKey = null;
