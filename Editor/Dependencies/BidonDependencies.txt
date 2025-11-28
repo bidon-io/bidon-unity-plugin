@@ -1,49 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dependencies>
     <iosPods>
-        <iosPod name="Bidon" version="0.11.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterAmazon" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterAppLovin" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterBidMachine" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterBigoAds" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterChartboost" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterDTExchange" version="0.11.0.0" minTargetSdk="13.0" />
-        <iosPod name="BidonAdapterGoogleAdManager" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterGoogleMobileAds" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterInMobi" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterIronSource" version="0.11.0.0" minTargetSdk="13.0" />
-        <iosPod name="BidonAdapterMetaAudienceNetwork" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterMintegral" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterMobileFuse" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterMoloco" version="0.11.0.0" minTargetSdk="13.0" />
-        <iosPod name="BidonAdapterMyTarget" version="0.11.0.0" minTargetSdk="12.4" />
-        <iosPod name="BidonAdapterUnityAds" version="0.11.0.0" minTargetSdk="13.0" />
-        <iosPod name="BidonAdapterVungle" version="0.11.0.0" minTargetSdk="12.0" />
-        <iosPod name="BidonAdapterYandex" version="0.11.0.0" minTargetSdk="13.0" />
+        <iosPod name="Bidon" version="0.12.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterAmazon" version="5.3.0.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterAppLovin" version="13.3.1.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterBidMachine" version="3.4.0.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterBigoAds" version="4.9.0.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterChartboost" version="9.9.2.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterDTExchange" version="8.3.8.0" minTargetSdk="13.0" />
+        <iosPod name="BidonAdapterGoogleAdManager" version="12.8.0.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterGoogleMobileAds" version="12.8.0.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterInMobi" version="10.8.6.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterIronSource" version="8.10.0.0.0" minTargetSdk="13.0" />
+        <iosPod name="BidonAdapterMetaAudienceNetwork" version="6.20.1.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterMintegral" version="7.7.9.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterMobileFuse" version="1.9.2.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterMoloco" version="4.0.0.0" minTargetSdk="13.0" />
+        <iosPod name="BidonAdapterMyTarget" version="5.33.0.0" minTargetSdk="12.4" />
+        <iosPod name="BidonAdapterStartIo" version="4.11.0.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterTaurusX" version="1.9.2.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterUnityAds" version="4.16.0.0" minTargetSdk="13.0" />
+        <iosPod name="BidonAdapterVungle" version="7.5.2.0" minTargetSdk="12.0" />
+        <iosPod name="BidonAdapterYandex" version="7.14.1.0" minTargetSdk="13.0" />
         <sources>
             <source>https://github.com/bidon-io/CocoaPods_Specs.git</source>
         </sources>
     </iosPods>
     <androidPackages>
-        <androidPackage spec="org.bidon:bidon-sdk:0.11.0" />
-        <androidPackage spec="org.bidon:admob-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:amazon-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:applovin-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:bidmachine-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:bigoads-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:chartboost-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:dtexchange-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:gam-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:inmobi-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:ironsource-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:meta-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:mintegral-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:mobilefuse-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:moloco-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:unityads-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:vkads-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:vungle-adapter:0.11.0.0" />
-        <androidPackage spec="org.bidon:yandex-adapter:0.11.0.0" />
+        <androidPackage spec="org.bidon:bidon-sdk:0.12.0" />
+        <androidPackage spec="org.bidon:admob-adapter:24.7.0.0" />
+        <androidPackage spec="org.bidon:amazon-adapter:11.0.1.0" />
+        <androidPackage spec="org.bidon:applovin-adapter:13.3.1.0" />
+        <androidPackage spec="org.bidon:bidmachine-adapter:3.4.0.0" />
+        <androidPackage spec="org.bidon:bigoads-adapter:5.4.0.0" />
+        <androidPackage spec="org.bidon:chartboost-adapter:9.9.1.0" />
+        <androidPackage spec="org.bidon:dtexchange-adapter:8.3.8.0" />
+        <androidPackage spec="org.bidon:gam-adapter:24.7.0.0" />
+        <androidPackage spec="org.bidon:inmobi-adapter:10.8.7.0" />
+        <androidPackage spec="org.bidon:ironsource-adapter:8.10.0.0" />
+        <androidPackage spec="org.bidon:meta-adapter:6.20.0.0" />
+        <androidPackage spec="org.bidon:mintegral-adapter:16.9.91.0" />
+        <androidPackage spec="org.bidon:mobilefuse-adapter:1.9.2.0" />
+        <androidPackage spec="org.bidon:moloco-adapter:3.12.0.0" />
+        <androidPackage spec="org.bidon:startio-adapter:5.2.4.0" />
+        <androidPackage spec="org.bidon:taurusx-adapter:1.11.2.0" />
+        <androidPackage spec="org.bidon:unityads-adapter:4.16.0.0" />
+        <androidPackage spec="org.bidon:vkads-adapter:5.27.2.0" />
+        <androidPackage spec="org.bidon:vungle-adapter:7.5.0.0" />
+        <androidPackage spec="org.bidon:yandex-adapter:7.15.0.0" />
         <repositories>
             <repository>https://artifactory.bidon.org/bidon</repository>
         </repositories>
