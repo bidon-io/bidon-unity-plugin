@@ -1,20 +1,18 @@
-# Bidon Unity Plugin
+# Changelog
 
-## Changelog
-
-### v0.12.0 (November 28, 2025)
+## v0.12.0 (November 28, 2025)
 
 + Updated Bidon Android SDK to v0.12.0
 + Updated Bidon iOS SDK to v0.12.0
 + Changed minimum supported Unity version to v2021.3
 + Added some minor development and distribution improvements
 
-### v0.11.0 (September 16, 2025)
+## v0.11.0 (September 16, 2025)
 
 + Updated Bidon Android SDK to v0.11.0
 + Updated Bidon iOS SDK to v0.11.0
 
-### v0.7.0 (March 19, 2025)
+## v0.7.0 (March 19, 2025)
 
 + Updated Bidon Android SDK to v0.7.6
 + Updated Bidon iOS SDK to v0.7.12
@@ -31,28 +29,28 @@
 + Refactored Editor scripts
 + Added other minor improvements
 
-### v0.4.5 (January 16, 2024)
+## v0.4.5 (January 16, 2024)
 
 + Updated Bidon Android SDK to v0.4.28
 + Updated Bidon iOS SDK to v0.4.7
 
-### v0.4.4 (December 07, 2023)
+## v0.4.4 (December 07, 2023)
 
 + Updated Bidon Android SDK to v0.4.26
 + Updated Bidon iOS SDK to v0.4.6
 + Added Bidon GAM adapter
 
-### v0.4.3 (November 24, 2023)
+## v0.4.3 (November 24, 2023)
 
 + Updated Bidon Android SDK to v0.4.25
 + Updated Bidon iOS SDK to v0.4.5
 
-### v0.4.2 (November 14, 2023)
+## v0.4.2 (November 14, 2023)
 
 + Updated Bidon Android SDK to v0.4.23
 + Added Bidon MobileFuse adapter for Android SDK
 
-### v0.4.1 (November 9, 2023)
+## v0.4.1 (November 9, 2023)
 
 + Updated Bidon Android SDK to v0.4.21
 + Updated Bidon iOS SDK to v0.4.4
@@ -61,7 +59,7 @@
 + Changed GDPR enum values for android bridge
 + Tuned up dismiss callbacks on iOS
 
-### v0.4.0 (September 26, 2023)
+## v0.4.0 (September 26, 2023)
 
 + Updated Bidon Android SDK to v0.4.18
 + Updated Bidon iOS SDK to v0.4.3
@@ -70,7 +68,7 @@
 + Improved iOS bridge
 + Tuned up GC
 
-### v0.3.0 (September 14, 2023)
+## v0.3.0 (September 14, 2023)
 
 + Updated Bidon Android SDK to v0.3.2
 + Updated Bidon iOS SDK to v0.3.3
@@ -79,7 +77,7 @@
 + Added `SetTestMode()` & `IsTestModeEnabled()` methods to `BidonSdk` class
 + Added `SetExtraData()`, `GetExtraData()`, `NotifyLoss()`, and `NotifyWin()` methods to `AdObject` classes
 
-### v0.2.1 (June 20, 2023)
+## v0.2.1 (June 20, 2023)
 
 + Updated Bidon Android SDK to v0.2.1
 + Updated Bidon iOS SDK to v0.2.1
@@ -89,7 +87,7 @@
 + Updated iOS bridge (synced callbacks with android platform)
 + Implemented some internal improvements
 
-### v0.1.0 (March 16, 2023)
+## v0.1.0 (March 16, 2023)
 
 + Integrated Bidon Android SDK v0.1.1-Beta
 + Integrated Bidon iOS SDK v0.1.3.1-Beta

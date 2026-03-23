@@ -1,0 +1,35 @@
+{
+  "git": {
+    "commit": true,
+    "commitMessage": "chore: prepare v${version} release",
+    "tag": true,
+    "tagName": "v${version}",
+    "push": true,
+    "requireCleanWorkingDir": true,
+    "requireBranch": "release/*"
+  },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}",
+    "draft": true
+  },
+  "npm": {
+    "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "conventionalcommits"
+      },
+      "infile": "CHANGELOG.md",
+      "header": "# Changelog",
+      "ignoreRecommendedBump": true,
+      "context": {
+        "host": "https://github.com",
+        "owner": "bidon-io",
+        "repository": "bidon-unity-plugin",
+        "repoUrl": "https://github.com/bidon-io/bidon-unity-plugin"
+      }
+    }
+  }
+}
