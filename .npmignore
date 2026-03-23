@@ -2,3 +2,7 @@
 
 .gitattributes
 /.github
+
+# CI/CD
+
+.release-it.json
